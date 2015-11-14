@@ -1,0 +1,24 @@
+<ion-view view-title="right">
+  <div class="bar bar-header">
+    <button class="button button-icon ion-ios-arrow-back" ui-sref="map" nav-direction="back"></button>
+    <div class="h1 title">Help them teleport</div>
+    <button class="button button-clear ion-android-settings" ui-sref="settings" nav-direction="enter"></button>
+  </div>
+  <ion-content class="has-header">
+
+    <div class="list">
+      <div class="card" ng-repeat="request in requests">
+        <div class="item item-avatar">
+          <img src="{{request.avatarurl}}">
+          <h2>{{request.header}}</h2>
+          <p>destination: University of Glasgow</p>
+        </div>
+        <div class="button-bar">
+          <button class="button icon-left ion-android-checkbox button-balanced" ng-click="takePhoto()">Accept</button>
+          <button class="button icon-left ion-android-cancel button-assertive" ng-click="decline()">Decline</button>
+        </div>
+      </div>
+    </div>
+
+  </ion-content>
+</ion-view>
