@@ -9129,15 +9129,6 @@ a.button {
   font-size: 13px;
   font-weight: 300; }
 
-.gmnoprint a, .gmnoprint span {
-  display: none; }
-
-.gmnoprint div {
-  background: none !important; }
-
-.gm-style-cc:last-child {
-  display: none !important; }
-
 .logo {
   display: block;
   position: relative;

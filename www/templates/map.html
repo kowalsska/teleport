@@ -1,7 +1,7 @@
 <ion-view>
   <ion-content>
     <input id="pac-input" class="controls" type="text" placeholder="teleport">
-    <button class="button button-small button-stable" ng-click=sendRequest()>teleport</button>
+
     <div id="map" data-tap-disabled="true"></div>
 
 
@@ -9,15 +9,12 @@
       <div class="tabs">
         <a class="tab-item" ui-sref="left" nav-direction="back">
           <i class="icon ion-eye"></i>
-          Test
         </a>
         <a class="tab-item active">
-          <i class="icon ion-earth"></i>
-          Favorites
+          <button class="button button-big button-stable" ng-click=sendRequest()>teleport</button>
         </a>
         <a class="tab-item" ui-sref="right" nav-direction="forward">
           <i class="icon ion-android-locate"></i>
-          Settings
         </a>
       </div>
     </div>

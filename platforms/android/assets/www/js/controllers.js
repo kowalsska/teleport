@@ -6,9 +6,25 @@ var teleportApp = angular.module('teleport.controllers', []);
 
 var ref = new Firebase("https://fiery-heat-6378.firebaseio.com/");
 
-teleportApp.controller('MapCtrl', function($scope, $state, $cordovaGeolocation) {
+teleportApp.controller('MapCtrl', function($scope, $state, $cordovaGeolocation, $firebaseArray, $ionicPopup) {
 
   var options = {timeout: 10000, enableHighAccuracy: true};
+
+  $scope.sendRequest = function() {
+    var fbAuth = ref.getAuth();
+    $scope.requests = [];
+    var requestsRef = ref.child("requests");
+    var requestsArray = $firebaseArray(requestsRef);
+    $scope.requests = requestsArray;
+    requestsArray.$add({latitude: $scope.centerMap.lat(),
+                        longitude: $scope.centerMap.lng(),
+                        timestamp: Date.now(),
+                        requester: fbAuth.uid});
+    $ionicPopup.alert({
+      title: 'teleport',
+      template: 'Your request has been sent!'
+    })
+  };
 
   $cordovaGeolocation.getCurrentPosition(options).then(function(position){
 
@@ -23,6 +39,8 @@ teleportApp.controller('MapCtrl', function($scope, $state, $cordovaGeolocation) 
 
     $scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
 
+    $scope.centerMap = $scope.map.getCenter();
+
     // Construct a draggable red triangle with geodesic set to true.
     var circle = new google.maps.Circle({
       strokeColor: '#FF0000',
@@ -31,17 +49,18 @@ teleportApp.controller('MapCtrl', function($scope, $state, $cordovaGeolocation) 
       fillColor: '#FF0000',
       fillOpacity: 0.35,
       map: $scope.map,
-      center: $scope.map.getCenter(),
+      center: $scope.centerMap,
       radius: 200,
       draggable: true,
       geodesic: true
     });
 
-    //var center = $scope.map.getCameraPosition().target;
-    //
-    //$scope.map.addListener('dragend', function() {
-    //  circle.moveTo(center);
-    //});
+    $scope.map.addListener('idle',function(){
+      if($scope.centerMap !== this.getCenter()) {
+        $scope.centerMap = this.getCenter();
+        circle.setCenter($scope.centerMap);
+      }
+    });
 
     var input = document.getElementById('pac-input');
     var searchBox = new google.maps.places.SearchBox(input);

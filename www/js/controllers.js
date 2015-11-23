@@ -6,9 +6,22 @@ var teleportApp = angular.module('teleport.controllers', []);
 
 var ref = new Firebase("https://fiery-heat-6378.firebaseio.com/");
 
-teleportApp.controller('MapCtrl', function($scope, $state, $cordovaGeolocation, $firebaseArray) {
+teleportApp.controller('MapCtrl', function($scope, $state, $cordovaGeolocation, $firebaseArray, $ionicPopup) {
 
   var options = {timeout: 10000, enableHighAccuracy: true};
+
+//  $scope.loadMyRequests = function () {
+//    $scope.requests = [];
+//    var myRequests = new Firebase("https://fiery-heat-6378.firebaseio.com/requests");
+//    myRequests.on('value', function (snapshot) {
+//      var data = snapshot.val();
+//      for(var req in data){
+//        if(data.hasOwnProperty(key))
+//      }
+//      var requestsArray = $firebaseArray(myRequests);
+//      $scope.requests = requestsArray;
+//    });
+//}
 
   $scope.sendRequest = function() {
     var fbAuth = ref.getAuth();
@@ -19,8 +32,13 @@ teleportApp.controller('MapCtrl', function($scope, $state, $cordovaGeolocation, 
     requestsArray.$add({latitude: $scope.centerMap.lat(),
                         longitude: $scope.centerMap.lng(),
                         timestamp: Date.now(),
-                        requester: fbAuth.uid});
-    console.log("Request added to the database!");
+                        requester: fbAuth.uid,
+                        gallery: []
+                        });
+    $ionicPopup.alert({
+      title: 'teleport',
+      template: 'Your request has been sent!'
+    })
   };
 
   $cordovaGeolocation.getCurrentPosition(options).then(function(position){
@@ -186,7 +204,7 @@ teleportApp.controller('LoginCtrl', function ($scope, $ionicModal, $state, $fire
   }
 });
 
-teleportApp.controller('RequestsCtrl', function($scope, $cordovaCamera, $firebaseArray) {
+teleportApp.controller('RequestsCtrl', function($scope, $cordovaCamera, $firebaseArray, Requests) {
 
     $scope.requests = [
       {avatarurl:"img/magda.jpg", header: "magda123 from Wroclaw, Poland"},
@@ -197,6 +215,8 @@ teleportApp.controller('RequestsCtrl', function($scope, $cordovaCamera, $firebas
       console.log($scope.images);
     };
 
+
+
     var fbAuth = ref.getAuth();
     $scope.images = [];
     var photosRef = ref.child("photos/" + fbAuth.uid);
@@ -206,7 +226,7 @@ teleportApp.controller('RequestsCtrl', function($scope, $cordovaCamera, $firebas
     $scope.takePhoto = function () {
 
       var options = {
-        quality: 100,
+        quality: 80,
         destinationType: Camera.DestinationType.DATA_URL,
         sourceType: Camera.PictureSourceType.CAMERA,
         allowEdit: false,
