@@ -7,15 +7,17 @@
   <ion-content class="has-header">
 
     <div class="list">
-      <div class="card" ng-repeat="request in requests">
+      <div class="card" ng-repeat="request in receivedRequests">
         <div class="item item-avatar">
-          <img src="{{request.avatarurl}}">
-          <h2>{{request.header}}</h2>
-          <p>destination: University of Glasgow</p>
+          <!-- <img src="{{request.avatarurl}}"> -->
+          <h2>from: {{request.requester}}</h2>
+          <p>{{request.timestamp}}</p>
+          <p>latitude: {{request.latitude}}</p>
+          <p>longitude: {{request.longitude}}</p>
         </div>
         <div class="button-bar">
-          <button class="button icon-left ion-android-checkbox button-balanced" ng-click="takePhoto()">Accept</button>
-          <button class="button icon-left ion-android-cancel button-assertive" ng-click="decline()">Decline</button>
+          <button class="button icon-left ion-android-checkbox button-balanced" ng-click="takePhoto(request)">Accept</button>
+          <button class="button icon-left ion-android-cancel button-assertive" ng-click="decline(request)">Decline</button>
         </div>
       </div>
     </div>

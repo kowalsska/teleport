@@ -51,21 +51,17 @@ teleportServices.factory('ReceivedRequests', function($firebaseArray) {
     var requestRef = ref.child("requests");
     var requests = $firebaseArray(requestRef);
 
-
     requests.$loaded().then(function() {
-      if(filteredRequests.length === 0) {
-        var reqArray = requests;
-        var myLoc = new google.maps.LatLng(lat, lng);
-        for (var i = 0; i < reqArray.length; i++) {
-          var reqLoc = new google.maps.LatLng(reqArray[i].latitude, reqArray[i].longitude);
-          var distance = getDistance(myLoc, reqLoc);
-          console.log(distance);
-          if (distance < 200) {
-            filteredRequests.push(reqArray[i]);
-          }
+      var reqArray = requests;
+      var myLoc = new google.maps.LatLng(lat, lng);
+      for(var i=0; i < reqArray.length; i++) {
+        var reqLoc = new google.maps.LatLng(reqArray[i].latitude, reqArray[i].longitude);
+        var distance = getDistance(myLoc, reqLoc);
+        console.log(distance);
+        if( distance < 200) {
+          filteredRequests.push(reqArray[i]);
         }
       }
-
     });
   }
 

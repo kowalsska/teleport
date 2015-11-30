@@ -51,6 +51,10 @@
                         {
                             "xml": "<preference default=\"true\" name=\"xwalkMultipleApk\" />",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Screenshot\"><param name=\"android-package\" value=\"com.darktalker.cordova.screenshot.Screenshot\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -68,7 +72,7 @@
                         },
                         {
                             "xml": "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />",
-                            "count": 1
+                            "count": 2
                         },
                         {
                             "xml": "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\" />",
@@ -109,6 +113,9 @@
             "PACKAGE_NAME": "com.ionicframework.teleport2514364"
         },
         "cordova-plugin-crosswalk-webview": {
+            "PACKAGE_NAME": "com.ionicframework.teleport2514364"
+        },
+        "com.darktalker.cordova.screenshot": {
             "PACKAGE_NAME": "com.ionicframework.teleport2514364"
         }
     },

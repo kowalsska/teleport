@@ -98,6 +98,13 @@ module.exports = [
         "clobbers": [
             "CameraPopoverHandle"
         ]
+    },
+    {
+        "file": "plugins/com.darktalker.cordova.screenshot/www/Screenshot.js",
+        "id": "com.darktalker.cordova.screenshot.screenshot",
+        "merges": [
+            "navigator.screenshot"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -111,7 +118,8 @@ module.exports.metadata =
     "ionic-plugin-keyboard": "1.0.7",
     "cordova-plugin-geolocation": "1.0.1",
     "cordova-plugin-camera": "1.2.0",
-    "cordova-plugin-crosswalk-webview": "1.4.0"
+    "cordova-plugin-crosswalk-webview": "1.4.0",
+    "com.darktalker.cordova.screenshot": "0.1.3"
 }
 // BOTTOM OF METADATA
 });

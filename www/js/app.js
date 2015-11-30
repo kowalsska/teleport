@@ -37,17 +37,19 @@ teleportApp.config(function($stateProvider, $urlRouterProvider) {
     .state('left', {
       url: '/galleries',
       templateUrl: 'templates/tab-galleries.html',
-      controller: 'RequestsCtrl'
+      controller: 'CreatedRequestsCtrl',
+      cache: false
     })
     .state('right', {
       url: '/requests',
       templateUrl: 'templates/tab-requests.html',
-      controller: 'RequestsCtrl'
+      controller: 'ReceivedRequestsCtrl',
+      cache: false
     })
     .state('gallery', {
-      url: '/galleries/photos',
+      url: '/galleries/photos:req',
       templateUrl: 'templates/gallery.html',
-      controller: 'RequestsCtrl',
+      controller: 'GalleryCtrl',
       cache: true
     })
     .state('settings', {
