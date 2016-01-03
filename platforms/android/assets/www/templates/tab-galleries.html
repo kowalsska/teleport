@@ -1,8 +1,8 @@
 <ion-view view-title="left">
   <div class="bar bar-header">
-    <button class="button button-icon ion-ios-arrow-back" ui-sref="map" nav-direction="forward"></button>
+    <button class="button button-icon ion-ios-gear-outline" ui-sref="settings" nav-direction="enter"></button>
     <div class="h1 title">Your requests</div>
-    <button class="button button-icon ion-android-settings" ui-sref="settings" nav-direction="enter"></button>
+    <button class="button button-icon ion-ios-arrow-forward" ui-sref="map" nav-direction="forward"></button>
   </div>
     <ion-content class="has-header">
 
@@ -14,7 +14,6 @@
             <p>{{myRequest.latitude}}</p>
             <p>{{myRequest.longitude}}</p>
             <p>{{myRequest.timestamp}}</p>
-            <p>{{myRequest.requester}}</p>
           </a>
 
           <div class="item item-image">
@@ -22,13 +21,13 @@
           </div>
 
           <div class="item item-icon-left assertive">
-            <i class="icon ion-ios-timer-outline"></i>
-            3:26
+            <i id="timer" class="icon ion-ios-timer-outline">
+              <timer interval="1000">5</timer>
+            </i>
           </div>
 
         </div>
         </div>
-
 
     </ion-content>
 </ion-view>

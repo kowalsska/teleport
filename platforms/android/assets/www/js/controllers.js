@@ -26,12 +26,27 @@ teleportApp.controller('MapCtrl', function($scope, $state, $cordovaGeolocation, 
       var newRequestRef = requestsRef.push();
       var ts = Date.now();
 
-      newRequestRef.set({
-        latitude: $scope.centerMap.lat(),
-        longitude: $scope.centerMap.lng(),
-        timestamp: ts,
-        requester: fbAuth.uid
+      var userRef = new Firebase("https://fiery-heat-6378.firebaseio.com/users/" + fbAuth.uid);
+
+      userRef.once("value", function(data) {
+        var user = data.val();
+        var userName = user.displayName;
+        var userLocation = user.location;
+
+        newRequestRef.set({
+          ref: newRequestRef.key(),
+          latitude: $scope.centerMap.lat(),
+          longitude: $scope.centerMap.lng(),
+          timestamp: ts,
+          requesterName: userName,
+          requesterID: fbAuth.uid,
+          requesterLocation: userLocation,
+          isReplied: false,
+          repliedBy: "none"
+        });
+
       });
+
 
       //window.plugins.screenshot.save(function(error,res){
       //  if(error){
@@ -222,19 +237,27 @@ teleportApp.controller('LoginCtrl', function ($scope, $ionicModal, $state, $fire
 
 teleportApp.controller('ReceivedRequestsCtrl', function($scope, $cordovaCamera, $firebaseArray, ReceivedRequests, $ionicPopup) {
 
-  $scope.receivedRequests = ReceivedRequests.all(myLat, myLng);
+  var fbAuth = ref.getAuth();
+  var myID = fbAuth.uid;
+
+  $scope.receivedRequests = ReceivedRequests.all(myLat, myLng, myID);
 
   $scope.decline = function(request) {
     ReceivedRequests.remove(request);
   };
 
+  $scope.myUserID = ref.getAuth().uid;
 
   $scope.takePhoto = function (reqPhoto) {
 
     var fbAuth = ref.getAuth();
-    var requestGalleryRef = new Firebase("https://fiery-heat-6378.firebaseio.com/photos/" + reqPhoto.timestamp);
 
+    var requestGalleryRef = new Firebase("https://fiery-heat-6378.firebaseio.com/photos/" + reqPhoto.timestamp);
     var requestsGalleryArray = $firebaseArray(requestGalleryRef);
+
+    console.log(reqPhoto.ref);
+    var requestRef = new Firebase("https://fiery-heat-6378.firebaseio.com/requests/" + reqPhoto.ref);
+    requestRef.update({isReplied: true, repliedBy: fbAuth.uid});
 
     var options = {
       quality: 80,
@@ -247,7 +270,6 @@ teleportApp.controller('ReceivedRequestsCtrl', function($scope, $cordovaCamera, 
     };
 
     $cordovaCamera.getPicture(options).then(function (imageData) {
-      ReceivedRequests.remove(reqPhoto);
       requestsGalleryArray.$add({
         image: imageData,
         author: fbAuth.uid,
@@ -264,13 +286,19 @@ teleportApp.controller('ReceivedRequestsCtrl', function($scope, $cordovaCamera, 
   }
 });
 
-teleportApp.controller('CreatedRequestsCtrl', function($scope, CreatedRequests, $firebaseArray) {
+teleportApp.controller('CreatedRequestsCtrl', function($scope, CreatedRequests) {
 
   var fbAuth = ref.getAuth();
-  var myUID = fbAuth.uid;
-  console.log("hello: " + $scope.myUID);
+  var myID = fbAuth.uid;
 
-  $scope.createdRequestsMine = CreatedRequests.all(myUID);
+  $scope.createdRequestsMine = CreatedRequests.all(myID);
+
+  $scope.runTimer = function(request) {
+    var reqTimestamp = request.timestamp;
+    var now = Date.now();
+    return now - reqTimestamp;
+  };
+
 
 });
 

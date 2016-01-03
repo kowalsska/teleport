@@ -34,45 +34,29 @@ teleportServices.factory('ReceivedRequests', function($firebaseArray) {
 
   var filteredRequests = [];
 
-  var getMatchingRequest = function(l1, l2, reqArray) {
-    var myLoc = new google.maps.LatLng(l1, l2);
-    for(var i=0; i < reqArray.length; i++) {
-      var reqLoc = new google.maps.LatLng(reqArray[i].latitude, reqArray[i].longitude);
-      var distance = getDistance(myLoc, reqLoc);
-      console.log(distance);
-      if( distance > 200) {
-        reqArray.splice(i, 1);
-      }
-    }
-    return reqArray;
-  };
-
-  function startGettingRequests(lat, lng) {
+  function startGettingRequests(lat, lng, uid) {
     var requestRef = ref.child("requests");
     var requests = $firebaseArray(requestRef);
-
+    filteredRequests = [];
 
     requests.$loaded().then(function() {
-      if(filteredRequests.length === 0) {
-        var reqArray = requests;
-        var myLoc = new google.maps.LatLng(lat, lng);
-        for (var i = 0; i < reqArray.length; i++) {
-          var reqLoc = new google.maps.LatLng(reqArray[i].latitude, reqArray[i].longitude);
-          var distance = getDistance(myLoc, reqLoc);
-          console.log(distance);
-          if (distance < 200) {
-            filteredRequests.push(reqArray[i]);
-          }
+      var reqArray = requests;
+      var myLoc = new google.maps.LatLng(lat, lng);
+      for (var i = 0; i < reqArray.length; i++) {
+        var reqLoc = new google.maps.LatLng(reqArray[i].latitude, reqArray[i].longitude);
+        var reqRequester = reqArray[i].requesterID;
+        var distance = getDistance(myLoc, reqLoc);
+        console.log("Distance: " + distance);
+        if (distance < 200 && reqRequester != uid) {
+          filteredRequests.push(reqArray[i]);
         }
       }
-
     });
   }
 
   return {
-    all: function(lat, lng) {
-//      return getMatchingRequest(lat, lng, requests);
-      startGettingRequests(lat, lng);
+    all: function(lat, lng, uid) {
+      startGettingRequests(lat, lng, uid);
       return filteredRequests;
     },
     remove: function(chat) {
@@ -93,35 +77,51 @@ teleportServices.factory('CreatedRequests', function($firebaseArray) {
 
   var ref = new Firebase("https://fiery-heat-6378.firebaseio.com/");
 
-  var createdRequests = [];
-  var createdRequestRef = ref.child("requests");
-  var createdRequestSync = $firebaseArray(createdRequestRef);
-  createdRequests = createdRequestSync;
+  var requests = [];
+  var requestRef = ref.child("requests");
+  var requestSync = $firebaseArray(requestRef);
+  requests = requestSync;
 
-  var getCreatedRequests = function(uid, reqArray) {
-    console.log("haaalllooo " + uid + " :: " + reqArray.length);
-    for(var j=0; j < reqArray.length; j++) {
-      var reqRequester = reqArray[i].requester;
-      console.log("requester: " + reqRequester);
-      if(  reqRequester !== uid ) {
-        reqArray.splice(j, 1);
-      }
+  var filteredRequests = [];
+
+  function isStillActive(ts) {
+    var value = ts - 5 * 60 * 1000;
+    if(value > 0) {
+      return true
+    } else {
+      return false
     }
-    return reqArray;
-  };
+  }
+
+  function startGettingRequests(uid) {
+    var requestRef = ref.child("requests");
+    var requests = $firebaseArray(requestRef);
+    filteredRequests = [];
+
+    requests.$loaded().then(function() {
+      var reqArray = requests;
+      for( var i = 0; i < reqArray.length; i++ ) {
+        var reqRequester = reqArray[i].requesterID;
+        var ts = reqArray[i].timestamp;
+        if( reqRequester === uid ) { //add && isStillActive(ts)
+          filteredRequests.push(reqArray[i]);
+        }
+      }
+    });
+  }
 
   return {
     all: function(uid) {
-      return getCreatedRequests(uid, createdRequests);
-      //return createdRequests;
+      startGettingRequests(uid);
+      return filteredRequests;
     },
     remove: function(chat) {
-      createdRequests.splice(createdRequests.indexOf(chat), 1);
+      requests.splice(requests.indexOf(chat), 1);
     },
     get: function(id) {
-      for (var i = 0; i < createdRequests.length; i++) {
-        if (createdRequests[i].id === parseInt(id)) {
-          return createdRequests[i];
+      for (var i = 0; i < requests.length; i++) {
+        if (requests[i].id === parseInt(id)) {
+          return requests[i];
         }
       }
       return null;
