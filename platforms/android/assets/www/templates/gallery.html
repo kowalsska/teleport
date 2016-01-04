@@ -13,14 +13,19 @@
           <img ng-src="data:image/jpeg;base64,{{img.image}}" width="100%">
         </div>
 
-        <div class="item item-button-right">
-          <div class="item item-avatar">
-            <img ng-src="data:image/jpeg;base64,{{getPhoto(img.authorID)}}" align="left">{{img.author}}
-            <!--<img src="http://i.imgur.com/7cp8gMW.jpg" align="left">{{img.author}}-->
-          <button id="likeButton" class="button icon-accessory ion-thumbsdown" ng-click="like(img)"> {{img.thumbsUp}}</button>
-          <button id="dislikeButton" class="button icon-accessory ion-thumbsdown" ng-click="dislike(img)"> {{img.thumbsDown}}</button>
+        <div class="row">
+          <div class="col">
+            <div class="item item-avatar">
+              <img ng-src="data:image/jpeg;base64,{{getPhoto(img.authorID)}}">
+              <h2>{{img.author}}</h2>
+              <p>4 minutes ago</p>
+            </div>
+          </div>
+
+          <div class="col col-20"><button class="button button-light ion-thumbsdown" ng-click="like(img)"> {{img.thumbsUp}}</button></div>
+          <div class="col col-20"><button class="button button-light ion-thumbsup" ng-click="dislike(img)"> {{img.thumbsDown}}</button></div>
         </div>
-        </div>
+
       </div>
 
     </div>

@@ -288,7 +288,7 @@ teleportApp.controller('ReceivedRequestsCtrl', function($scope, $cordovaCamera, 
     ReceivedRequests.remove(request);
   };
 
-  $scope.myUserID = ref.getAuth().uid;
+  //$scope.myUserID = ref.getAuth().uid;
 
   $scope.takePhoto = function (reqPhoto) {
 

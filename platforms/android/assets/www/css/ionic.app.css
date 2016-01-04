@@ -6164,9 +6164,9 @@ button.item.item-button-right {
 
 .item-thumbnail-left,
 .item-thumbnail-left .item-content {
-  padding-top: 8px;
+  padding-top: 14px;
   padding-left: 106px;
-  min-height: 100px; }
+  min-height: 70px; }
   .item-thumbnail-left > img:first-child,
   .item-thumbnail-left .item-image,
   .item-thumbnail-left .item-content > img:first-child,
@@ -6175,7 +6175,7 @@ button.item.item-button-right {
     top: 10px;
     left: 10px;
     max-width: 80px;
-    max-height: 80px;
+    max-height: 50px;
     width: 100%;
     height: 100%; }
 
@@ -9134,9 +9134,3 @@ a.button {
   position: relative;
   width: 60%;
   margin: 0 auto; }
-
-#underPhotoBar {
-  height: 100px; }
-
-.likeButton {
-  padding-left: 200px; }

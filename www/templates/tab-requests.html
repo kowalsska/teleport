@@ -1,7 +1,7 @@
 <ion-view view-title="right">
   <div class="bar bar-header">
     <button class="button button-icon ion-ios-arrow-back" ui-sref="map" nav-direction="back"></button>
-    <div class="h1 title">Help them teleport</div>
+    <div class="h1 title">Teleport requests</div>
     <button class="button button-icon ion-ios-gear-outline" ui-sref="settings" nav-direction="enter"></button>
   </div>
   <ion-content class="has-header">
@@ -14,7 +14,7 @@
           <div ng-switch-when="myUserID)">
             <div class="item item-avatar">
               <!-- <img src="{{request.avatarurl}}"> -->
-              <h2>You help {{request.requesterName}} to teleport<br>from {{request.requesterLocation}}</h2>
+              <h2>You helped {{request.requesterName}} to teleport<br>from {{request.requesterLocation}}</h2>
               <p><i id="timer1" class="icon ion-ios-timer-outline"></i> 2:56</p>
             </div>
             <div class="button-bar">

@@ -353,15 +353,17 @@ teleportApp.controller('GalleryCtrl', function($scope, $firebaseArray, $statePar
 
   $scope.galleryRequestTimestamp = $stateParams.req;
 
-  //console.log($scope.galleryRequest);
   var myReqGalleryRef = new Firebase("https://fiery-heat-6378.firebaseio.com/photos/" + $scope.galleryRequestTimestamp);
   var myReqGalleryArray = $firebaseArray(myReqGalleryRef);
-  $scope.images = myReqGalleryArray;
 
-  $scope.getPhoto = function(userID) {
+  myReqGalleryArray.$loaded().then(function() {
+    $scope.images = myReqGalleryArray;
+  });
+
+  $scope.getPhoto = function (userID) {
     var tempRef = new Firebase("https://fiery-heat-6378.firebaseio.com/users/" + userID);
     var photo;
-    tempRef.on("value", function(snapshot) {
+    tempRef.on("value", function (snapshot) {
       photo = snapshot.val().profilePicture;
     });
     return photo;
