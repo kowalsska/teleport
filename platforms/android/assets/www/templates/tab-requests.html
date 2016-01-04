@@ -1,7 +1,7 @@
 <ion-view view-title="right">
   <div class="bar bar-header">
     <button class="button button-icon ion-ios-arrow-back" ui-sref="map" nav-direction="back"></button>
-    <div class="h1 title">Help them teleport</div>
+    <div class="h1 title">Teleport requests</div>
     <button class="button button-icon ion-ios-gear-outline" ui-sref="settings" nav-direction="enter"></button>
   </div>
   <ion-content class="has-header">
@@ -9,21 +9,23 @@
     <div class="list">
       <div class="card" ng-repeat="request in receivedRequests">
 
-        <div ng-switch on="request.repliedBy">
+        <div ng-switch on="checkReplies(request)">
 
-          <div ng-switch-when="myUserID)">
+          <div ng-switch-when="true">
+
             <div class="item item-avatar">
               <!-- <img src="{{request.avatarurl}}"> -->
-              <h2>You help {{request.requesterName}} to teleport<br>from {{request.requesterLocation}}</h2>
+              <h2>You helped {{request.requesterName}} to teleport<br>from {{request.requesterLocation}}</h2><br>
               <p><i id="timer1" class="icon ion-ios-timer-outline"></i> 2:56</p>
             </div>
             <div class="button-bar">
-              <button class="button icon-left ion-images button-calm" ng-click="decline(request)">See gallery</button>
+              <button class="button icon-left ion-images button-calm" ui-sref="gallery({req: {{request.timestamp}} })">See gallery</button>
             </div>
 
           </div>
 
-          <div ng-switch-default>
+          <div ng-switch-when="false">
+
             <div class="item item-avatar">
               <!-- <img src="{{request.avatarurl}}"> -->
               <h2>{{request.requesterName}} from {{request.requesterLocation}}</h2>
@@ -34,6 +36,7 @@
               <button class="button icon-left ion-android-checkbox button-balanced" ng-click="takePhoto(request)">Accept</button>
               <button class="button icon-left ion-android-cancel button-assertive" ng-click="decline(request)">Decline</button>
             </div>
+
           </div>
 
         </div>

@@ -41,7 +41,6 @@ teleportApp.controller('MapCtrl', function($scope, $state, $cordovaGeolocation, 
           requesterName: userName,
           requesterID: fbAuth.uid,
           requesterLocation: userLocation,
-          isReplied: false,
           repliedBy: "none"
         });
 
@@ -176,21 +175,7 @@ teleportApp.controller('LoginCtrl', function ($scope, $ionicModal, $state, $fire
   //$scope.profilePictureURI = null;
 
   $scope.pickPhoto = function() {
-    //  var options = {
-    //    maximumImagesCount: 1,
-    //    width: 800,
-    //    height: 800,
-    //    quality: 80
-    //  };
-    //
-    //  $cordovaImagePicker.getPictures(options).then(function (results) {
-    //    document.getElementById('isPictureAdded').innerHTML = 'Photo added!';
-    //    $scope.profilePictureURI = $base64.encode(results);
-    //  }, function(error) {
-    //    // error getting photos
-    //  });
-    //  //alert('Image URI: ' + $scope.profilePictureURI);
-    //};
+
     var options = {
       quality: 60,
       destinationType: Camera.DestinationType.DATA_URL,
@@ -284,6 +269,26 @@ teleportApp.controller('ReceivedRequestsCtrl', function($scope, $cordovaCamera, 
 
   $scope.receivedRequests = ReceivedRequests.all(myLat, myLng, myID);
 
+  $scope.checkReplies = function(req) {
+    if(req.repliedBy != "none") {
+      for (reply in req.repliedBy) {
+        var replyRef = new Firebase("https://fiery-heat-6378.firebaseio.com/requests/" + req.ref + "/repliedBy/" + reply);
+        replyRef.on("value", function (snapshot) {
+          $scope.whoReplied = snapshot.val().repliedByID;
+        });
+        if ($scope.whoReplied === myID) {
+          //console.log("Yes you replied to this request");
+          return true;
+        }
+      }
+      //console.log("Current user didnt reply");
+      return false;
+    } else {
+      //console.log("None replied yet");
+      return false;
+    }
+  };
+
   $scope.decline = function(request) {
     ReceivedRequests.remove(request);
   };
@@ -298,12 +303,17 @@ teleportApp.controller('ReceivedRequestsCtrl', function($scope, $cordovaCamera, 
     var requestsGalleryArray = $firebaseArray(requestGalleryRef);
 
     //console.log(reqPhoto.ref);
-    var requestRef = new Firebase("https://fiery-heat-6378.firebaseio.com/requests/" + reqPhoto.ref);
-    requestRef.update({isReplied: true, repliedBy: fbAuth.uid});
     var userDisplayName;
     var refUser = new Firebase("https://fiery-heat-6378.firebaseio.com/users/" + fbAuth.uid);
     refUser.on("value", function(snapshot) {
       userDisplayName = snapshot.val().displayName;
+    });
+
+    var requestRef = new Firebase("https://fiery-heat-6378.firebaseio.com/requests/" + reqPhoto.ref + "/repliedBy");
+    var repliedByArray = $firebaseArray(requestRef);
+    repliedByArray.$add({
+      repliedByID: fbAuth.uid,
+      repliedByName: userDisplayName
     });
 
     var options = {
