@@ -1,26 +1,28 @@
 <ion-view view-title="gallery">
   <div class="bar bar-header">
-    <button class="button button-icon ion-ios-arrow-back" ui-sref="left" nav-direction="back"></button>
+    <button class="button button-icon ion-ios-gear-outline" ui-sref="settings" nav-direction="enter"></button>
     <div class="h1 title">Gallery</div>
-    <button class="button button-clear ion-android-settings" ui-sref="settings" nav-direction="enter"></button>
+    <button class="button button-icon ion-ios-arrow-forward" ui-sref="left" nav-direction="enter"></button>
   </div>
   <ion-content class="has-header">
 
-    <div class="row" ng-repeat="img in images" ng-if="$index % 4 === 0">
+    <div class="list">
+      <div class="card" ng-repeat="img in images">
 
-      <div class="col col-25" ng-if="$index < images.length">
+        <div class="item item-image">
+          <img ng-src="data:image/jpeg;base64,{{img.image}}" width="100%">
+        </div>
 
-        <img ng-src="data:image/jpeg;base64,{{images[$index].image}}" width="100%" />
+        <div class="item item-button-right">
+          <div class="item item-avatar">
+            <img ng-src="data:image/jpeg;base64,{{getPhoto(img.authorID)}}" align="left">{{img.author}}
+            <!--<img src="http://i.imgur.com/7cp8gMW.jpg" align="left">{{img.author}}-->
+          <button id="likeButton" class="button icon-accessory ion-thumbsdown" ng-click="like(img)"> {{img.thumbsUp}}</button>
+          <button id="dislikeButton" class="button icon-accessory ion-thumbsdown" ng-click="dislike(img)"> {{img.thumbsDown}}</button>
+        </div>
+        </div>
       </div>
-      <div class="col col-25" ng-if="$index + 1 < images.length">
-        <img ng-src="data:image/jpeg;base64,{{images[$index + 1].image}}" width="100%" />
-      </div>
-      <div class="col col-25" ng-if="$index + 2 < images.length">
-        <img ng-src="data:image/jpeg;base64,{{images[$index + 2].image}}" width="100%" />
-      </div>
-      <div class="col col-25" ng-if="$index + 3 < images.length">
-        <img ng-src="data:image/jpeg;base64,{{images[$index + 3].image}}" width="100%" />
-      </div>
+
     </div>
 
 

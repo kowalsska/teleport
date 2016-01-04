@@ -82,7 +82,9 @@
                             "xml": "<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\" />",
                             "count": 1
                         }
-                    ]
+                    ],
+                    "/manifest/application": [],
+                    "/manifest": []
                 }
             }
         }

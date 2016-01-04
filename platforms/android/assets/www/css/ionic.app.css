@@ -9134,3 +9134,9 @@ a.button {
   position: relative;
   width: 60%;
   margin: 0 auto; }
+
+#underPhotoBar {
+  height: 100px; }
+
+.likeButton {
+  padding-left: 200px; }
