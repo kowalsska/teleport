@@ -369,9 +369,15 @@ teleportApp.controller('CreatedRequestsCtrl', function($scope, CreatedRequests) 
   $scope.createdRequestsMine = CreatedRequests.all(myID);
 
   $scope.runTimer = function(request) {
-    var reqTimestamp = request.timestamp;
-    var now = Date.now();
-    return now - reqTimestamp;
+    var reqTimestamp = request.timestamp / 1000;
+    var now = Date.now() / 1000;
+    //console.log("Current: " + now + " Timestamp: " + reqTimestamp);
+    var value = 300 - (now - reqTimestamp);
+    if(value > 0){
+      return value;
+    } else {
+      return -1;
+    }
   };
 
 });

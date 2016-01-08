@@ -7,6 +7,9 @@
     <ion-content class="has-header">
 
       <div class="list">
+
+
+
         <div class="card" ng-repeat="myRequest in createdRequestsMine">
 
           <a class="item item-avatar" ui-sref="gallery({req: {{myRequest.timestamp}} })" nav-direction="enter">
@@ -26,6 +29,15 @@
           </div>
 
         </div>
+
+        <div ng-if="createdRequestsMine.length === 0">
+          <div class="card">
+            <div class="item item-text-wrap">
+              <p align="center"> No requests to show!</p>
+            </div>
+          </div>
+        </div>
+
         </div>
 
     </ion-content>

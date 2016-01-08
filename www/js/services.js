@@ -82,10 +82,14 @@ teleportServices.factory('CreatedRequests', function($firebaseArray) {
   var filteredRequests = [];
 
   function isStillActive(ts) {
-    var value = ts - 5 * 60 * 1000;
+    var timestamp5minutesAgo = Date.now() - 5 * 60 * 1000;
+    var requestTimestamp = ts;
+    var value = requestTimestamp - timestamp5minutesAgo;
     if(value > 0) {
+      console.log(value);
       return true
     } else {
+      console.log(value);
       return false
     }
   }
@@ -100,7 +104,7 @@ teleportServices.factory('CreatedRequests', function($firebaseArray) {
       for( var i = 0; i < reqArray.length; i++ ) {
         var reqRequester = reqArray[i].requesterID;
         var ts = reqArray[i].timestamp;
-        if( reqRequester === uid ) { //add && isStillActive(ts)
+        if( reqRequester === uid && isStillActive(ts)) { //add && isStillActive(ts)
           filteredRequests.push(reqArray[i]);
         }
       }

@@ -24,7 +24,7 @@ teleportApp.controller('MapCtrl', function($scope, $state, $cordovaGeolocation, 
       }else{
         $scope.reqScreenshot = res.URI;
       }
-    },60);
+    },50);
   }
 
   $scope.sendRequest = function() {
@@ -106,11 +106,11 @@ teleportApp.controller('MapCtrl', function($scope, $state, $cordovaGeolocation, 
 
     // Construct a draggable red triangle with geodesic set to true.
     var circle = new google.maps.Circle({
-      strokeColor: '#14D1E1',
-      strokeOpacity: 0.35,
-      strokeWeight: 1,
-      fillColor: '#14D1E1',
-      fillOpacity: 0.35,
+      strokeColor: '#1f9398',
+      strokeOpacity: 0.25,
+      strokeWeight: 0,
+      fillColor: '#1f9398',
+      fillOpacity: 0.25,
       map: map,
       center: $scope.centerMap,
       radius: 200,
@@ -369,11 +369,16 @@ teleportApp.controller('CreatedRequestsCtrl', function($scope, CreatedRequests) 
   $scope.createdRequestsMine = CreatedRequests.all(myID);
 
   $scope.runTimer = function(request) {
-    var reqTimestamp = request.timestamp;
-    var now = Date.now();
-    return now - reqTimestamp;
+    var reqTimestamp = request.timestamp / 1000;
+    var now = Date.now() / 1000;
+    //console.log("Current: " + now + " Timestamp: " + reqTimestamp);
+    var value = 300 - (now - reqTimestamp);
+    if(value > 0){
+      return value;
+    } else {
+      return -1;
+    }
   };
-
 
 });
 

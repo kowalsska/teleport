@@ -3,8 +3,6 @@
  */
 var teleportServices = angular.module('teleport.services', []);
 
-
-
 teleportServices.factory('ReceivedRequests', function($firebaseArray) {
   // Might use a resource here that returns a JSON array
 
@@ -46,11 +44,6 @@ teleportServices.factory('ReceivedRequests', function($firebaseArray) {
         var reqLoc = new google.maps.LatLng(reqArray[i].latitude, reqArray[i].longitude);
         var reqRequester = reqArray[i].requesterID;
         var distance = getDistance(myLoc, reqLoc);
-        //console.log("Distance: " + distance);
-        //console.log(reqArray[i].repliedBy);
-        //for(o in reqArray[i].repliedBy) {
-        //  console.log(o.getForKey());
-        //}
         if (distance < 200 && reqRequester != uid) {
           filteredRequests.push(reqArray[i]);
         }
@@ -89,10 +82,14 @@ teleportServices.factory('CreatedRequests', function($firebaseArray) {
   var filteredRequests = [];
 
   function isStillActive(ts) {
-    var value = ts - 5 * 60 * 1000;
+    var timestamp5minutesAgo = Date.now() - 5 * 60 * 1000;
+    var requestTimestamp = ts;
+    var value = requestTimestamp - timestamp5minutesAgo;
     if(value > 0) {
+      console.log(value);
       return true
     } else {
+      console.log(value);
       return false
     }
   }
@@ -107,7 +104,7 @@ teleportServices.factory('CreatedRequests', function($firebaseArray) {
       for( var i = 0; i < reqArray.length; i++ ) {
         var reqRequester = reqArray[i].requesterID;
         var ts = reqArray[i].timestamp;
-        if( reqRequester === uid ) { //add && isStillActive(ts)
+        if( reqRequester === uid && isStillActive(ts)) { //add && isStillActive(ts)
           filteredRequests.push(reqArray[i]);
         }
       }
