@@ -15,58 +15,76 @@ navigator.geolocation.getCurrentPosition(function(position) {
   console.log("My location: " + myLat + ", " + myLng);
 });
 
-teleportApp.controller('MapCtrl', function($scope, $state, $cordovaGeolocation, $firebaseArray, $ionicPopup) {
+teleportApp.controller('MapCtrl', function($scope, $state, $cordovaGeolocation, $firebaseArray, $ionicPopup, $ionicLoading) {
 
+  function takeScreenshot() {
+    navigator.screenshot.URI(function(error,res){
+      if(error){
+        console.error(error);
+      }else{
+        $scope.reqScreenshot = res.URI;
+      }
+    },60);
+  }
 
   $scope.sendRequest = function() {
-    var fbAuth = ref.getAuth();
-    if(fbAuth) {
-      var requestsRef = ref.child("requests");
 
-      var newRequestRef = requestsRef.push();
-      var ts = Date.now();
+    takeScreenshot();
 
-      var userRef = new Firebase("https://fiery-heat-6378.firebaseio.com/users/" + fbAuth.uid);
+    var popup = $ionicPopup.prompt({
+      title: 'Where are you teleporting?',
+      subTitle: 'Give it a name',
+      inputType: 'text'
+    }).then(function(res) {
+      $scope.requestName = res;
+    });
 
-      userRef.once("value", function(data) {
-        var user = data.val();
-        var userName = user.displayName;
-        var userLocation = user.location;
+    popup.then(function() {
 
-        newRequestRef.set({
-          ref: newRequestRef.key(),
-          latitude: $scope.centerMap.lat(),
-          longitude: $scope.centerMap.lng(),
-          timestamp: ts,
-          requesterName: userName,
-          requesterID: fbAuth.uid,
-          requesterLocation: userLocation,
-          repliedBy: "none"
-        });
+      if($scope.requestName != undefined) {
 
-      });
+        var fbAuth = ref.getAuth();
+        if(fbAuth) {
+          var requestsRef = ref.child("requests");
 
+          var newRequestRef = requestsRef.push();
+          var ts = Date.now();
 
-      //window.plugins.screenshot.save(function(error,res){
-      //  if(error){
-      //    alert(error);
-      //  }else{
-      //    alert('ok','/img'); //should be path/to/myScreenshot.jpg
-      //  }
-      //},'jpg',50,ts);
+          var userRef = new Firebase("https://fiery-heat-6378.firebaseio.com/users/" + fbAuth.uid);
 
-      $ionicPopup.alert({
-        title: 'teleport',
-        template: 'Your request has been sent!'
-      })
-    } else {
-      $ionicPopup.alert({
-        title: 'teleport',
-        template: 'You need to log in first!'
-      })
-    }
+          userRef.once("value", function(data) {
+            var user = data.val();
+            var userName = user.displayName;
+            var userLocation = user.location;
 
+            newRequestRef.set({
+              ref: newRequestRef.key(),
+              name: $scope.requestName,
+              latitude: $scope.centerMap.lat(),
+              longitude: $scope.centerMap.lng(),
+              timestamp: ts,
+              requesterName: userName,
+              requesterID: fbAuth.uid,
+              requesterLocation: userLocation,
+              repliedBy: "none",
+              screenshot: $scope.reqScreenshot
+            });
+          });
 
+          //window.plugins.screenshot.save(function(error,res){
+          //  if(error){
+          //    alert(error);
+          //  }else{
+          //    alert('ok','/img'); //should be path/to/myScreenshot.jpg
+          //  }
+          //},'jpg',50,ts);
+
+          $ionicLoading.show({ template: 'Request sent!', noBackdrop: true, duration: 1500 });
+        }
+      } else {
+        $ionicLoading.show({ template: 'Request not sent', noBackdrop: true, duration: 1000 });
+      }
+    });
   };
 
   var options = {timeout: 10000, enableHighAccuracy: true};
@@ -88,15 +106,15 @@ teleportApp.controller('MapCtrl', function($scope, $state, $cordovaGeolocation, 
 
     // Construct a draggable red triangle with geodesic set to true.
     var circle = new google.maps.Circle({
-      strokeColor: '#FF0000',
+      strokeColor: '#14D1E1',
       strokeOpacity: 0.35,
       strokeWeight: 1,
-      fillColor: '#FF0000',
+      fillColor: '#14D1E1',
       fillOpacity: 0.35,
       map: map,
       center: $scope.centerMap,
       radius: 200,
-      draggable: true,
+      draggable: false,
       geodesic: true
     });
 

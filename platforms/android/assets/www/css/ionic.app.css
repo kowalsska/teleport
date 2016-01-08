@@ -9134,3 +9134,15 @@ a.button {
   position: relative;
   width: 60%;
   margin: 0 auto; }
+
+.crop {
+  width: 340px;
+  height: 140px;
+  overflow: hidden; }
+
+.crop img {
+  height: 500px;
+  margin-top: -180px;
+  margin-bottom: 0px;
+  margin-right: 0px;
+  margin-left: 0px; }

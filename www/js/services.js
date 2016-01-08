@@ -3,8 +3,6 @@
  */
 var teleportServices = angular.module('teleport.services', []);
 
-
-
 teleportServices.factory('ReceivedRequests', function($firebaseArray) {
   // Might use a resource here that returns a JSON array
 
@@ -46,11 +44,6 @@ teleportServices.factory('ReceivedRequests', function($firebaseArray) {
         var reqLoc = new google.maps.LatLng(reqArray[i].latitude, reqArray[i].longitude);
         var reqRequester = reqArray[i].requesterID;
         var distance = getDistance(myLoc, reqLoc);
-        //console.log("Distance: " + distance);
-        //console.log(reqArray[i].repliedBy);
-        //for(o in reqArray[i].repliedBy) {
-        //  console.log(o.getForKey());
-        //}
         if (distance < 200 && reqRequester != uid) {
           filteredRequests.push(reqArray[i]);
         }

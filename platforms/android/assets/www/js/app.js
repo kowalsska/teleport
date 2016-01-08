@@ -5,8 +5,6 @@
 // the 2nd parameter is an array of 'requires'
 var teleportApp = angular.module('teleport', ['ionic', 'ngCordova', 'firebase', 'teleport.controllers', 'teleport.services']);
 
-//var ref = new Firebase("https://fiery-heat-6378.firebaseio.com/");
-
 teleportApp.run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
