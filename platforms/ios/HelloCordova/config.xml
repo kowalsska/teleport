@@ -57,4 +57,7 @@
     <feature name="Screenshot">
         <param name="ios-package" value="Screenshot" />
     </feature>
+    <feature name="PushNotification">
+        <param name="ios-package" value="PushPlugin" />
+    </feature>
 </widget>

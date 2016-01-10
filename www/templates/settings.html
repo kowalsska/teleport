@@ -1,21 +1,11 @@
 <ion-view view-title="settings">
   <div class="bar bar-header">
-    <button class="button button-icon ion-ios-arrow-back" ui-sref="left" nav-direction="exit"></button>
+    <button class="button button-icon ion-ios-arrow-back" ng-click="goBackFunc()" nav-direction="exit"></button>
     <div class="h1 title">Settings</div>
   </div>
   <ion-content class="has-header">
 
     <div class="list">
-
-      <li class="item item-toggle">
-        Track my location
-        <label class="toggle toggle-energized">
-          <input type="checkbox">
-          <div class="track">
-            <div class="handle"></div>
-          </div>
-        </label>
-      </li>
 
       <li class="item item-toggle">
         Post anonymously
@@ -28,11 +18,6 @@
       </li>
 
       <a class="item item-icon-left" href="#">
-        <i class="icon ion-ios-person"></i>
-        Change profile picture
-      </a>
-
-      <a class="item item-icon-left" href="#">
         <i class="icon ion-log-out"></i>
         Log out
       </a>
@@ -41,19 +26,27 @@
         Your profile
       </div>
 
+      <div class="item item-button-right">
+        Location: {{userLocation}}
+        <button class="button button-positive" ng-click="updateLocation()">
+          Update
+        </button>
+      </div>
+
       <li class="item" href="#">
-        <i class="icon ion-thumbsup"></i> 112
+        <i class="icon ion-thumbsup"></i> {{userLikes}}
       </li>
 
       <li class="item" href="#">
-        <i class="icon ion-thumbsdown"></i> 37
+        <i class="icon ion-thumbsdown"></i> {{userDislikes}}
       </li>
 
-        <div class="item item-thumbnail-left">
-          <img ng-src="data:image/jpeg;base64,{{userPhoto}}" align="left">
+      <div class="item item-button-right">
+        <div class="item-thumbnail-left">
+          <img ng-src="data:image/jpeg;base64,{{userPhoto}}">
         </div>
-
-
+        <button class="button button-positive">Change photo</button>
+      </div>
 
     </div>
 

@@ -239,7 +239,9 @@ teleportApp.controller('LoginCtrl', function ($scope, $ionicModal, $state, $fire
           email: user.email,
           displayName: user.displayname,
           location: user.location,
-          profilePicture: $scope.profilePictureURI
+          profilePicture: $scope.profilePictureURI,
+          likes: 0,
+          dislikes: 0
         });
         $ionicLoading.hide();
         $scope.modal.hide();
@@ -280,12 +282,19 @@ teleportApp.controller('LoginCtrl', function ($scope, $ionicModal, $state, $fire
   }
 });
 
-teleportApp.controller('ReceivedRequestsCtrl', function($scope, $cordovaCamera, $firebaseArray, ReceivedRequests, $ionicPopup) {
+teleportApp.controller('ReceivedRequestsCtrl', function($scope, $cordovaCamera, $firebaseArray, $firebaseObject, ReceivedRequests, $ionicPopup) {
 
   var fbAuth = ref.getAuth();
   var myID = fbAuth.uid;
 
   $scope.receivedRequests = ReceivedRequests.all(myLat, myLng, myID);
+
+  $scope.getRequesterProfilePicture = function(req) {
+    var userRef = new Firebase("https://fiery-heat-6378.firebaseio.com/users/" + req.requesterID);
+    userRef.on("value", function(dataSnapshot) {
+      return "data:image/jpeg;base64," + dataSnapshot.profilePicture;
+    });
+  };
 
   $scope.checkReplies = function(req) {
     if(req.repliedBy != "none") {
@@ -323,7 +332,7 @@ teleportApp.controller('ReceivedRequestsCtrl', function($scope, $cordovaCamera, 
     //console.log(reqPhoto.ref);
     var userDisplayName;
     var refUser = new Firebase("https://fiery-heat-6378.firebaseio.com/users/" + fbAuth.uid);
-    refUser.on("value", function(snapshot) {
+    refUser.on("value", function (snapshot) {
       userDisplayName = snapshot.val().displayName;
     });
 
@@ -350,18 +359,19 @@ teleportApp.controller('ReceivedRequestsCtrl', function($scope, $cordovaCamera, 
         author: userDisplayName,
         authorID: fbAuth.uid,
         thumbsUp: 0,
-        thumbsDown: 0});
-      }, function (err) {
-        $ionicPopup.alert({
-          title: 'teleport',
-          template: 'Something went wrong when taking photo.'
-        })
+        thumbsDown: 0
+      });
+    }, function (err) {
+      $ionicPopup.alert({
+        title: 'teleport',
+        template: 'Something went wrong when taking photo.'
+      })
     });
+  };
 
-  }
 });
 
-teleportApp.controller('CreatedRequestsCtrl', function($scope, CreatedRequests) {
+teleportApp.controller('CreatedRequestsCtrl', function($scope, $firebaseObject, CreatedRequests) {
 
   var fbAuth = ref.getAuth();
   var myID = fbAuth.uid;
@@ -380,9 +390,33 @@ teleportApp.controller('CreatedRequestsCtrl', function($scope, CreatedRequests) 
     }
   };
 
+  $scope.numberOfPhotos = function(req) {
+    var reqRef = new Firebase("https://fiery-heat-6378.firebaseio.com/photos/" + req.timestamp);
+    var sync = $firebaseObject(reqRef);
+    sync.$loaded(function(data) {
+      $scope.photosValue = sync.numChildren();
+      var string = $scope.photosValue.toString() + " photos in gallery";
+      if($scope.photosValue == 1) {
+        string = $scope.photosValue.toString() + " photo in gallery";
+      }
+      return string;
+      }
+    );
+    //reqRef.once("value", function(snapshot) {
+    //  $scope.photosValue = snapshot.numChildren();
+    //});
+    //reqRef.$loaded(function () {
+    //  var string = $scope.photosValue.toString() + " photos in gallery";
+    //  if($scope.photosValue == 1) {
+    //    string = $scope.photosValue.toString() + " photo in gallery";
+    //  }
+    //  return string;
+    //});
+  }
+
 });
 
-teleportApp.controller('GalleryCtrl', function($scope, $firebaseArray, $stateParams) {
+teleportApp.controller('GalleryCtrl', function($scope, $firebaseArray, $firebaseObject, $stateParams, $ionicHistory) {
 
   $scope.galleryRequestTimestamp = $stateParams.req;
 
@@ -393,6 +427,15 @@ teleportApp.controller('GalleryCtrl', function($scope, $firebaseArray, $statePar
     $scope.images = myReqGalleryArray;
   });
 
+  //$scope.getPhoto = function (userID) {
+  //  var tempRef = new Firebase("https://fiery-heat-6378.firebaseio.com/users/" + userID);
+  //  var sync = $firebaseObject(tempRef);
+  //  sync.$loaded(function(data) {
+  //    var photo = data.profilePicture;
+  //    return photo;
+  //  });
+  //};
+
   $scope.getPhoto = function (userID) {
     var tempRef = new Firebase("https://fiery-heat-6378.firebaseio.com/users/" + userID);
     var photo;
@@ -400,17 +443,55 @@ teleportApp.controller('GalleryCtrl', function($scope, $firebaseArray, $statePar
       photo = snapshot.val().profilePicture;
     });
     return photo;
+  };
+
+  $scope.goBackFunc = function() {
+    $ionicHistory.nextViewOptions({
+      disableAnimate: true
+    });
+    $ionicHistory.goBack();
+  };
+
+  $scope.like = function(photo) {
+    var photoRef = new Firebase("https://fiery-heat-6378.firebaseio.com/photos/" + photo.timestamp);
+    photoRef.on("value", function(snapshot) {
+      var newLikesValue = snapshot.val().thumbsUp + 1;
+      console.log(newLikesValue);
+      photoRef.update({thumbsUp : newLikesValue});
+    });
   }
 
 });
 
-teleportApp.controller('SettingsCtrl', function($scope) {
+teleportApp.controller('SettingsCtrl', function($scope, $firebaseObject, $ionicHistory, $ionicPopup, $window) {
 
   var fbAuth = ref.getAuth();
   var userRef = new Firebase("https://fiery-heat-6378.firebaseio.com/users/" + fbAuth.uid);
-  userRef.on("value", function(snapshot) {
-    $scope.userPhoto = snapshot.val().profilePicture;
+  var sync = $firebaseObject(userRef);
+  sync.$loaded(function(data) {
+    $scope.userLocation = data.location;
+    $scope.userLikes = data.likes;
+    $scope.userDislikes = data.dislikes;
+    $scope.userPhoto = data.profilePicture;
   });
+
+  $scope.updateLocation = function() {
+    var popup = $ionicPopup.prompt({
+      title: 'What\'s your usual location?',
+      inputType: 'text'
+    }).then(function(res) {
+      $scope.newLocationName = res;
+      userRef.update({location : $scope.newLocationName});
+      $window.location.reload(true);
+    });
+  };
+
+  $scope.goBackFunc = function() {
+    $ionicHistory.nextViewOptions({
+      disableAnimate: true
+    });
+    $ionicHistory.goBack();
+  };
 
 });
 

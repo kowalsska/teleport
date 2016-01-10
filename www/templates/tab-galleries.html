@@ -4,18 +4,16 @@
     <div class="h1 title">Your requests</div>
     <button class="button button-icon ion-ios-arrow-forward" ui-sref="map" nav-direction="forward"></button>
   </div>
-    <ion-content class="has-header">
+    <ion-content class="has-header" on-swipe-left="gotoMap()">
 
       <div class="list">
-
-
 
         <div class="card" ng-repeat="myRequest in createdRequestsMine">
 
           <a class="item item-avatar" ui-sref="gallery({req: {{myRequest.timestamp}} })" nav-direction="enter">
             <img src="img/avatar.png">
             <h2>{{myRequest.name}}</h2>
-            <p>2 photos in gallery</p>
+            <p>2 photos in gallery</p><!--{{numberOfPhotos(myRequest)}}-->
           </a>
 
           <div class="item item-image">

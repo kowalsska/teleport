@@ -70,7 +70,7 @@ teleportServices.factory('ReceivedRequests', function($firebaseArray) {
   };
 });
 
-teleportServices.factory('CreatedRequests', function($firebaseArray) {
+teleportServices.factory('CreatedRequests', function($firebaseArray, $ionicLoading) {
 
   var ref = new Firebase("https://fiery-heat-6378.firebaseio.com/");
 
@@ -95,6 +95,9 @@ teleportServices.factory('CreatedRequests', function($firebaseArray) {
   }
 
   function startGettingRequests(uid) {
+    $ionicLoading.show({
+      template: '<ion-spinner icon="spiral"></ion-spinner>'
+    });
     var requestRef = ref.child("requests");
     var requests = $firebaseArray(requestRef);
     filteredRequests = [];
@@ -109,6 +112,7 @@ teleportServices.factory('CreatedRequests', function($firebaseArray) {
         }
       }
     });
+    $ionicLoading.hide();
   }
 
   return {

@@ -82,6 +82,13 @@ module.exports = [
         "merges": [
             "navigator.screenshot"
         ]
+    },
+    {
+        "file": "plugins/phonegap-plugin-push/www/push.js",
+        "id": "phonegap-plugin-push.PushNotification",
+        "clobbers": [
+            "PushNotification"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -96,7 +103,8 @@ module.exports.metadata =
     "cordova-plugin-geolocation": "1.0.1",
     "cordova-plugin-camera": "1.2.0",
     "cordova-plugin-crosswalk-webview": "1.4.0",
-    "com.darktalker.cordova.screenshot": "0.1.3"
+    "com.darktalker.cordova.screenshot": "0.1.3",
+    "phonegap-plugin-push": "1.5.2"
 }
 // BOTTOM OF METADATA
 });
