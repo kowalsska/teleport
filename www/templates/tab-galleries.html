@@ -6,6 +6,11 @@
   </div>
     <ion-content class="has-header" on-swipe-left="gotoMap()">
 
+      <ion-refresher
+        pulling-text="Pull to refresh..."
+        on-refresh="reloadArray()">
+      </ion-refresher>
+
       <div class="list">
 
         <div class="card" ng-repeat="myRequest in createdRequestsMine">

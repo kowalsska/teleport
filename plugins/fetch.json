@@ -87,5 +87,22 @@
         },
         "is_top_level": true,
         "variables": {}
+    },
+    "cordova-plugin-googleplayservices": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-googleplayservices"
+        },
+        "is_top_level": false,
+        "variables": {}
+    },
+    "se.frostyelk.cordova.parse.plugin": {
+        "source": {
+            "type": "git",
+            "url": "https://github.com/rrostt/cordova-parse-plugin.git",
+            "subdir": "."
+        },
+        "is_top_level": true,
+        "variables": {}
     }
 }

@@ -22,18 +22,15 @@ teleportServices.factory('ReceivedRequests', function($firebaseArray) {
       Math.sin(dLong / 2) * Math.sin(dLong / 2);
     var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     var d = R * c;
+    console.log("Distance: " + d);
     return d; // returns the distance in meter
   };
-
-  var requests = [];
-  var requestRef = ref.child("requests");
-  var requestSync = $firebaseArray(requestRef);
-  requests = requestSync;
 
   var filteredRequests = [];
 
   function startGettingRequests(lat, lng, uid) {
     var requestRef = ref.child("requests");
+    requestRef.orderByChild("timestamp");
     var requests = $firebaseArray(requestRef);
     filteredRequests = [];
 
@@ -56,8 +53,8 @@ teleportServices.factory('ReceivedRequests', function($firebaseArray) {
       startGettingRequests(lat, lng, uid);
       return filteredRequests;
     },
-    remove: function(chat) {
-      requests.splice(requests.indexOf(chat), 1);
+    remove: function(req) {
+      filteredRequests.splice(filteredRequests.indexOf(req), 1);
     },
     get: function(chatId) {
       for (var i = 0; i < requests.length; i++) {
@@ -99,6 +96,7 @@ teleportServices.factory('CreatedRequests', function($firebaseArray, $ionicLoadi
       template: '<ion-spinner icon="spiral"></ion-spinner>'
     });
     var requestRef = ref.child("requests");
+    requestRef.orderByChild("timestamp");
     var requests = $firebaseArray(requestRef);
     filteredRequests = [];
 

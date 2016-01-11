@@ -51,10 +51,6 @@
                         {
                             "xml": "<feature name=\"Screenshot\"><param name=\"ios-package\" value=\"Screenshot\" /></feature>",
                             "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"PushNotification\"><param name=\"ios-package\" value=\"PushPlugin\" /></feature>",
-                            "count": 1
                         }
                     ]
                 }
@@ -125,12 +121,7 @@
                             "count": 2
                         }
                     ],
-                    "UIBackgroundModes": [
-                        {
-                            "xml": "<array><string>remote-notification</string></array>",
-                            "count": 1
-                        }
-                    ]
+                    "UIBackgroundModes": []
                 }
             }
         }
@@ -166,9 +157,13 @@
         "com.darktalker.cordova.screenshot": {
             "PACKAGE_NAME": "com.ionicframework.starter"
         },
-        "phonegap-plugin-push": {
+        "se.frostyelk.cordova.parse.plugin": {
             "PACKAGE_NAME": "com.ionicframework.starter"
         }
     },
-    "dependent_plugins": {}
+    "dependent_plugins": {
+        "cordova-plugin-googleplayservices": {
+            "PACKAGE_NAME": "com.ionicframework.starter"
+        }
+    }
 }

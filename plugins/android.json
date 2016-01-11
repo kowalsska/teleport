@@ -57,7 +57,7 @@
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"PushNotification\"><param name=\"android-package\" value=\"com.adobe.phonegap.push.PushPlugin\" /></feature>",
+                            "xml": "<feature name=\"ParsePlugin\"><param name=\"android-package\" value=\"se.frostyelk.cordova.parse.plugin.ParsePlugin\" /></feature>",
                             "count": 1
                         }
                     ]
@@ -89,23 +89,27 @@
                     ],
                     "/manifest/application": [
                         {
-                            "xml": "<activity android:exported=\"true\" android:name=\"com.adobe.phonegap.push.PushHandlerActivity\" />",
+                            "xml": "<meta-data android:name=\"com.google.android.gms.version\" android:value=\"@integer/google_play_services_version\" />",
                             "count": 1
                         },
                         {
-                            "xml": "<receiver android:exported=\"true\" android:name=\"com.google.android.gms.gcm.GcmReceiver\" android:permission=\"com.google.android.c2dm.permission.SEND\"><intent-filter><action android:name=\"com.google.android.c2dm.intent.RECEIVE\" /><category android:name=\"${applicationId}\" /></intent-filter></receiver>",
+                            "xml": "<service android:name=\"com.parse.PushService\" />",
                             "count": 1
                         },
                         {
-                            "xml": "<service android:exported=\"false\" android:name=\"com.adobe.phonegap.push.GCMIntentService\"><intent-filter><action android:name=\"com.google.android.c2dm.intent.RECEIVE\" /></intent-filter></service>",
+                            "xml": "<receiver android:name=\"se.frostyelk.cordova.parse.plugin.ParseWakeUpReceiver\"><intent-filter><action android:name=\"com.google.android.c2dm.intent.RECEIVE\" /><action android:name=\"android.intent.action.BOOT_COMPLETED\" /><action android:name=\"android.intent.action.USER_PRESENT\" /><category android:name=\"com.ionicframework.teleport2514364\" /></intent-filter></receiver>",
                             "count": 1
                         },
                         {
-                            "xml": "<service android:exported=\"false\" android:name=\"com.adobe.phonegap.push.PushInstanceIDListenerService\"><intent-filter><action android:name=\"com.google.android.gms.iid.InstanceID\" /></intent-filter></service>",
+                            "xml": "<receiver android:name=\"com.parse.ParseBroadcastReceiver\"><intent-filter><action android:name=\"android.intent.action.BOOT_COMPLETED\" /><action android:name=\"android.intent.action.USER_PRESENT\" /></intent-filter></receiver>",
                             "count": 1
                         },
                         {
-                            "xml": "<service android:exported=\"false\" android:name=\"com.adobe.phonegap.push.RegistrationIntentService\"></service>",
+                            "xml": "<receiver android:name=\"com.parse.GcmBroadcastReceiver\" android:permission=\"com.google.android.c2dm.permission.SEND\"><intent-filter><action android:name=\"com.google.android.c2dm.intent.RECEIVE\" /><action android:name=\"com.google.android.c2dm.intent.REGISTRATION\" /><category android:name=\"com.ionicframework.teleport2514364\" /></intent-filter></receiver>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<receiver android:exported=\"false\" android:name=\"se.frostyelk.cordova.parse.plugin.ParsePluginBroadcastReciever\"><intent-filter><action android:name=\"com.parse.push.intent.RECEIVE\" /><action android:name=\"com.parse.push.intent.OPEN\" /><action android:name=\"com.parse.push.intent.DELETE\" /></intent-filter></receiver>",
                             "count": 1
                         }
                     ],
@@ -131,11 +135,19 @@
                             "count": 1
                         },
                         {
-                            "xml": "<permission android:name=\"${applicationId}.permission.C2D_MESSAGE\" android:protectionLevel=\"signature\" />",
+                            "xml": "<uses-permission android:name=\"android.permission.RECEIVE_BOOT_COMPLETED\" />",
                             "count": 1
                         },
                         {
-                            "xml": "<uses-permission android:name=\"${applicationId}.permission.C2D_MESSAGE\" />",
+                            "xml": "<uses-permission android:name=\"android.permission.GET_ACCOUNTS\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<permission android:name=\"com.ionicframework.teleport2514364.permission.C2D_MESSAGE\" android:protectionLevel=\"signature\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<uses-permission android:name=\"com.ionicframework.teleport2514364.permission.C2D_MESSAGE\" />",
                             "count": 1
                         }
                     ]
@@ -174,9 +186,13 @@
         "com.darktalker.cordova.screenshot": {
             "PACKAGE_NAME": "com.ionicframework.teleport2514364"
         },
-        "phonegap-plugin-push": {
+        "se.frostyelk.cordova.parse.plugin": {
             "PACKAGE_NAME": "com.ionicframework.teleport2514364"
         }
     },
-    "dependent_plugins": {}
+    "dependent_plugins": {
+        "cordova-plugin-googleplayservices": {
+            "PACKAGE_NAME": "com.ionicframework.teleport2514364"
+        }
+    }
 }

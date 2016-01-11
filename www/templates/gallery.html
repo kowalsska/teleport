@@ -6,7 +6,13 @@
   </div>
   <ion-content class="has-header">
 
+    <ion-refresher
+      pulling-text="Pull to refresh..."
+      on-refresh="reloadArray()">
+    </ion-refresher>
+
     <div class="list">
+
       <div class="card" ng-repeat="img in images">
 
         <div class="item item-image">
@@ -26,6 +32,14 @@
           <div class="col col-20"><button class="button button-light ion-thumbsup" ng-click="like(img)"> {{img.thumbsUp}}</button></div>
         </div>
 
+      </div>
+
+      <div ng-if="images.length === 0">
+        <div class="card">
+          <div class="item item-text-wrap">
+            <p align="center"> No photos added yet!</p>
+          </div>
+        </div>
       </div>
 
     </div>

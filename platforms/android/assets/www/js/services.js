@@ -25,11 +25,6 @@ teleportServices.factory('ReceivedRequests', function($firebaseArray) {
     return d; // returns the distance in meter
   };
 
-  var requests = [];
-  var requestRef = ref.child("requests");
-  var requestSync = $firebaseArray(requestRef);
-  requests = requestSync;
-
   var filteredRequests = [];
 
   function startGettingRequests(lat, lng, uid) {
@@ -56,8 +51,8 @@ teleportServices.factory('ReceivedRequests', function($firebaseArray) {
       startGettingRequests(lat, lng, uid);
       return filteredRequests;
     },
-    remove: function(chat) {
-      requests.splice(requests.indexOf(chat), 1);
+    remove: function(req) {
+      filteredRequests.splice(filteredRequests.indexOf(req), 1);
     },
     get: function(chatId) {
       for (var i = 0; i < requests.length; i++) {

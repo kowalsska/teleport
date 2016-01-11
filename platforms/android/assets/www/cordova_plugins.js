@@ -43,10 +43,10 @@ module.exports = [
     {
         "file": "plugins/ionic-plugin-keyboard/www/android/keyboard.js",
         "id": "ionic-plugin-keyboard.keyboard",
+        "runs": true,
         "clobbers": [
             "cordova.plugins.Keyboard"
-        ],
-        "runs": true
+        ]
     },
     {
         "file": "plugins/cordova-plugin-camera/www/CameraConstants.js",
@@ -84,10 +84,10 @@ module.exports = [
         ]
     },
     {
-        "file": "plugins/phonegap-plugin-push/www/push.js",
-        "id": "phonegap-plugin-push.PushNotification",
+        "file": "plugins/se.frostyelk.cordova.parse.plugin/www/ParsePlugin.js",
+        "id": "se.frostyelk.cordova.parse.plugin.ParsePlugin",
         "clobbers": [
-            "PushNotification"
+            "ParsePlugin"
         ]
     }
 ];
@@ -104,7 +104,8 @@ module.exports.metadata =
     "cordova-plugin-camera": "1.2.0",
     "cordova-plugin-crosswalk-webview": "1.4.0",
     "com.darktalker.cordova.screenshot": "0.1.3",
-    "phonegap-plugin-push": "1.5.2"
+    "se.frostyelk.cordova.parse.plugin": "0.2.0",
+    "cordova-plugin-googleplayservices": "19.0.3"
 }
 // BOTTOM OF METADATA
 });
