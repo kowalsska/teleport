@@ -1,0 +1,47 @@
+<ion-view view-title="left">
+  <div class="bar bar-header">
+    <button class="button button-icon ion-ios-gear-outline" ui-sref="settings" nav-direction="enter"></button>
+    <div class="h1 title">Your requests</div>
+    <button class="button button-icon ion-ios-arrow-forward" ui-sref="map" nav-direction="forward"></button>
+  </div>
+    <ion-content class="has-header" on-swipe-left="gotoMap()">
+
+      <ion-refresher
+        pulling-text="Pull to refresh..."
+        on-refresh="reloadArray()">
+      </ion-refresher>
+
+      <div class="list">
+
+        <div class="card" ng-repeat="myRequest in createdRequestsMine">
+
+          <a class="item item-avatar" ui-sref="gallery({req: {{myRequest.timestamp}} })" nav-direction="enter">
+            <img src="img/avatar.png">
+            <h2>{{myRequest.name}}</h2>
+            <p>2 photos in gallery</p><!--{{numberOfPhotos(myRequest)}}-->
+          </a>
+
+          <div class="item item-image">
+            <div class="crop">
+              <img ng-src="{{myRequest.screenshot}}" height="150">
+            </div>
+          </div>
+
+          <div class="item item-icon-left assertive">
+            <i class="icon ion-ios-timer-outline"></i><timer countdown="runTimer(myRequest)" max-time-unit="'minute'" interval="1000">{{mminutes}}:{{sseconds}}</timer>
+          </div>
+
+        </div>
+
+        <div ng-if="createdRequestsMine.length === 0">
+          <div class="card">
+            <div class="item item-text-wrap">
+              <p align="center"> No requests to show!</p>
+            </div>
+          </div>
+        </div>
+
+        </div>
+
+    </ion-content>
+</ion-view>
