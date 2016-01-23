@@ -465,7 +465,19 @@ teleportApp.controller('GalleryCtrl', function($scope, $firebaseArray, $firebase
 
   myReqGalleryArray.$loaded().then(function() {
     $scope.images = myReqGalleryArray;
+
+    $scope.images.forEach(function(img) {
+      startFetchingPhoto(img.authorID, img);
+    });
   });
+
+  function startFetchingPhoto(userID, img) {
+    var tempRef = new Firebase("https://fiery-heat-6378.firebaseio.com/users/" + userID);
+    var sync = $firebaseObject(tempRef);
+    sync.$loaded(function(data) {
+      img.authorImg = data.profilePicture;
+    });
+  }
 
   $scope.reloadArray = function() {
     var myReqGalleryRef = new Firebase("https://fiery-heat-6378.firebaseio.com/photos/" + $scope.galleryRequestTimestamp);
@@ -487,14 +499,15 @@ teleportApp.controller('GalleryCtrl', function($scope, $firebaseArray, $firebase
   //};
 
   //only loads photo after clicking something in the view
-  $scope.getPhoto = function (userID) {
-    var tempRef = new Firebase("https://fiery-heat-6378.firebaseio.com/users/" + userID);
-    var photo;
-    tempRef.on("value", function (snapshot) {
-      photo = snapshot.val().profilePicture;
-    });
-    return photo;
-  };
+//  $scope.getPhoto = function (userID, img) {
+//    var tempRef = new Firebase("https://fiery-heat-6378.firebaseio.com/users/" + userID);
+////    var photo;
+//    tempRef.on("value", function (snapshot) {
+////      photo = snapshot.val().profilePicture;
+//      img.authorImg = snapshot.val().profilePicture;
+//    });
+////    return photo;
+//  };
 
   $scope.goBackFunc = function() {
     $ionicHistory.nextViewOptions({
@@ -515,7 +528,7 @@ teleportApp.controller('GalleryCtrl', function($scope, $firebaseArray, $firebase
 
 });
 
-teleportApp.controller('SettingsCtrl', function($scope, $firebaseObject, $ionicHistory, $ionicPopup) {
+teleportApp.controller('SettingsCtrl', function($scope, $firebaseObject, $ionicHistory, $ionicPopup, $state, $ionicLoading) {
 
   //sometimes works , sometimes not
   var fbAuth = ref.getAuth();
@@ -527,6 +540,12 @@ teleportApp.controller('SettingsCtrl', function($scope, $firebaseObject, $ionicH
     $scope.userDislikes = data.dislikes;
     $scope.userPhoto = data.profilePicture;
   });
+
+  $scope.logout = function() {
+    ref.unauth();
+    $state.go('login');
+    $ionicLoading.show({ template: 'Sucessful log out', noBackdrop: true, duration: 1000 });
+  };
 
   //works in the browser, not on a phone
   $scope.updateLocation = function() {

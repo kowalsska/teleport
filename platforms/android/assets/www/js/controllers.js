@@ -9,11 +9,29 @@ var ref = new Firebase("https://fiery-heat-6378.firebaseio.com/");
 var myLat;
 var myLng;
 
-navigator.geolocation.getCurrentPosition(function(position) {
-  myLat = position.coords.latitude;
-  myLng = position.coords.longitude;
-  console.log("My location: " + myLat + ", " + myLng);
-});
+var options = {
+  enableHighAccuracy: true,
+  timeout: 5000,
+  maximumAge: 0
+};
+
+function success(pos) {
+  var crd = pos.coords;
+
+  myLat = pos.coords.latitude;
+  myLng = pos.coords.longitude;
+
+  console.log('Your current position is:');
+  console.log('Latitude : ' + crd.latitude);
+  console.log('Longitude: ' + crd.longitude);
+  console.log('More or less ' + crd.accuracy + ' meters.');
+}
+
+function error(err) {
+  console.warn('ERROR(' + err.code + '): ' + err.message);
+}
+
+navigator.geolocation.getCurrentPosition(success, error, options);
 
 teleportApp.controller('MapCtrl', function($scope, $state, $cordovaGeolocation, $firebaseArray, $ionicPopup, $ionicLoading) {
 
@@ -71,15 +89,6 @@ teleportApp.controller('MapCtrl', function($scope, $state, $cordovaGeolocation, 
               screenshot: $scope.reqScreenshot
             });
           });
-
-          //window.plugins.screenshot.save(function(error,res){
-          //  if(error){
-          //    alert(error);
-          //  }else{
-          //    alert('ok','/img'); //should be path/to/myScreenshot.jpg
-          //  }
-          //},'jpg',50,ts);
-
           $ionicLoading.show({ template: 'Request sent!', noBackdrop: true, duration: 1500 });
         }
       } else {
@@ -506,7 +515,7 @@ teleportApp.controller('GalleryCtrl', function($scope, $firebaseArray, $firebase
 
 });
 
-teleportApp.controller('SettingsCtrl', function($scope, $firebaseObject, $ionicHistory, $ionicPopup) {
+teleportApp.controller('SettingsCtrl', function($scope, $firebaseObject, $ionicHistory, $ionicPopup, $state, $ionicLoading) {
 
   //sometimes works , sometimes not
   var fbAuth = ref.getAuth();
@@ -518,6 +527,12 @@ teleportApp.controller('SettingsCtrl', function($scope, $firebaseObject, $ionicH
     $scope.userDislikes = data.dislikes;
     $scope.userPhoto = data.profilePicture;
   });
+
+  $scope.logout = function() {
+    ref.unauth();
+    $state.go('login');
+    $ionicLoading.show({ template: 'Sucessful log out', noBackdrop: true, duration: 1000 });
+  };
 
   //works in the browser, not on a phone
   $scope.updateLocation = function() {
