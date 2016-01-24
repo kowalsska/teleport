@@ -4,7 +4,7 @@
     <div class="h1 title">Teleport requests</div>
     <button class="button button-icon ion-ios-gear-outline" ui-sref="settings" nav-direction="enter"></button>
   </div>
-  <ion-content class="has-header">
+  <ion-content class="has-header" on-swipe-right="swipeRight()" nav-direction="back">
 
     <ion-refresher
       pulling-text="Pull to refresh..."
@@ -19,7 +19,7 @@
           <div ng-switch-when="true">
 
             <div class="item item-avatar">
-              <!--<img ng-src="{{::getRequesterProfilePicture(request)}}">-->
+              <img ng-src="data:image/jpeg;base64,{{request.authorImg}}">
               <h2>You helped {{request.requesterName}} to teleport<br>from {{request.requesterLocation}}</h2>
               <div class="row">
                 <div class="col col-67">
@@ -39,7 +39,7 @@
           <div ng-switch-when="false">
 
             <div class="item item-avatar">
-              <!--<img ng-src="{{::getRequesterProfilePicture(request)}}">-->
+              <img ng-src="data:image/jpeg;base64,{{request.authorImg}}">
               <h2>{{request.requesterName}} from {{request.requesterLocation}}</h2>
               <h2>wants to teleport near you</h2>
               <div class="row">
@@ -61,4 +61,19 @@
     </div>
 
   </ion-content>
+
+  <ion-footer-bar>
+    <ion-tabs class="tabs-striped tabs-color-calm">
+      <a class="tab-item" ui-sref="left" nav-direction="back">
+        <i class="icon ion-eye"></i>
+      </a>
+      <a class="tab-item" ui-sref="map" nav-direction="back">
+        <img src="img/button_inactive.png" class="button button-clear">
+      </a>
+      <a class="tab-item active">
+        <i class="icon ion-android-locate"></i>
+      </a>
+    </ion-tabs>
+  </ion-footer-bar>
+
 </ion-view>

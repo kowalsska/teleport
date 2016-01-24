@@ -64,5 +64,11 @@ teleportApp.config(function($stateProvider, $urlRouterProvider) {
 
 });
 
+teleportApp.config(['$ionicConfigProvider', function($ionicConfigProvider) {
+
+  $ionicConfigProvider.tabs.position('bottom');
+
+}]);
+
 
 

@@ -4,7 +4,7 @@
     <div class="h1 title">Your requests</div>
     <button class="button button-icon ion-ios-arrow-forward" ui-sref="map" nav-direction="forward"></button>
   </div>
-    <ion-content class="has-header" on-swipe-left="gotoMap()">
+    <ion-content class="has-header" on-swipe-left="swipeLeft()">
 
       <ion-refresher
         pulling-text="Pull to refresh..."
@@ -41,7 +41,22 @@
           </div>
         </div>
 
-        </div>
+      </div>
 
     </ion-content>
+
+    <ion-footer-bar>
+      <ion-tabs class="tabs-striped tabs-color-calm">
+        <a class="tab-item active">
+          <i class="icon ion-eye"></i>
+        </a>
+        <a class="tab-item" ui-sref="map" nav-direction="forward">
+          <img src="img/button_inactive.png" class="button button-clear">
+        </a>
+        <a class="tab-item" ui-sref="right" nav-direction="forward">
+          <i class="icon ion-android-locate"></i>
+        </a>
+      </ion-tabs>
+    </ion-footer-bar>
+
 </ion-view>

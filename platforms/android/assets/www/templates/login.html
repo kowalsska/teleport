@@ -4,15 +4,15 @@
       <img src="img/logo.png" class="logo">
     </div>
     <div class="list list-inset">
-      <label class="item item-input">
+      <label id="topInput" class="item item-input">
         <span class="input-label">Email</span>
         <input type="email" ng-model="user.email">
       </label>
-      <label class="item item-input">
+      <label id="bottomInput" class="item item-input">
         <span class="input-label">Password</span>
         <input type="password" ng-model="user.pwdForLogin">
       </label>
-      <button ng-click="signIn(user)" class="button button-block button-calm activated">
+      <button ng-click="signIn(user)" class="button button-block button-calm">
         Sign In
       </button>
     </div>

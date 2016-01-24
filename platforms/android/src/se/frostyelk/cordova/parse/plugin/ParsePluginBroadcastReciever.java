@@ -27,6 +27,8 @@ import com.parse.ParsePushBroadcastReceiver;
 
 public class ParsePluginBroadcastReciever extends ParsePushBroadcastReceiver {
 
+
+
     private static final String LOGTAG = "ParsePluginReciever";
 
     @Override
