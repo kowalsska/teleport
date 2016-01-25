@@ -21,31 +21,53 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.parse.ParseAnalytics;
 import com.parse.ParsePushBroadcastReceiver;
 
 public class ParsePluginBroadcastReciever extends ParsePushBroadcastReceiver {
 
-
-
     private static final String LOGTAG = "ParsePluginReciever";
 
     @Override
     protected void onPushReceive(Context context, Intent intent) {
+
         Log.i(LOGTAG, "onPushReceive Intent: " + intent.getAction());
 
         Bundle pushData = intent.getExtras();
+        String jsonData = pushData.getString("com.parse.Data");
+        JSONObject jsonObject;
 
-        if (ParsePlugin.isAppForeground()) {
-            Log.i(LOGTAG, "App is in foreground");
-            pushData.putBoolean("foreground", true);
-            ParsePlugin.receivePushData(pushData);
-        } else {
-            // Let Parse show the notification
-            Log.i(LOGTAG, "App is NOT in foreground");
-            super.onPushReceive(context, intent);
+        try {
+            jsonObject = new JSONObject(jsonData);
+            String requesterID = jsonObject.getString("requesterID");
+            String reqLatitude = jsonObject.getString("reqLatitude");
+            String reqLongitude = jsonObject.getString("reqLongitude");
+            String message = jsonObject.getString("alert");
+
+            Log.i(LOGTAG, "starting Location Service");
+            Intent serviceIntent = new Intent(context,MyLocationService.class);
+            serviceIntent.putExtra("message", message);
+            serviceIntent.putExtra("requesterID", requesterID);
+            serviceIntent.putExtra("latitude", reqLatitude);
+            serviceIntent.putExtra("longitude", reqLongitude);
+            context.startService(serviceIntent);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
+
+        // if (ParsePlugin.isAppForeground()) {
+        //     Log.i(LOGTAG, "App is in foreground");
+        //     pushData.putBoolean("foreground", true);
+        //     ParsePlugin.receivePushData(pushData);
+        // } else {
+        //     // Let Parse show the notification
+        //     Log.i(LOGTAG, "App is NOT in foreground");
+        //     super.onPushReceive(context, intent);
+        // }
     }
 
     @Override

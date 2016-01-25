@@ -107,16 +107,6 @@ teleportApp.controller('MapCtrl', function($scope, $state, $cordovaGeolocation, 
     });
   };
 
-  $scope.swipeLeft = function() {
-    $ionicViewSwitcher.nextDirection("forward");
-    $state.go("right");
-  };
-
-  $scope.swipeRight = function() {
-    $ionicViewSwitcher.nextDirection("back");
-    $state.go("left");
-  };
-
   var options = {timeout: 10000, enableHighAccuracy: true};
 
   $cordovaGeolocation.getCurrentPosition(options).then(function(position){

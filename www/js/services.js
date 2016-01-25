@@ -13,7 +13,6 @@ teleportServices.factory('ReceivedRequests', function($firebaseArray) {
   };
 
   var getDistance = function(p1, p2) {
-    //console.log("p1: " + p1 + " p2: " + p2);
     var R = 6378137; // Earth’s mean radius in meter
     var dLat = rad(p2.lat() - p1.lat());
     var dLong = rad(p2.lng() - p1.lng());
