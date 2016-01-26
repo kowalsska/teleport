@@ -16,6 +16,8 @@ import android.app.Notification;
 import android.util.Log;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationCompat.Builder;
+import android.media.RingtoneManager;
+import android.net.Uri;
 
 public class MyLocationService extends Service {
 
@@ -39,28 +41,30 @@ public class MyLocationService extends Service {
 	    // Define the criteria how to select the location provider
 	    Criteria criteria = new Criteria();
 	    String provider = locationManager.getBestProvider(criteria, false);
+	    Log.i(LOGTAG, "Provider: " + provider);
 	    Location location = locationManager.getLastKnownLocation(provider);
 	    double requestLatitude = Double.parseDouble(intent.getStringExtra("latitude"));
 	    double requestLongitude = Double.parseDouble(intent.getStringExtra("longitude"));
 	    String message = intent.getStringExtra("message");
 	    double distance = getDistanceBetweenTwoLocations(location, requestLatitude, requestLongitude);
-
-		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
-		    .setContentTitle("Teleport")
-		    .setContentText(message);
-
-		// Sets an ID for the notification
-		int mNotificationId = 001;
-
-		// Gets an instance of the NotificationManager service
-		NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 		
-		// Builds the notification and issues it.
-		Log.i(LOGTAG, "Displaying notification");
-		mNotifyMgr.notify(mNotificationId, mBuilder.build());
-
-        if (distance < 200) { //&&!ParsePlugin.isAppForeground() ??
+        if (distance < 300) {
         	//Show the notification
+        	int drawableResourceId = this.getResources().getIdentifier("icon", "drawable", this.getPackageName());
+	    	Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+
+			NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
+				.setSmallIcon(drawableResourceId)
+			    .setContentTitle("Teleport")
+			    .setContentText(message)
+			    .setVibrate(new long[] { 0, 500, -1})
+			    .setSound(alarmSound);
+
+			// Gets an instance of the NotificationManager service
+			NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+			Log.i(LOGTAG, "Displaying notification");
+			mNotifyMgr.notify(0, mBuilder.build());
         } else {
             //Stop service
 			//stopService();
