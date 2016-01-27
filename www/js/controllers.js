@@ -11,7 +11,7 @@ var myLng;
 
 var options = {
   enableHighAccuracy: true,
-  timeout: 5000,
+  timeout: 8000,
   maximumAge: 0
 };
 
@@ -318,7 +318,6 @@ teleportApp.controller('ReceivedRequestsCtrl', function($scope, $timeout, $ionic
     var sync = $firebaseObject(tempRef);
     sync.$loaded(function(data) {
       req.authorImg = data.profilePicture;
-      console.log("photo loaded for " + data.displayName);
     });
   }
 
@@ -332,14 +331,16 @@ teleportApp.controller('ReceivedRequestsCtrl', function($scope, $timeout, $ionic
     $scope.$broadcast('scroll.refreshComplete');
   };
 
-  //digest error
-  $scope.getRequesterProfilePicture = function(req) {
-    var userRef = new Firebase("https://fiery-heat-6378.firebaseio.com/users/" + req.requesterID);
-    var sync = $firebaseObject(userRef);
-    sync.$loaded(function(data) {
-      console.log(data.displayName);
-      return "data:image/jpeg;base64," + data.profilePicture;
-    });
+  $scope.runTimer = function(request) {
+    var reqTimestamp = request.timestamp / 1000;
+    var now = Date.now() / 1000;
+    //console.log("Current: " + now + " Timestamp: " + reqTimestamp);
+    var value = 300 - (now - reqTimestamp);
+    if(value > 0){
+      return value;
+    } else {
+      return -1;
+    }
   };
 
   $scope.checkReplies = function(req) {
@@ -422,7 +423,8 @@ teleportApp.controller('ReceivedRequestsCtrl', function($scope, $timeout, $ionic
         author: userDisplayName,
         authorID: fbAuth.uid,
         thumbsUp: 0,
-        thumbsDown: 0
+        thumbsDown: 0,
+        timestamp: Date.now()
       });
     }, function (err) {
       $ionicPopup.alert({
@@ -489,7 +491,7 @@ teleportApp.controller('CreatedRequestsCtrl', function($scope, $firebaseObject, 
 
 });
 
-teleportApp.controller('GalleryCtrl', function($scope, $firebaseArray, $firebaseObject, $stateParams, $ionicHistory) {
+teleportApp.controller('GalleryCtrl', function($scope, $firebaseArray, $firebaseObject, $stateParams, $cordovaCamera, $ionicPopup) {
 
   $scope.galleryRequestTimestamp = $stateParams.req;
 
@@ -497,15 +499,28 @@ teleportApp.controller('GalleryCtrl', function($scope, $firebaseArray, $firebase
   var myReqGalleryArray = $firebaseArray(myReqGalleryRef);
 
   myReqGalleryArray.$loaded().then(function() {
-    var now = Date.now;
+
     $scope.images = myReqGalleryArray;
     $scope.images.forEach(function(img) {
+      var now = Date.now();
       startFetchingPhoto(img.authorID, img);
+      addTimers(img, now);
     });
   });
 
-  function addTimers(img) {
-
+  function addTimers(img, now) {
+    var photoTimestamp = img.timestamp;
+    var value = Math.floor((now/60000) - (photoTimestamp/60000));
+    if(value < 1) {
+      img.minutesAgo = "less than a minute ago";
+    }
+    if(value === 1) {
+      img.minutesAgo = "1 minute ago";
+    }
+    if(value > 1) {
+      img.minutesAgo = value + " minutes ago";
+    }
+    console.log("Minutes ago: " + value);
   }
 
   function startFetchingPhoto(userID, img) {
@@ -525,13 +540,6 @@ teleportApp.controller('GalleryCtrl', function($scope, $firebaseArray, $firebase
     $scope.$broadcast('scroll.refreshComplete');
   };
 
-  $scope.goBackFunc = function() {
-    $ionicHistory.nextViewOptions({
-      disableAnimate: true
-    });
-    $ionicHistory.goBack();
-  };
-
   //doesnt work yet
   $scope.like = function(photo) {
     var photoRef = new Firebase("https://fiery-heat-6378.firebaseio.com/photos/" + photo.timestamp);
@@ -540,7 +548,44 @@ teleportApp.controller('GalleryCtrl', function($scope, $firebaseArray, $firebase
       console.log(newLikesValue);
       photoRef.update({thumbsUp : newLikesValue});
     });
-  }
+  };
+
+  $scope.takeNextPhoto = function () {
+
+    var fbAuth = ref.getAuth();
+
+    var userDisplayName;
+    var refUser = new Firebase("https://fiery-heat-6378.firebaseio.com/users/" + fbAuth.uid);
+    refUser.on("value", function (snapshot) {
+      userDisplayName = snapshot.val().displayName;
+    });
+
+    var options = {
+      quality: 80,
+      destinationType: Camera.DestinationType.DATA_URL,
+      sourceType: Camera.PictureSourceType.CAMERA,
+      allowEdit: false,
+      encodingType: Camera.EncodingType.JPEG,
+      popoverOptions: CameraPopoverOptions,
+      saveToPhotoAlbum: false
+    };
+
+    $cordovaCamera.getPicture(options).then(function (imageData) {
+      myReqGalleryArray.$add({
+        image: imageData,
+        author: userDisplayName,
+        authorID: fbAuth.uid,
+        thumbsUp: 0,
+        thumbsDown: 0,
+        timestamp: Date.now()
+      });
+    }, function (err) {
+      $ionicPopup.alert({
+        title: 'teleport',
+        template: 'Something went wrong when taking photo.'
+      })
+    });
+  };
 
 });
 

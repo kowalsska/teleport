@@ -1,0 +1,52 @@
+<ion-view view-title="gallery">
+  <div class="bar bar-header">
+    <button class="button button-icon ion-ios-arrow-back" ui-sref="right" nav-direction="back"></button>
+    <div class="h1 title">Gallery</div>
+    <button class="button button-icon ion-ios-gear-outline" ui-sref="settings" nav-direction="enter"></button>
+  </div>
+  <ion-content class="has-header">
+
+    <button class="button button-block icon ion-ios-plus-outline button-light" ng-click="takeNextPhoto()"> Add more photos
+    </button>
+
+    <ion-refresher
+      pulling-text="Pull to refresh..."
+      on-refresh="reloadArray()">
+    </ion-refresher>
+
+    <div class="list">
+
+      <div class="card" ng-repeat="img in images">
+
+        <div class="item item-image">
+          <img ng-src="data:image/jpeg;base64,{{img.image}}" width="100%">
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <div class="item item-avatar">
+              <img id="galleryUserPhoto" ng-src="data:image/jpeg;base64,{{img.authorImg}}">
+              <h2 id="userNameByPhoto">{{img.author}}</h2>
+              <p>{{img.minutesAgo}}</p>
+            </div>
+          </div>
+
+          <div class="col col-20"><button class="button button-outline button-assertive ion-thumbsdown" ng-click="dislike(img)"> {{img.thumbsDown}}</button></div>
+          <div class="col col-20"><button class="button button-outline button-positive ion-thumbsup" ng-click="like(img)"> {{img.thumbsUp}}</button></div>
+        </div>
+
+      </div>
+
+      <div ng-if="images.length === 0">
+        <div class="card">
+          <div class="item item-text-wrap">
+            <p align="center"> No photos added yet!</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+
+  </ion-content>
+</ion-view>

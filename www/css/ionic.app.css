@@ -9157,7 +9157,44 @@ a.button {
 
 .crop img {
   height: 500px;
-  margin-top: -180px;
+  margin-top: -160px;
   margin-bottom: 0px;
   margin-right: 0px;
   margin-left: 0px; }
+
+#avatarLook {
+  border-radius: 10%;
+  left: 11px;
+  max-width: 50px;
+  max-height: 50px; }
+
+#iconMyRequest {
+  border-radius: 0%;
+  left: 8px;
+  top: 11px;
+  max-width: 55px;
+  max-height: 55px; }
+
+.tabs .tab-item .icon.teleOn {
+  background-repeat: no-repeat;
+  background-position: 50%;
+  height: 100%;
+  background-image: url("../img/button.png");
+  background-size: contain; }
+
+.tabs .tab-item .icon.teleOff {
+  background-repeat: no-repeat;
+  background-position: 50%;
+  height: 100%;
+  background-image: url("../img/button_inactive.png");
+  background-size: contain; }
+
+#galleryUserPhoto {
+  border-radius: 10%;
+  left: 3px;
+  right: 0px;
+  max-width: 50px;
+  max-height: 50px; }
+
+#userNameByPhoto {
+  padding-left: -20px; }

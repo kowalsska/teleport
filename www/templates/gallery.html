@@ -2,7 +2,7 @@
   <div class="bar bar-header">
     <button class="button button-icon ion-ios-gear-outline" ui-sref="settings" nav-direction="enter"></button>
     <div class="h1 title">Gallery</div>
-    <button class="button button-icon ion-ios-arrow-forward" ng-click="goBackFunc()" nav-direction="enter"></button>
+    <button class="button button-icon ion-ios-arrow-forward" ui-sref="left" nav-direction="enter"></button>
   </div>
   <ion-content class="has-header">
 
@@ -24,7 +24,7 @@
             <div class="item item-avatar">
               <img ng-src="data:image/jpeg;base64,{{img.authorImg}}">
               <h2>{{img.author}}</h2>
-              <p>4 minutes ago</p>
+              <p>{{img.minutesAgo}}</p>
             </div>
           </div>
 

@@ -53,6 +53,12 @@ teleportApp.config(function($stateProvider, $urlRouterProvider) {
       controller: 'GalleryCtrl',
       cache: false
     })
+    .state('galleryAddMore', {
+      url: '/requests/photos:req',
+      templateUrl: 'templates/galleryAddMore.html',
+      controller: 'GalleryCtrl',
+      cache: false
+    })
     .state('settings', {
       url: '/settings',
       templateUrl: 'templates/settings.html',

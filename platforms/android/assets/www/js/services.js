@@ -4,9 +4,21 @@
 var teleportServices = angular.module('teleport.services', []);
 
 teleportServices.factory('ReceivedRequests', function($firebaseArray) {
-  // Might use a resource here that returns a JSON array
 
   var ref = new Firebase("https://fiery-heat-6378.firebaseio.com/");
+
+  function isStillActive(ts) {
+    var timestamp5minutesAgo = Date.now() - 5 * 60 * 1000;
+    var requestTimestamp = ts;
+    var value = requestTimestamp - timestamp5minutesAgo;
+    if(value > 0) {
+      console.log(value);
+      return true
+    } else {
+      console.log(value);
+      return false
+    }
+  }
 
   var rad = function(x) {
     return x * Math.PI / 180;
@@ -39,8 +51,9 @@ teleportServices.factory('ReceivedRequests', function($firebaseArray) {
       for (var i = 0; i < reqArray.length; i++) {
         var reqLoc = new google.maps.LatLng(reqArray[i].latitude, reqArray[i].longitude);
         var reqRequester = reqArray[i].requesterID;
+        var ts = reqArray[i].timestamp;
         var distance = getDistance(myLoc, reqLoc);
-        if (distance < 200 && reqRequester != uid) {
+        if ( distance < 1000 && reqRequester != uid ) { //&& isStillActive(ts)
           filteredRequests.push(reqArray[i]);
         }
       }
