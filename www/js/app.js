@@ -7,9 +7,6 @@ var teleportApp = angular.module('teleport', ['ionic', 'ngCordova', 'firebase', 
 
 teleportApp.run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
-    //Parse
-    ParsePlugin.initialize("QPhqq46IfsZuIT9GLUMydSwHHNRakPas2u2mIjDl", "ixkdoG5b66pJfR6s1PnlyTc1WX83XVKYLY7aMAar", function() {
-    });
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
     if(window.cordova && window.cordova.plugins.Keyboard) {

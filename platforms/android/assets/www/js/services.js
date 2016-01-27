@@ -3,9 +3,13 @@
  */
 var teleportServices = angular.module('teleport.services', []);
 
-teleportServices.factory('ReceivedRequests', function($firebaseArray) {
-
+teleportServices.factory('FirebaseRef', function() {
   var ref = new Firebase("https://fiery-heat-6378.firebaseio.com/");
+
+  return ref;
+});
+
+teleportServices.factory('ReceivedRequests', function(FirebaseRef, $firebaseArray) {
 
   function isStillActive(ts) {
     var timestamp5minutesAgo = Date.now() - 5 * 60 * 1000;
@@ -40,11 +44,9 @@ teleportServices.factory('ReceivedRequests', function($firebaseArray) {
   var filteredRequests = [];
 
   function startGettingRequests(lat, lng, uid) {
-    var requestRef = ref.child("requests");
-    requestRef.orderByChild("timestamp");
+    var requestRef = FirebaseRef.child("requests");
     var requests = $firebaseArray(requestRef);
-    filteredRequests = [];
-
+    filteredRequests.splice(0);
     requests.$loaded().then(function() {
       var reqArray = requests;
       var myLoc = new google.maps.LatLng(lat, lng);
@@ -53,7 +55,7 @@ teleportServices.factory('ReceivedRequests', function($firebaseArray) {
         var reqRequester = reqArray[i].requesterID;
         var ts = reqArray[i].timestamp;
         var distance = getDistance(myLoc, reqLoc);
-        if ( distance < 1000 && reqRequester != uid ) { //&& isStillActive(ts)
+        if ( distance < 500 && reqRequester != uid ) { //&& isStillActive(ts)
           filteredRequests.push(reqArray[i]);
         }
       }
@@ -79,12 +81,10 @@ teleportServices.factory('ReceivedRequests', function($firebaseArray) {
   };
 });
 
-teleportServices.factory('CreatedRequests', function($firebaseArray, $ionicLoading) {
-
-  var ref = new Firebase("https://fiery-heat-6378.firebaseio.com/");
+teleportServices.factory('CreatedRequests', function(FirebaseRef, $firebaseArray, $ionicLoading) {
 
   var requests = [];
-  var requestRef = ref.child("requests");
+  var requestRef = FirebaseRef.child("requests");
   var requestSync = $firebaseArray(requestRef);
   requests = requestSync;
 
@@ -107,17 +107,16 @@ teleportServices.factory('CreatedRequests', function($firebaseArray, $ionicLoadi
     $ionicLoading.show({
       template: '<ion-spinner icon="spiral"></ion-spinner>'
     });
-    var requestRef = ref.child("requests");
-    requestRef.orderByChild("timestamp");
+    var requestRef = FirebaseRef.child("requests");
     var requests = $firebaseArray(requestRef);
-    filteredRequests = [];
+    filteredRequests.splice(0);
 
     requests.$loaded().then(function() {
       var reqArray = requests;
       for( var i = 0; i < reqArray.length; i++ ) {
         var reqRequester = reqArray[i].requesterID;
         var ts = reqArray[i].timestamp;
-        if( reqRequester === uid && isStillActive(ts)) { //add && isStillActive(ts)
+        if( reqRequester === uid ) { //add && isStillActive(ts)
           filteredRequests.push(reqArray[i]);
         }
       }
@@ -142,6 +141,43 @@ teleportServices.factory('CreatedRequests', function($firebaseArray, $ionicLoadi
       return null;
     }
   };
+});
 
+teleportServices.factory('GalleryService', function(FirebaseRef, $firebaseArray) {
 
+  var photos = [];
+
+  function startGettingPhotos(requestTimestamp, cb) {
+    console.log("more photos ", requestTimestamp);
+    var galleryRef = FirebaseRef.child("photos").child(requestTimestamp);
+    var gallery = $firebaseArray(galleryRef);
+    photos.splice(0);
+    gallery.$loaded().then(function() {
+      console.log("photos loaded, now adding them to array");
+      var reqArray = gallery;
+      for( var i = 0; i < reqArray.length; i++ ) {
+          photos.push(reqArray[i]);
+      }
+
+      if (cb) cb(photos);
+    });
+  }
+
+  return {
+    all: function(requestTimestamp, cb) {
+      startGettingPhotos(requestTimestamp, cb);
+      return photos;
+    },
+    remove: function(chat) {
+      requests.splice(requests.indexOf(chat), 1);
+    },
+    get: function(id) {
+      for (var i = 0; i < requests.length; i++) {
+        if (requests[i].id === parseInt(id)) {
+          return requests[i];
+        }
+      }
+      return null;
+    }
+  };
 });

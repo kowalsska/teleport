@@ -39,6 +39,7 @@ public class ParsePlugin extends CordovaPlugin {
 
     public static final String PREFERENCE_APP_ID = "se.frostyelk.cordova.parse.ParseAppId";
     public static final String PREFERENCE_CLIENT_KEY = "se.frostyelk.cordova.parse.ClientKey";
+    public static final String PREFERENCE_FIREBASE_USER_ID = "se.frostyelk.cordova.parse.FirebaseUserID";
     public static final String SHARED_PREFERENCES = "se.frostyelk.cordova.parse";
 
     private static final String LOGTAG = "ParsePlugin";
@@ -49,6 +50,7 @@ public class ParsePlugin extends CordovaPlugin {
     private static final String ACTION_GET_PENDING_PUSH = "getPendingPush";
     private static final String ACTION_SUBSCRIBE = "subscribe";
     private static final String ACTION_UNSUBSCRIBE = "unsubscribe";
+    private static final String ACTION_LOGOUT = "logout";
 
     private static CordovaInterface cordovaInterface;
     private static CordovaWebView webView;
@@ -58,6 +60,7 @@ public class ParsePlugin extends CordovaPlugin {
 
     private String appId;
     private String clientKey;
+    private String firebaseUserID;
 
     public static boolean isAppForeground() {
         return appForeground;
@@ -247,6 +250,8 @@ public class ParsePlugin extends CordovaPlugin {
             result = unsubscribe(args.getString(0), callbackContext);
         } else if (ACTION_GET_PENDING_PUSH.equals(action)) {
             result = getPendingPush(callbackContext);
+        } else if (ACTION_LOGOUT.equals(action)) {
+            result = logout();
         } else {
             result = new PluginResult(Status.INVALID_ACTION);
         }
@@ -257,10 +262,20 @@ public class ParsePlugin extends CordovaPlugin {
         return true;
     }
 
+    private void saveFirebaseUserID(String userID) {
+            SharedPreferences sharedPref = getActivity().getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putString(PREFERENCE_FIREBASE_USER_ID, firebaseUserID);
+            editor.commit();
+    }
+
     private PluginResult initialize(final CallbackContext callbackContext, final JSONArray args) {
 		try {
+            Log.d("teleport", "Initializing");
 			appId = args.getString(0);
 			clientKey = args.getString(1);
+            firebaseUserID = args.getString(2);
+            saveFirebaseUserID(firebaseUserID);
 			Parse.initialize(cordova.getActivity().getApplicationContext(), appId, clientKey);
 			ParseInstallation.getCurrentInstallation().saveInBackground();
 			ParseAnalytics.trackAppOpenedInBackground(cordova.getActivity().getIntent());
@@ -270,6 +285,11 @@ public class ParsePlugin extends CordovaPlugin {
 		}
 
         return null;
+    }
+
+    private PluginResult logout() {
+            saveFirebaseUserID("");
+            return null;
     }
 
     private PluginResult getInstallationId(final CallbackContext callbackContext) {

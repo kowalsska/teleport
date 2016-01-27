@@ -22,6 +22,11 @@
               <img id="avatarLook" ng-src="data:image/jpeg;base64,{{request.authorImg}}">
               <h2>You helped {{request.requesterName}} to teleport<br>from {{request.requesterLocation}}</h2>
               <div class="row">
+                <div class="col">
+                  <p>"{{request.name}}"</p>
+                </div>
+              </div>
+              <div class="row">
                 <div class="col col-67">
                   <p><i class="icon ion-android-done"></i> Photo Delivered</p>
                 </div>
@@ -42,6 +47,11 @@
               <img id="avatarLook" ng-src="data:image/jpeg;base64,{{request.authorImg}}">
               <h2>{{request.requesterName}} from {{request.requesterLocation}}</h2>
               <h2>wants to teleport near you</h2>
+              <div class="row">
+                <div class="col">
+                  <p>"{{request.name}}"</p>
+                </div>
+              </div>
               <div class="row">
                 <div class="col">
                   <p><i class="icon ion-ios-timer-outline"></i><timer countdown="runTimer(request)" max-time-unit="'minute'" interval="1000"> {{mminutes}}:{{sseconds}}</timer></p>

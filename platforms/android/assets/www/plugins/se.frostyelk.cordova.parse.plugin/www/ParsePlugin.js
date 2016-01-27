@@ -22,8 +22,8 @@ parseExport.echo = function (successCallback, failureCallback) {
 	cordova.exec(successCallback, failureCallback, 'ParsePlugin', 'echo');
 };
 
-parseExport.initialize = function (appId, clientKey, successCallback, errorCallback) {
-	cordova.exec(successCallback, errorCallback, 'ParsePlugin', 'initialize', [appId, clientKey]);
+parseExport.initialize = function (appId, clientKey, firebaseUserID, successCallback, errorCallback) {
+	cordova.exec(successCallback, errorCallback, 'ParsePlugin', 'initialize', [appId, clientKey, firebaseUserID]);
 };
 
 parseExport.getInstallationId = function (successCallback, errorCallback) {
@@ -47,8 +47,12 @@ parseExport.unsubscribe = function (channel, successCallback, errorCallback) {
 };
 
 parseExport.getPendingPush = function (channel, successCallback, errorCallback) {
-	cordova.exec(successCallback, errorCallback, 'ParsePlugin', 'getPendingPush', []);
+  cordova.exec(successCallback, errorCallback, 'ParsePlugin', 'getPendingPush', []);
 };
 
-module.exports = parseExport;
+parseExport.logout = function (successCallback, errorCallback) {
+  cordova.exec(successCallback, errorCallback, 'ParsePlugin', 'logout', []);
+};
+
+  module.exports = parseExport;
 });

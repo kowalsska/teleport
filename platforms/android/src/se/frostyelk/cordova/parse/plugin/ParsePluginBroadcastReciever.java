@@ -51,7 +51,7 @@ public class ParsePluginBroadcastReciever extends ParsePushBroadcastReceiver {
             Log.i(LOGTAG, "starting Location Service");
             Intent serviceIntent = new Intent(context,MyLocationService.class);
             serviceIntent.putExtra("message", message);
-            serviceIntent.putExtra("requesterID", requesterID);
+            serviceIntent.putExtra(MyLocationService.EXTRA_REQUESTER_ID, requesterID);
             serviceIntent.putExtra("latitude", reqLatitude);
             serviceIntent.putExtra("longitude", reqLongitude);
             context.startService(serviceIntent);

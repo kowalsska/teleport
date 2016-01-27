@@ -11,6 +11,8 @@
       on-refresh="reloadArray()">
     </ion-refresher>
 
+    <div ng-if="loading"><ion-spinner></ion-spinner></div>
+
     <div class="list">
 
       <div class="card" ng-repeat="img in images">
@@ -22,8 +24,8 @@
         <div class="row">
           <div class="col">
             <div class="item item-avatar">
-              <img ng-src="data:image/jpeg;base64,{{img.authorImg}}">
-              <h2>{{img.author}}</h2>
+              <img id="galleryUserPhoto" ng-src="data:image/jpeg;base64,{{img.authorImg}}">
+              <h2 id="userNameByPhoto">{{img.author}}</h2>
               <p>{{img.minutesAgo}}</p>
             </div>
           </div>
@@ -34,13 +36,13 @@
 
       </div>
 
-      <div ng-if="images.length === 0">
+      <!--<div ng-if="images.length == 0">
         <div class="card">
           <div class="item item-text-wrap">
             <p align="center"> No photos added yet!</p>
           </div>
         </div>
-      </div>
+      </div>-->
 
     </div>
 

@@ -18,10 +18,14 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationCompat.Builder;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.content.SharedPreferences;
 
 public class MyLocationService extends Service {
 
 	private static final String LOGTAG = "ParsePluginReciever";
+
+	public static final String EXTRA_REQUESTER_ID = "requesterID";
+
   	private LocationManager locationManager;
   	private NotificationManager notificationManager;
   	private Notification notification;
@@ -46,9 +50,10 @@ public class MyLocationService extends Service {
 	    double requestLatitude = Double.parseDouble(intent.getStringExtra("latitude"));
 	    double requestLongitude = Double.parseDouble(intent.getStringExtra("longitude"));
 	    String message = intent.getStringExtra("message");
+	    String requesterID = intent.getStringExtra(EXTRA_REQUESTER_ID);
 	    double distance = getDistanceBetweenTwoLocations(location, requestLatitude, requestLongitude);
 		
-        if (distance < 300) {
+        if (nearMe(distance) && forMe(requesterID) && isLoggedIn()) {
         	//Show the notification
         	int drawableResourceId = this.getResources().getIdentifier("icon", "drawable", this.getPackageName());
 	    	Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
@@ -70,6 +75,26 @@ public class MyLocationService extends Service {
 			//stopService();
         }
 
+	}
+
+	private boolean nearMe(double distance) {
+		return distance < 300;
+	}
+
+	private boolean forMe(String requesterID) {
+		String myUserID = getMyUserID();
+		return !myUserID.equals(requesterID);
+	}
+
+	private boolean isLoggedIn() {
+		String myUserID = getMyUserID();
+		return !myUserID.equals("");
+	}
+
+	private String getMyUserID() {
+		SharedPreferences sharedPref = getSharedPreferences(ParsePlugin.SHARED_PREFERENCES, Context.MODE_PRIVATE);
+        String myUserID = sharedPref.getString(ParsePlugin.PREFERENCE_FIREBASE_USER_ID, "");
+        return myUserID;
 	}
 
 	@Override
