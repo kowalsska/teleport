@@ -1,7 +1,7 @@
 <ion-view view-title="gallery">
   <div class="bar bar-header">
     <button class="button button-icon ion-ios-arrow-back" ui-sref="right" nav-direction="back"></button>
-    <div class="h1 title">Gallery</div>
+    <div class="h1 title">{{requestName}}</div>
     <button class="button button-icon ion-ios-gear-outline" ui-sref="settings" nav-direction="enter"></button>
   </div>
   <ion-content class="has-header">
@@ -13,6 +13,8 @@
       pulling-text="Pull to refresh..."
       on-refresh="reloadArray()">
     </ion-refresher>
+
+    <div id="loadingSpinner" ng-if="loading"><ion-spinner icon="spiral"></ion-spinner></div>
 
     <div class="list">
 
@@ -30,23 +32,33 @@
               <p>{{img.minutesAgo}}</p>
             </div>
           </div>
-
-          <div class="col col-20"><button class="button button-outline button-assertive ion-thumbsdown" ng-click="dislike(img)"> {{img.thumbsDown}}</button></div>
-          <div class="col col-20"><button class="button button-outline button-positive ion-thumbsup" ng-click="like(img)"> {{img.thumbsUp}}</button></div>
-        </div>
-
-      </div>
-
-      <div ng-if="images.length === 0">
-        <div class="card">
-          <div class="item item-text-wrap">
-            <p align="center"> No photos added yet!</p>
+          <div ng-switch on="{{img.canAddDislike}}">
+            <div ng-switch-when="-1">
+              <div class="col col-20"><button class="button button-outline button-assertive ion-thumbsdown" disabled="true"> {{img.likes.thumbsDown.value}}</button></div>
+            </div>
+            <div ng-switch-when="0">
+              <div class="col col-20"><button class="button button button-assertive ion-thumbsdown" > {{img.likes.thumbsDown.value}}</button></div>
+            </div>
+            <div ng-switch-default>
+              <div class="col col-20"><button class="button button-outline button-assertive ion-thumbsdown" ng-click="likePhoto(img,'no')"> {{img.likes.thumbsDown.value}}</button></div>
+            </div>
+          </div>
+          <div ng-switch on="{{img.canAddLike}}">
+            <div ng-switch-when="-1">
+              <div class="col col-20"><button class="button button-outline button-positive ion-thumbsup" disabled="true"> {{img.likes.thumbsUp.value}}</button></div>
+            </div>
+            <div ng-switch-when="0">
+              <div class="col col-20"><button class="button button button-positive ion-thumbsup"> {{img.likes.thumbsUp.value}}</button></div>
+            </div>
+            <div ng-switch-default>
+              <div class="col col-20"><button class="button button-outline button-positive ion-thumbsup" ng-click="likePhoto(img,'yes')"> {{img.likes.thumbsUp.value}}</button></div>
+            </div>
           </div>
         </div>
+
       </div>
 
     </div>
-
 
   </ion-content>
 </ion-view>

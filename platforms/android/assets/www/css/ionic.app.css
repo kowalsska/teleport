@@ -9198,3 +9198,7 @@ a.button {
 
 #userNameByPhoto {
   padding-left: -20px; }
+
+#loadingSpinner {
+  margin: auto;
+  width: 10%; }

@@ -1,17 +1,15 @@
 <ion-view view-title="gallery">
   <div class="bar bar-header">
     <button class="button button-icon ion-ios-gear-outline" ui-sref="settings" nav-direction="enter"></button>
-    <div class="h1 title">Gallery</div>
+    <div class="h1 title">{{requestName}}</div>
     <button class="button button-icon ion-ios-arrow-forward" ui-sref="left" nav-direction="enter"></button>
   </div>
   <ion-content class="has-header">
 
-    <ion-refresher
-      pulling-text="Pull to refresh..."
-      on-refresh="reloadArray()">
+    <ion-refresher pulling-text="Pull to refresh..." on-refresh="reloadArray()" spinner="spiral">
     </ion-refresher>
 
-    <div ng-if="loading"><ion-spinner></ion-spinner></div>
+    <div id="loadingSpinner" ng-if="loading"><ion-spinner icon="spiral"></ion-spinner></div>
 
     <div class="list">
 
@@ -30,8 +28,8 @@
             </div>
           </div>
 
-          <div class="col col-20"><button class="button button-outline button-assertive ion-thumbsdown" ng-click="dislike(img)"> {{img.thumbsDown}}</button></div>
-          <div class="col col-20"><button class="button button-outline button-positive ion-thumbsup" ng-click="like(img)"> {{img.thumbsUp}}</button></div>
+          <div class="col col-20"><button class="button button-outline button-assertive ion-thumbsdown" ng-click="dislikePhoto(img)"> {{img.thumbsDown}}</button></div>
+          <div class="col col-20"><button class="button button-outline button-positive ion-thumbsup" ng-click="likePhoto(img)"> {{img.thumbsUp}}</button></div>
         </div>
 
       </div>

@@ -45,13 +45,13 @@ teleportApp.config(function($stateProvider, $urlRouterProvider) {
       cache: false
     })
     .state('gallery', {
-      url: '/galleries/photos:req',
+      url: '/galleries/photos:req?reqid?reqname',
       templateUrl: 'templates/gallery.html',
       controller: 'GalleryCtrl',
       cache: false
     })
     .state('galleryAddMore', {
-      url: '/requests/photos:req',
+      url: '/requests/photos:req?reqid?reqname',
       templateUrl: 'templates/galleryAddMore.html',
       controller: 'GalleryCtrl',
       cache: false

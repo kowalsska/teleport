@@ -37,16 +37,17 @@ teleportServices.factory('ReceivedRequests', function(FirebaseRef, $firebaseArra
       Math.sin(dLong / 2) * Math.sin(dLong / 2);
     var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     var d = R * c;
-    console.log("Distance: " + d);
+    //console.log("Distance: " + d);
     return d; // returns the distance in meter
   };
 
   var filteredRequests = [];
 
-  function startGettingRequests(lat, lng, uid) {
+  function startGettingRequests(lat, lng, uid, cb) {
     var requestRef = FirebaseRef.child("requests");
     var requests = $firebaseArray(requestRef);
     filteredRequests.splice(0);
+
     requests.$loaded().then(function() {
       var reqArray = requests;
       var myLoc = new google.maps.LatLng(lat, lng);
@@ -59,29 +60,22 @@ teleportServices.factory('ReceivedRequests', function(FirebaseRef, $firebaseArra
           filteredRequests.push(reqArray[i]);
         }
       }
+      if (cb) cb();
     });
   }
 
   return {
-    all: function(lat, lng, uid) {
-      startGettingRequests(lat, lng, uid);
+    all: function(lat, lng, uid, cb) {
+      startGettingRequests(lat, lng, uid, cb);
       return filteredRequests;
     },
     remove: function(req) {
       filteredRequests.splice(filteredRequests.indexOf(req), 1);
-    },
-    get: function(chatId) {
-      for (var i = 0; i < requests.length; i++) {
-        if (requests[i].id === parseInt(chatId)) {
-          return requests[i];
-        }
-      }
-      return null;
     }
   };
 });
 
-teleportServices.factory('CreatedRequests', function(FirebaseRef, $firebaseArray, $ionicLoading) {
+teleportServices.factory('CreatedRequests', function(FirebaseRef, $firebaseArray) {
 
   var requests = [];
   var requestRef = FirebaseRef.child("requests");
@@ -95,18 +89,13 @@ teleportServices.factory('CreatedRequests', function(FirebaseRef, $firebaseArray
     var requestTimestamp = ts;
     var value = requestTimestamp - timestamp5minutesAgo;
     if(value > 0) {
-      console.log(value);
       return true
     } else {
-      console.log(value);
       return false
     }
   }
 
-  function startGettingRequests(uid) {
-    $ionicLoading.show({
-      template: '<ion-spinner icon="spiral"></ion-spinner>'
-    });
+  function startGettingRequests(uid, cb) {
     var requestRef = FirebaseRef.child("requests");
     var requests = $firebaseArray(requestRef);
     filteredRequests.splice(0);
@@ -120,25 +109,24 @@ teleportServices.factory('CreatedRequests', function(FirebaseRef, $firebaseArray
           filteredRequests.push(reqArray[i]);
         }
       }
+      if (cb) {
+        if(filteredRequests.length > 0){
+          cb(false);
+        } else {
+          cb(true);
+        }
+
+      }
     });
-    $ionicLoading.hide();
   }
 
   return {
-    all: function(uid) {
-      startGettingRequests(uid);
+    all: function(uid, cb) {
+      startGettingRequests(uid, cb);
       return filteredRequests;
     },
     remove: function(chat) {
       requests.splice(requests.indexOf(chat), 1);
-    },
-    get: function(id) {
-      for (var i = 0; i < requests.length; i++) {
-        if (requests[i].id === parseInt(id)) {
-          return requests[i];
-        }
-      }
-      return null;
     }
   };
 });
@@ -148,17 +136,14 @@ teleportServices.factory('GalleryService', function(FirebaseRef, $firebaseArray)
   var photos = [];
 
   function startGettingPhotos(requestTimestamp, cb) {
-    console.log("more photos ", requestTimestamp);
     var galleryRef = FirebaseRef.child("photos").child(requestTimestamp);
     var gallery = $firebaseArray(galleryRef);
     photos.splice(0);
     gallery.$loaded().then(function() {
-      console.log("photos loaded, now adding them to array");
       var reqArray = gallery;
       for( var i = 0; i < reqArray.length; i++ ) {
           photos.push(reqArray[i]);
       }
-
       if (cb) cb(photos);
     });
   }
@@ -170,14 +155,6 @@ teleportServices.factory('GalleryService', function(FirebaseRef, $firebaseArray)
     },
     remove: function(chat) {
       requests.splice(requests.indexOf(chat), 1);
-    },
-    get: function(id) {
-      for (var i = 0; i < requests.length; i++) {
-        if (requests[i].id === parseInt(id)) {
-          return requests[i];
-        }
-      }
-      return null;
     }
   };
 });

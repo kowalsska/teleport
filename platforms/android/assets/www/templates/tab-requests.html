@@ -6,10 +6,10 @@
   </div>
   <ion-content class="has-header" on-swipe-right="swipeRight()" nav-direction="back">
 
-    <ion-refresher
-      pulling-text="Pull to refresh..."
-      on-refresh="reloadArray()">
+    <ion-refresher pulling-text="Pull to refresh..." on-refresh="reloadArray()" spinner="spiral">
     </ion-refresher>
+
+    <div id="loadingSpinner" ng-if="loading"><ion-spinner icon="spiral"></ion-spinner></div>
 
     <div class="list">
       <div class="card" ng-repeat="request in receivedRequests">
@@ -36,7 +36,7 @@
               </div>
             </div>
             <div class="button-bar">
-              <a class="button icon-left ion-images button-calm" nav-direction="forward" ui-sref="galleryAddMore({req: {{request.timestamp}} })">See gallery</a>
+              <a class="button icon-left ion-images button-calm" nav-direction="forward" ui-sref="galleryAddMore({req: request.timestamp, reqid: request.ref, reqname: request.name })">See gallery</a>
             </div>
 
           </div>
