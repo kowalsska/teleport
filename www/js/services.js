@@ -13,15 +13,8 @@ teleportServices.factory('ReceivedRequests', function(FirebaseRef, $firebaseArra
 
   function isStillActive(ts) {
     var timestamp5minutesAgo = Date.now() - 5 * 60 * 1000;
-    var requestTimestamp = ts;
-    var value = requestTimestamp - timestamp5minutesAgo;
-    if(value > 0) {
-      console.log(value);
-      return true
-    } else {
-      console.log(value);
-      return false
-    }
+    var value = ts - timestamp5minutesAgo;
+    return value > 0;
   }
 
   var rad = function(x) {
@@ -138,40 +131,6 @@ teleportServices.factory('GalleryService', function(FirebaseRef, $firebaseArray)
   function isUserAuthor(img) {
     console.log("Am I the author?", img.authorID == FirebaseRef.getAuth().uid);
     var value = (img.authorID == FirebaseRef.getAuth().uid);
-    return value;
-  }
-
-  function getIfLikedValue() {
-    var value;
-    var likeRef = FirebaseRef.child("photos").child(requestTimestamp).child(gallery[i].$id).child('likes').child('thumbsUp').child('whoClicked');
-    likeRef.once("value", function(snapshot) {
-      var childName = FirebaseRef.getAuth().uid;
-      var hasClicked = snapshot.hasChild(childName);
-      if(hasClicked){
-        console.log('I liked this photo');
-        value = false;
-      } else {
-        console.log('I didnt like this photo');
-        value = true;
-      }
-    });
-    return value;
-  }
-
-  function getIfDislikedValue() {
-    var value;
-    var dislikeRef = FirebaseRef.child("photos").child(requestTimestamp).child(gallery[i].$id).child('likes').child('thumbsDown').child('whoClicked');
-    dislikeRef.once("value", function(snapshot) {
-      var childName = FirebaseRef.getAuth().uid;
-      var hasClicked = snapshot.hasChild(childName);
-      if(hasClicked){
-        console.log('I disliked this photo');
-        value = false;
-      } else {
-        console.log('I didnt dislike this photo');
-        value = true;
-      }
-    });
     return value;
   }
 

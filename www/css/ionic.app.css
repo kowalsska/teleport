@@ -9212,5 +9212,7 @@ a.button {
   line-height: 55px; }
 
 #pendingRequestCounter {
+  z-index: 10;
   position: absolute;
-  z-index: 90; }
+  bottom: 20px;
+  right: 25px; }

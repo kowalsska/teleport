@@ -28,6 +28,28 @@ navigator.geolocation.getCurrentPosition(success, error, options);
 
 teleportApp.controller('MapCtrl', function(FirebaseRef, $scope, $state, $cordovaGeolocation, $firebaseArray, $ionicPopup, $ionicLoading) {
 
+  function isStillActive(ts) {
+    var timestamp5minutesAgo = Date.now() - 5 * 60 * 1000;
+    var value = ts - timestamp5minutesAgo;
+    return value > 0;
+  }
+
+  function countPendingRequests() {
+    var countRef = FirebaseRef.child("requests");
+    var countRefArray = $firebaseArray(countRef);
+    var count = 0;
+    countRefArray.$loaded().then(function() {
+      for (var i = 0; i < countRefArray.length; i++) {
+        var ts = countRefArray[i].timestamp;
+        var reqRequester = countRefArray[i].requesterID;
+        if ( reqRequester != FirebaseRef.getAuth().uid  && isStillActive(ts)) {
+          count++;
+        }
+      }
+      $scope.countPending = count;
+    });
+  }
+
   function takeScreenshot() {
     navigator.screenshot.URI(function(error,res){
       if(error){
@@ -87,7 +109,8 @@ teleportApp.controller('MapCtrl', function(FirebaseRef, $scope, $state, $cordova
               requesterLocation: userLocation,
               repliedBy: "none",
               declinedBy: "none",
-              screenshot: $scope.reqScreenshot
+              screenshot: $scope.reqScreenshot,
+              repliesNumber: 0
             });
           });
           $ionicLoading.show({ template: 'Request sent!', noBackdrop: true, duration: 1500 });
@@ -101,6 +124,8 @@ teleportApp.controller('MapCtrl', function(FirebaseRef, $scope, $state, $cordova
   var options = {timeout: 10000, enableHighAccuracy: true};
 
   $cordovaGeolocation.getCurrentPosition(options).then(function(position){
+
+    countPendingRequests();
 
     var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
@@ -422,14 +447,19 @@ teleportApp.controller('ReceivedRequestsCtrl', function(FirebaseRef, $scope, $ti
       })
     });
 
+    var tempRef = FirebaseRef.child("requests").child(reqPhoto.timestamp).child('repliesNumber');
+    tempRef.on('value', function(dataSnapshot) {
+      $scope.val = dataSnapshot.val() + 1;
+    });
+    tempRef.update($scope.val);
+
   };
 
 });
 
 teleportApp.controller('CreatedRequestsCtrl', function(FirebaseRef, $scope, $firebaseObject, $firebaseArray, CreatedRequests, $state, $ionicViewSwitcher) {
 
-  var fbAuth = FirebaseRef.getAuth();
-  var myID = fbAuth.uid;
+  var myID = FirebaseRef.getAuth().uid;
 
   $scope.loading = true;
   $scope.noRequestsToShow = false;
@@ -456,11 +486,13 @@ teleportApp.controller('CreatedRequestsCtrl', function(FirebaseRef, $scope, $fir
     }
   };
 
-  function loadingInformation(loadingVar) {
-    $scope.noRequestsToShow = loadingVar;
+  function loadingInformation() {
     $scope.createdRequestsMine.forEach(function(req) {
       getNumberOfPhotos(req);
     });
+    if($scope.createdRequestsMine.length === 0) {
+      $scope.noRequestsToShow = true;
+    }
     $scope.loading = false;
   }
 
@@ -475,13 +507,11 @@ teleportApp.controller('CreatedRequestsCtrl', function(FirebaseRef, $scope, $fir
   }
 
   function getNumberOfPhotos(req) {
-    //var tempRef = FirebaseRef.child("photos").child(req.timestamp);
-    //tempRef.once("value", function (snapshot) {
-    //  var a = snapshot.numChildren();
-    //  console.log(a);
-    //  req.numberOfPhotos = a;
-    //});
-    req.numberOfPhotos = convertToString(5);
+    var tempRef = FirebaseRef.child("requests").child(req.timestamp);
+    tempRef.once("value", function (snapshot) {
+      var repliesNumber = snapshot.repliesNumber;
+      req.numberOfPhotos = convertToString(repliesNumber);
+    });
   }
 
 });
@@ -489,7 +519,6 @@ teleportApp.controller('CreatedRequestsCtrl', function(FirebaseRef, $scope, $fir
 teleportApp.controller('GalleryCtrl', function(FirebaseRef, $scope, $firebaseArray, $firebaseObject, $stateParams, $cordovaCamera, $ionicPopup, GalleryService) {
 
   var requestTimestamp = $stateParams.req;
-  var requestID = $stateParams.reqid;
   $scope.requestName = $stateParams.reqname;
   var now = Date.now();
   $scope.try1 = 1;

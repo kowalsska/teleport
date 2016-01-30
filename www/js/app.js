@@ -45,7 +45,7 @@ teleportApp.config(function($stateProvider, $urlRouterProvider) {
       cache: false
     })
     .state('gallery', {
-      url: '/galleries/photos:req?reqid?reqname',
+      url: '/galleries/photos:req?reqname',
       templateUrl: 'templates/gallery.html',
       controller: 'GalleryCtrl',
       cache: false
