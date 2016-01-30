@@ -1,23 +1,23 @@
-<ion-view view-title="login">
+<ion-view view-title="login" hide-nav-bar="true">
   <ion-content class="padding">
     <div class="list">
-      <img src="img/logo1.png" class="logo">
+      <img src="img/logo.png" class="logo">
     </div>
     <div class="list list-inset">
-      <label class="item item-input">
+      <label id="topInput" class="item item-input">
         <span class="input-label">Email</span>
         <input type="email" ng-model="user.email">
       </label>
-      <label class="item item-input">
+      <label id="bottomInput" class="item item-input">
         <span class="input-label">Password</span>
         <input type="password" ng-model="user.pwdForLogin">
       </label>
-      <button ng-click="signIn(user)" class="button button-block button-energized activated">
+      <button ng-click="signIn(user)" class="button button-block button-calm">
         Sign In
       </button>
     </div>
     <div class="list" style="text-align:center">
-      <button ng-click="modal.show()" class="button button-small button-outline icon-left ion-person-add button-energized">
+      <button ng-click="modal.show()" class="button button-small button-outline icon-left ion-person-add button-dark">
         Create New Account
       </button>
     </div>

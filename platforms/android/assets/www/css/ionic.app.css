@@ -9201,4 +9201,5 @@ a.button {
 
 #loadingSpinner {
   margin: auto;
+  top: 5px;
   width: 10%; }

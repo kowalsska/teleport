@@ -4,21 +4,21 @@
     <div class="h1 title">Your requests</div>
     <button class="button button-icon ion-ios-arrow-forward" ui-sref="map" nav-direction="forward"></button>
   </div>
-    <ion-content class="has-header" on-swipe-left="gotoMap()">
+    <ion-content class="has-header" on-swipe-left="swipeLeft()" nav-direction="forward">
 
-      <ion-refresher
-        pulling-text="Pull to refresh..."
-        on-refresh="reloadArray()">
+      <ion-refresher pulling-text="Pull to refresh..." on-refresh="reloadArray()" spinner="spiral">
       </ion-refresher>
+
+      <div id="loadingSpinner" ng-if="loading"><ion-spinner icon="spiral"></ion-spinner></div>
 
       <div class="list">
 
         <div class="card" ng-repeat="myRequest in createdRequestsMine">
 
-          <a class="item item-avatar" ui-sref="gallery({req: {{myRequest.timestamp}} })" nav-direction="enter">
-            <img src="img/avatar.png">
+          <a class="item item-avatar" ui-sref="gallery({req: myRequest.timestamp, reqid: myRequest.ref, reqname: myRequest.name })" nav-direction="enter">
+            <img id="iconMyRequest" src="img/icon.png">
             <h2>{{myRequest.name}}</h2>
-            <p>2 photos in gallery</p><!--{{numberOfPhotos(myRequest)}}-->
+            <p>{{myRequest.numberOfPhotos}}</p>
           </a>
 
           <div class="item item-image">
@@ -33,7 +33,7 @@
 
         </div>
 
-        <div ng-if="createdRequestsMine.length === 0">
+        <div ng-if="noRequestsToShow">
           <div class="card">
             <div class="item item-text-wrap">
               <p align="center"> No requests to show!</p>
@@ -41,7 +41,22 @@
           </div>
         </div>
 
-        </div>
+      </div>
 
     </ion-content>
+
+    <ion-footer-bar>
+      <ion-tabs class="tabs-striped tabs-color-calm">
+        <a class="tab-item active">
+          <i class="icon ion-eye"></i>
+        </a>
+        <a class="tab-item" ui-sref="map" nav-direction="forward">
+          <img src="img/button_inactive.png" class="button button-clear">
+        </a>
+        <a class="tab-item" ui-sref="right" nav-direction="forward">
+          <i class="icon ion-android-locate"></i>
+        </a>
+      </ion-tabs>
+    </ion-footer-bar>
+
 </ion-view>

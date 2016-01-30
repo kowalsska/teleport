@@ -59,6 +59,10 @@
                         {
                             "xml": "<feature name=\"ParsePlugin\"><param name=\"android-package\" value=\"se.frostyelk.cordova.parse.plugin.ParsePlugin\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"NetworkStatus\"><param name=\"android-package\" value=\"org.apache.cordova.networkinformation.NetworkManager\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -72,7 +76,7 @@
                         },
                         {
                             "xml": "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\" />",
-                            "count": 1
+                            "count": 2
                         },
                         {
                             "xml": "<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\" />",
@@ -191,6 +195,9 @@
         },
         "se.frostyelk.cordova.parse.plugin": {
             "PACKAGE_NAME": "com.ionicframework.teleport2514364"
+        },
+        "cordova-plugin-network-information": {
+            "PACKAGE_NAME": "com.ionicframework.teleport2514364"
         }
     },
     "dependent_plugins": {},
@@ -297,6 +304,23 @@
             "clobbers": [
                 "ParsePlugin"
             ]
+        },
+        {
+            "file": "plugins/cordova-plugin-network-information/www/network.js",
+            "id": "cordova-plugin-network-information.network",
+            "pluginId": "cordova-plugin-network-information",
+            "clobbers": [
+                "navigator.connection",
+                "navigator.network.connection"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-network-information/www/Connection.js",
+            "id": "cordova-plugin-network-information.Connection",
+            "pluginId": "cordova-plugin-network-information",
+            "clobbers": [
+                "Connection"
+            ]
         }
     ],
     "plugin_metadata": {
@@ -311,6 +335,7 @@
         "cordova-plugin-statusbar": "1.0.1",
         "cordova-plugin-whitelist": "1.0.0",
         "ionic-plugin-keyboard": "1.0.7",
-        "se.frostyelk.cordova.parse.plugin": "0.2.0"
+        "se.frostyelk.cordova.parse.plugin": "0.2.0",
+        "cordova-plugin-network-information": "1.2.0"
     }
 }

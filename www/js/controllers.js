@@ -16,6 +16,8 @@ var options = {
 function success(pos) {
   myLat = pos.coords.latitude;
   myLng = pos.coords.longitude;
+  console.log('lat', myLat);
+  console.log('long', myLng);
 }
 
 function error(err) {
@@ -376,7 +378,9 @@ teleportApp.controller('ReceivedRequestsCtrl', function(FirebaseRef, $scope, $ti
 
   $scope.takePhoto = function (reqPhoto) {
 
-    var fbAuth = FirebaseRef.getAuth();
+    $$log$$('someone', 'addedPhoto');
+
+    var myID = FirebaseRef.getAuth().uid;
 
     var requestGalleryRef = FirebaseRef.child("photos").child(reqPhoto.timestamp);
     var requestsGalleryArray = $firebaseArray(requestGalleryRef);
@@ -385,13 +389,12 @@ teleportApp.controller('ReceivedRequestsCtrl', function(FirebaseRef, $scope, $ti
     var refUser = FirebaseRef.child("users").child(fbAuth.uid);
     refUser.on("value", function (snapshot) {
       userDisplayName = snapshot.val().displayName;
-    });
-
-    var requestRef = FirebaseRef.child("requests").child(reqPhoto.ref).child("repliedBy");
-    var repliedByArray = $firebaseArray(requestRef);
-    repliedByArray.$add({
-      repliedByID: fbAuth.uid,
-      repliedByName: userDisplayName
+      var requestRef = FirebaseRef.child("requests").child(reqPhoto.ref).child("repliedBy");
+      var repliedByArray = $firebaseArray(requestRef);
+      repliedByArray.$add({
+        repliedByID: fbAuth.uid,
+        repliedByName: userDisplayName
+      });
     });
 
     var options = {
@@ -408,7 +411,7 @@ teleportApp.controller('ReceivedRequestsCtrl', function(FirebaseRef, $scope, $ti
       requestsGalleryArray.$add({
         image: imageData,
         author: userDisplayName,
-        authorID: fbAuth.uid,
+        authorID: myID,
         likes: {thumbsUp: {value: 0, whoClicked: 'none' }, thumbsDown: {value: 0, whoClicked: 'none' } },
         timestamp: Date.now()
       });
@@ -489,6 +492,7 @@ teleportApp.controller('GalleryCtrl', function(FirebaseRef, $scope, $firebaseArr
   var requestID = $stateParams.reqid;
   $scope.requestName = $stateParams.reqname;
   var now = Date.now();
+  $scope.try1 = 1;
 
 
   $scope.loading = true;
@@ -499,9 +503,6 @@ teleportApp.controller('GalleryCtrl', function(FirebaseRef, $scope, $firebaseArr
     $scope.images.forEach(function(img) {
       startFetchingPhoto(img.authorID, img);
       addTimers(img, now);
-      var likes = checkLikes(img);
-      img.canAddLike = likes[0];
-      img.canAddDislike = likes[1];
     });
   }
 
@@ -535,22 +536,46 @@ teleportApp.controller('GalleryCtrl', function(FirebaseRef, $scope, $firebaseArr
 
   $scope.reloadArray = reloadArray;
 
-  $scope.likePhoto = function(img, yesno) {
-    var likeType = 'thumbsUp';
-    if(yesno === 'no') {
-      likeType = 'thumbsDown';
-    }
-    var likeRef = FirebaseRef.child("photos").child(requestTimestamp).child(img.$id).child("likes").child(likeType);
+  $scope.likePhoto = function(img) {
+    var saveTime = img.minutesAgo;
+    var likeRef = FirebaseRef.child("photos").child(requestTimestamp).child(img.$id).child("likes").child("thumbsUp");
     likeRef.on('value', function(dataSnapshot) {
       $scope.val = dataSnapshot.val().value + 1;
     });
     likeRef.update({value:$scope.val});
-    img.canAddLike = 0;
-    img.canAddDislike = 0;
-    checkLikes(img);
-    addTimers(img, now);
-    addLikeToAuthor(img, likeType);
-    addLikerToWhoClicked(img, likeType);
+    switchLikes(false, 'disable', img);
+    //img.canAddLike = false;
+    //img.canAddDislike = 'disable';
+    console.log("Like added");
+    console.log("can I add like now?", img.canAddLike);
+    console.log("can I still dislike?", img.canAddDislike);
+    //addTimers(img, now);
+    addLikeToAuthor(img, 'thumbsUp');
+    addLikerToWhoClicked(img, 'thumbsUp');
+    img.minutesAgo = saveTime;
+  };
+
+  function switchLikes(like, dislike, img) {
+    img.canAddDislike = like;
+    img.canAddLike = dislike;
+  }
+
+  $scope.dislikePhoto = function(img) {
+    var saveTime = img.minutesAgo;
+    var likeRef = FirebaseRef.child("photos").child(requestTimestamp).child(img.$id).child("likes").child("thumbsDown");
+    likeRef.on('value', function(dataSnapshot) {
+      $scope.val = dataSnapshot.val().value + 1;
+    });
+    likeRef.update({value:$scope.val});
+    switchLikes('disable', false, img);
+    //img.canAddDislike = false;
+    //img.canAddLike = 'disable';
+    console.log("can I add dislike now?", img.canAddDislike);
+    console.log("can I still like?", img.canAddLike);
+    //addTimers(img, now);
+    addLikeToAuthor(img, 'thumbsDown');
+    addLikerToWhoClicked(img, 'thumbsDown');
+    img.minutesAgo = saveTime;
   };
 
   function addLikeToAuthor(img, yesno) {
@@ -569,81 +594,14 @@ teleportApp.controller('GalleryCtrl', function(FirebaseRef, $scope, $firebaseArr
     }
   }
 
-  function checkLikes(img) {
-    var like = 1;
-    var dislike = 1;
-    if(isUserAuthor(img)) {
-      like = -1;
-      dislike = -1;
-    } else {
-      if(hasUserDisliked(img)) {
-        console.log('I disliked the photo');
-        like = 0;
-      } if(hasUserLiked(img)) {
-        console.log('I liked the photo');
-        dislike = 0;
-      }
-    }
-    console.log('like', like, 'dislike', dislike);
-    return [like, dislike];
-  }
-
-  function isUserAuthor(img) {
-    console.log("Am I the author?", img.authorID == FirebaseRef.getAuth().uid);
-    return img.authorID == FirebaseRef.getAuth().uid;
-  }
-
-  function hasUserLiked(img) {
-    if(img.likes.thumbsUp.whoClicked != "none") {
-      var clickRef = FirebaseRef.child("photos").child(requestTimestamp).child(img.$id).child("likes").child("thumbsUp").child("whoClicked");
-      var refArray = $firebaseArray(clickRef);
-      refArray.$loaded().then(function() {
-        for(var i=0; i < refArray.length; i++){
-          var name = refArray[i].clickedByID;
-          if(name === FirebaseRef.getAuth().uid) {
-            console.log("I likeed this photo");
-            return true;
-          }
-        }
-      });
-    }
-    return false;
-  }
-
-  function hasUserDisliked(img) {
-    //if(img.likes.thumbsUp.whoClicked != "none") {
-    //  for (click in img.likes.thumbsUp.whoClicked) {
-    //    var clickRef = FirebaseRef.child("photos").child(requestTimestamp).child(img.$id).child("likes").child("thumbsDown").child("whoClicked").child(click);
-    //    clickRef.on("value", function (snapshot) {
-    //      console.log(snapshot.val().clickedByID);
-    //      $scope.whoClicked = snapshot.val().clickedByID;
-    //      console.log($scope.whoClicked);
-    //    });
-    //    console.log($scope.whoClicked);
-    //    console.log(FirebaseRef.getAuth().uid);
-    //    if ($scope.whoClicked.equals(FirebaseRef.getAuth().uid)) {
-    //      console.log("2. I did like the photo in the past");
-    //      return true;
-    //    }
-    //  }
-    //  console.log("I never liked the photo");
-    //  return false;
-    //} else {
-    //  console.log("hello");
-    //  return false;
-    //}
-    return false;
-  }
-
   function addLikerToWhoClicked(img, likeType) {
-    var tempRef = FirebaseRef.child("photos").child(requestTimestamp).child(img.$id).child("likes").child(likeType).child("whoClicked");
-    var clickedByArray = $firebaseArray(tempRef);
-    clickedByArray.$add({
-      clickedByID: FirebaseRef.getAuth().uid
-    });
+    var tempRef = FirebaseRef.child("photos").child(requestTimestamp).child(img.$id).child("likes").child(likeType).child("whoClicked").child(FirebaseRef.getAuth().uid);
+    tempRef.set(true);
   }
 
   $scope.takeNextPhoto = function () {
+
+    $$log$$('someone two', 'added more photos');
 
     var fbAuth = FirebaseRef.getAuth();
 
@@ -680,6 +638,9 @@ teleportApp.controller('GalleryCtrl', function(FirebaseRef, $scope, $firebaseArr
         template: 'Something went wrong when taking photo.'
       })
     });
+
+    reloadArray();
+
   };
 
 });

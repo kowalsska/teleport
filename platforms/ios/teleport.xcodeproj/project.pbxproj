@@ -68,6 +68,9 @@
 		CCBC2CB4509642E1B094394D /* CDVCamera.m in Sources */ = {isa = PBXBuildFile; fileRef = 1776AD3B7589469BBE5DD171 /* CDVCamera.m */; };
 		CC5C32A4607C45CB8F232B15 /* CDVJpegHeaderWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = A80AC82B380241B6866A1D1E /* CDVJpegHeaderWriter.m */; };
 		0DAE386829144D9D898EA954 /* Screenshot.m in Sources */ = {isa = PBXBuildFile; fileRef = 04C9906E2B2A487B90EA4CBC /* Screenshot.m */; };
+		01650AA9FAC84B5D8B60C6C2 /* CDVConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 71E9938479BC4B1EA6E41C8F /* CDVConnection.m */; };
+		7841251A8F8A40CAAA1C239B /* CDVReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 672F16C276764AF3903D40AC /* CDVReachability.m */; };
+		CD88388F7D3145F8ADC9661A /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5AA16AC8B754C7B8B6D3AF4 /* CoreTelephony.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -177,6 +180,11 @@
 		E725716679134A5091DB111D /* CDVExif.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVExif.h"; path = "cordova-plugin-camera/CDVExif.h"; sourceTree = "<group>"; fileEncoding = 4; };
 		04C9906E2B2A487B90EA4CBC /* Screenshot.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "Screenshot.m"; path = "com.darktalker.cordova.screenshot/Screenshot.m"; sourceTree = "<group>"; fileEncoding = 4; };
 		E55BEA321799444E90B72A69 /* Screenshot.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "Screenshot.h"; path = "com.darktalker.cordova.screenshot/Screenshot.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		71E9938479BC4B1EA6E41C8F /* CDVConnection.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "CDVConnection.m"; path = "cordova-plugin-network-information/CDVConnection.m"; sourceTree = "<group>"; fileEncoding = 4; };
+		672F16C276764AF3903D40AC /* CDVReachability.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "CDVReachability.m"; path = "cordova-plugin-network-information/CDVReachability.m"; sourceTree = "<group>"; fileEncoding = 4; };
+		699920CE14D4487EB223A13C /* CDVConnection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVConnection.h"; path = "cordova-plugin-network-information/CDVConnection.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		508164CD4FCC481FB2CC6FD4 /* CDVReachability.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVReachability.h"; path = "cordova-plugin-network-information/CDVReachability.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		D5AA16AC8B754C7B8B6D3AF4 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "CoreTelephony.framework"; path = "System/Library/Frameworks/CoreTelephony.framework"; sourceTree = SDKROOT; fileEncoding = 4; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -203,6 +211,7 @@
 				03C91F29E29548568F092A88 /* SystemConfiguration.framework in Frameworks */,
 				4FC9CA01EEB641E9AD5E90AC /* libz.dylib in Frameworks */,
 				FF28EDF014484F02A6B46A3D /* libsqlite3.dylib in Frameworks */,
+				CD88388F7D3145F8ADC9661A /* CoreTelephony.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -316,6 +325,7 @@
 				C8246242DA934EB983C999E4 /* SystemConfiguration.framework */,
 				C76C08668C6E4DF9A0399EE2 /* libz.dylib */,
 				FBFEF4EDB0D64CF6A49F328C /* libsqlite3.dylib */,
+				D5AA16AC8B754C7B8B6D3AF4 /* CoreTelephony.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -360,6 +370,10 @@
 				E725716679134A5091DB111D /* CDVExif.h */,
 				04C9906E2B2A487B90EA4CBC /* Screenshot.m */,
 				E55BEA321799444E90B72A69 /* Screenshot.h */,
+				71E9938479BC4B1EA6E41C8F /* CDVConnection.m */,
+				672F16C276764AF3903D40AC /* CDVReachability.m */,
+				699920CE14D4487EB223A13C /* CDVConnection.h */,
+				508164CD4FCC481FB2CC6FD4 /* CDVReachability.h */,
 			);
 			name = Plugins;
 			path = "teleport/Plugins";
@@ -558,6 +572,8 @@
 				CCBC2CB4509642E1B094394D /* CDVCamera.m in Sources */,
 				CC5C32A4607C45CB8F232B15 /* CDVJpegHeaderWriter.m in Sources */,
 				0DAE386829144D9D898EA954 /* Screenshot.m in Sources */,
+				01650AA9FAC84B5D8B60C6C2 /* CDVConnection.m in Sources */,
+				7841251A8F8A40CAAA1C239B /* CDVReachability.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

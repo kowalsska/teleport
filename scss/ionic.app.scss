@@ -168,5 +168,19 @@ $font-family-base: "Oxygen", sans-serif !default;
 
 #loadingSpinner {
     margin: auto;
+    top: 5px;
     width: 10%;
+}
+
+#likeButton {
+  display: flex;
+  max-width: 55px;
+  min-width: 55px;
+  max-height: 50px;
+  line-height: 55px;
+}
+
+#pendingRequestCounter {
+  position: absolute;
+  z-index:90;
 }

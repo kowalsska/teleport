@@ -4,12 +4,12 @@
     <div class="h1 title">Teleport requests</div>
     <button class="button button-icon ion-ios-gear-outline" ui-sref="settings" nav-direction="enter"></button>
   </div>
-  <ion-content class="has-header">
+  <ion-content class="has-header" on-swipe-right="swipeRight()" nav-direction="back">
 
-    <ion-refresher
-      pulling-text="Pull to refresh..."
-      on-refresh="reloadArray()">
+    <ion-refresher pulling-text="Pull to refresh..." on-refresh="reloadArray()" spinner="spiral">
     </ion-refresher>
+
+    <div id="loadingSpinner" ng-if="loading"><ion-spinner icon="spiral"></ion-spinner></div>
 
     <div class="list">
       <div class="card" ng-repeat="request in receivedRequests">
@@ -19,19 +19,24 @@
           <div ng-switch-when="true">
 
             <div class="item item-avatar">
-              <!--<img ng-src="{{::getRequesterProfilePicture(request)}}">-->
+              <img id="avatarLook" ng-src="data:image/jpeg;base64,{{request.authorImg}}">
               <h2>You helped {{request.requesterName}} to teleport<br>from {{request.requesterLocation}}</h2>
+              <div class="row">
+                <div class="col">
+                  <p>"{{request.name}}"</p>
+                </div>
+              </div>
               <div class="row">
                 <div class="col col-67">
                   <p><i class="icon ion-android-done"></i> Photo Delivered</p>
                 </div>
                 <div class="col">
-                  <p><i class="icon ion-ios-timer-outline"></i> 2:56</p>
+                  <i class="icon ion-ios-timer-outline"></i><timer countdown="runTimer(request)" max-time-unit="'minute'" interval="1000"> {{mminutes}}:{{sseconds}}</timer>
                 </div>
               </div>
             </div>
             <div class="button-bar">
-              <button class="button icon-left ion-images button-calm" ui-sref="gallery({req: {{request.timestamp}} })">See gallery</button>
+              <a class="button icon-left ion-images button-calm" nav-direction="forward" ui-sref="galleryAddMore({req: request.timestamp, reqid: request.ref, reqname: request.name })">See gallery</a>
             </div>
 
           </div>
@@ -39,12 +44,17 @@
           <div ng-switch-when="false">
 
             <div class="item item-avatar">
-              <!--<img ng-src="{{::getRequesterProfilePicture(request)}}">-->
+              <img id="avatarLook" ng-src="data:image/jpeg;base64,{{request.authorImg}}">
               <h2>{{request.requesterName}} from {{request.requesterLocation}}</h2>
               <h2>wants to teleport near you</h2>
               <div class="row">
                 <div class="col">
-                  <p><i class="icon ion-ios-timer-outline"></i> 2:56</p>
+                  <p>"{{request.name}}"</p>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <p><i class="icon ion-ios-timer-outline"></i><timer countdown="runTimer(request)" max-time-unit="'minute'" interval="1000"> {{mminutes}}:{{sseconds}}</timer></p>
                 </div>
               </div>
             </div>
@@ -61,4 +71,19 @@
     </div>
 
   </ion-content>
+
+  <ion-footer-bar>
+    <ion-tabs class="tabs-striped tabs-color-calm">
+      <a class="tab-item" ui-sref="left" nav-direction="back">
+        <i class="icon ion-eye"></i>
+      </a>
+      <a class="tab-item" ui-sref="map" nav-direction="back">
+        <img src="img/button_inactive.png" class="button button-clear">
+      </a>
+      <a class="tab-item active">
+        <i class="icon ion-android-locate"></i>
+      </a>
+    </ion-tabs>
+  </ion-footer-bar>
+
 </ion-view>

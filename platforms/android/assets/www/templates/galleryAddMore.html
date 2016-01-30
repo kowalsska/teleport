@@ -32,30 +32,26 @@
               <p>{{img.minutesAgo}}</p>
             </div>
           </div>
-          <div ng-switch on="{{img.canAddDislike}}">
-            <div ng-switch-when="-1">
+            <div ng-if ="img.isAuthor">
               <div class="col col-20"><button class="button button-outline button-assertive ion-thumbsdown" disabled="true"> {{img.likes.thumbsDown.value}}</button></div>
             </div>
-            <div ng-switch-when="false">
+            <div ng-if ="!img.canAddDislike && !img.isAuthor">
               <div class="col col-20"><button class="button button button-assertive ion-thumbsdown" > {{img.likes.thumbsDown.value}}</button></div>
             </div>
-            <div ng-switch-default>
-              <div class="col col-20"><button class="button button-outline button-assertive ion-thumbsdown" ng-click="likePhoto(img,'no')"> {{img.likes.thumbsDown.value}}</button></div>
+            <div ng-if ="img.canAddDislike && !img.isAuthor">
+              <div class="col col-20"><button class="button button-outline button-assertive ion-thumbsdown" ng-click="dislikePhoto(img)"> {{img.likes.thumbsDown.value}}</button></div>
             </div>
-          </div>
-          <div ng-switch on="{{img.canAddLike}}">
-            <div ng-switch-when="-1">
+
+          <div ng-if ="img.isAuthor">
               <div class="col col-20"><button class="button button-outline button-positive ion-thumbsup" disabled="true"> {{img.likes.thumbsUp.value}}</button></div>
             </div>
-            <div ng-switch-when="false">
+            <div ng-if ="!img.canAddLike && !img.isAuthor">
               <div class="col col-20"><button class="button button button-positive ion-thumbsup"> {{img.likes.thumbsUp.value}}</button></div>
             </div>
-            <div ng-switch-default>
-              <div class="col col-20"><button class="button button-outline button-positive ion-thumbsup" ng-click="likePhoto(img,'yes')"> {{img.likes.thumbsUp.value}}</button></div>
+            <div ng-if ="img.canAddLike && !img.isAuthor">
+              <div class="col col-20"><button class="button button-outline button-positive ion-thumbsup" ng-click="likePhoto(img)"> {{img.likes.thumbsUp.value}}</button></div>
             </div>
-          </div>
         </div>
-
       </div>
 
     </div>

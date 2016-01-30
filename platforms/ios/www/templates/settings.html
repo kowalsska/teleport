@@ -9,7 +9,7 @@
 
       <li class="item item-toggle">
         Post anonymously
-        <label class="toggle toggle-energized">
+        <label class="toggle toggle-calm">
           <input type="checkbox">
           <div class="track">
             <div class="handle"></div>
@@ -17,7 +17,7 @@
         </label>
       </li>
 
-      <a class="item item-icon-left" href="#">
+      <a class="item item-icon-left" ng-click="logout()">
         <i class="icon ion-log-out"></i>
         Log out
       </a>
@@ -26,26 +26,35 @@
         Your profile
       </div>
 
-      <div class="item item-button-right">
-        <b>Location:</b> {{userLocation}}
-        <button class="button button-positive" ng-click="updateLocation()">
-          Update
-        </button>
-      </div>
+      <a class="item item-icon-left" ng-click="updateLocation()">
+        <i class="icon ion-location"></i>
+        Location
+        <span class="item-note">
+          {{userLocation}}
+        </span>
+      </a>
 
-      <li class="item" href="#">
-        <i class="icon ion-thumbsup"></i> {{userLikes}}
-      </li>
+      <a class="item item-icon-left">
+        <i class="icon ion-thumbsup"></i>
+        Likes
+        <span class="item-note">
+          {{userLikes}}
+        </span>
+      </a>
 
-      <li class="item" href="#">
-        <i class="icon ion-thumbsdown"></i> {{userDislikes}}
-      </li>
+      <a class="item item-icon-left">
+        <i class="icon ion-thumbsdown"></i>
+        Dislikes
+        <span class="item-note">
+          {{userDislikes}}
+        </span>
+      </a>
 
       <div class="item item-button-right">
         <div class="item-thumbnail-left">
           <img ng-src="data:image/jpeg;base64,{{userPhoto}}">
         </div>
-        <button class="button button-positive">Change photo</button>
+        <button class="button button-light">Change photo</button>
       </div>
 
     </div>

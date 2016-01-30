@@ -42,6 +42,9 @@
         },
         "se.frostyelk.cordova.parse.plugin": {
             "PACKAGE_NAME": "com.ionicframework.teleport2514364"
+        },
+        "cordova-plugin-network-information": {
+            "PACKAGE_NAME": "com.ionicframework.teleport2514364"
         }
     },
     "dependent_plugins": {}

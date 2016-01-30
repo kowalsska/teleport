@@ -1,11 +1,11 @@
 <ion-modal-view>
-  <ion-header-bar class="bar bar-header bar-positive">
+  <ion-header-bar class="bar bar-header bar-calm">
     <h1 class="title">Create New Account</h1>
     <button class="button button-clear button-primary" ng-click="modal.hide()">Cancel</button>
   </ion-header-bar>
   <ion-content class="padding">
     <div class="list">
-      <label class="item item-input">
+      <label id="topInput" class="item item-input">
         <span class="input-label">Email</span>
         <input ng-model="user.email" type="email">
       </label>
@@ -17,15 +17,17 @@
         <span class="input-label">Username</span>
         <input ng-model="user.displayname" type="text">
       </label>
-      <label class="item item-input">
+      <label id="bottomInput" class="item item-input">
         <span class="input-label">Location</span>
         <input ng-model="user.location" type="text">
       </label>
       <div class="row">
-        <div class="col col-75"><button class="button button-positive" ng-click="pickPhoto()">Add profile picture</button></div>
+        <div class="col col-75"><button class="button button-calm" ng-click="pickPhoto()">Add profile picture</button></div>
         <div class="col" id="isPictureAdded"></div>
       </div>
-      <button class="button button-full button-positive" ng-click="createUser(user)">Create</button>
+      <button class="button button-full button-calm">Terms and Conditions</button>
+      <ion-checkbox>I have read and agreed to<br> Terms and Conditions</ion-checkbox>
+      <button class="button button-full button-calm" ng-click="createUser(user)">Create</button>
     </div>
   </ion-content>
 </ion-modal-view>

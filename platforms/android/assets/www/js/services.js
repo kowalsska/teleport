@@ -135,14 +135,85 @@ teleportServices.factory('GalleryService', function(FirebaseRef, $firebaseArray)
 
   var photos = [];
 
+  function isUserAuthor(img) {
+    console.log("Am I the author?", img.authorID == FirebaseRef.getAuth().uid);
+    var value = (img.authorID == FirebaseRef.getAuth().uid);
+    return value;
+  }
+
+  function getIfLikedValue() {
+    var value;
+    var likeRef = FirebaseRef.child("photos").child(requestTimestamp).child(gallery[i].$id).child('likes').child('thumbsUp').child('whoClicked');
+    likeRef.once("value", function(snapshot) {
+      var childName = FirebaseRef.getAuth().uid;
+      var hasClicked = snapshot.hasChild(childName);
+      if(hasClicked){
+        console.log('I liked this photo');
+        value = false;
+      } else {
+        console.log('I didnt like this photo');
+        value = true;
+      }
+    });
+    return value;
+  }
+
+  function getIfDislikedValue() {
+    var value;
+    var dislikeRef = FirebaseRef.child("photos").child(requestTimestamp).child(gallery[i].$id).child('likes').child('thumbsDown').child('whoClicked');
+    dislikeRef.once("value", function(snapshot) {
+      var childName = FirebaseRef.getAuth().uid;
+      var hasClicked = snapshot.hasChild(childName);
+      if(hasClicked){
+        console.log('I disliked this photo');
+        value = false;
+      } else {
+        console.log('I didnt dislike this photo');
+        value = true;
+      }
+    });
+    return value;
+  }
+
   function startGettingPhotos(requestTimestamp, cb) {
     var galleryRef = FirebaseRef.child("photos").child(requestTimestamp);
     var gallery = $firebaseArray(galleryRef);
     photos.splice(0);
+    var i;
     gallery.$loaded().then(function() {
-      var reqArray = gallery;
-      for( var i = 0; i < reqArray.length; i++ ) {
-          photos.push(reqArray[i]);
+      for( i = 0; i < gallery.length; i++ ) {
+        if(isUserAuthor(gallery[i])) {
+          gallery[i].isAuthor = true;
+          gallery[i].canAddLike = false;
+          gallery[i].canAddDislike = false;
+        } else {
+          gallery[i].isAuthor = false;
+          var likeRef = FirebaseRef.child("photos").child(requestTimestamp).child(gallery[i].$id).child('likes').child('thumbsUp').child('whoClicked');
+          likeRef.once("value", function(snapshot) {
+            var childName = FirebaseRef.getAuth().uid;
+            var hasClicked = snapshot.hasChild(childName);
+            if(hasClicked){
+              console.log('I liked this photo');
+              gallery[i].canAddLike = false;
+            } else {
+              console.log('I didnt like this photo');
+              gallery[i].canAddLike = true;
+            }
+          });
+          var dislikeRef = FirebaseRef.child("photos").child(requestTimestamp).child(gallery[i].$id).child('likes').child('thumbsDown').child('whoClicked');
+          dislikeRef.once("value", function(snapshot) {
+            var childName = FirebaseRef.getAuth().uid;
+            var hasClicked = snapshot.hasChild(childName);
+            if(hasClicked){
+              console.log('I disliked this photo');
+              gallery[i].canAddDislike = false;
+            } else {
+              console.log('I didnt dislike this photo');
+              gallery[i].canAddDislike = true;
+            }
+          });
+        }
+        photos.push(gallery[i]);
       }
       if (cb) cb(photos);
     });

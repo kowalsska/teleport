@@ -1,15 +1,15 @@
 <ion-view view-title="gallery">
   <div class="bar bar-header">
     <button class="button button-icon ion-ios-gear-outline" ui-sref="settings" nav-direction="enter"></button>
-    <div class="h1 title">Gallery</div>
-    <button class="button button-icon ion-ios-arrow-forward" ng-click="goBackFunc()" nav-direction="enter"></button>
+    <div class="h1 title">{{requestName}}</div>
+    <button class="button button-icon ion-ios-arrow-forward" ui-sref="left" nav-direction="enter"></button>
   </div>
   <ion-content class="has-header">
 
-    <ion-refresher
-      pulling-text="Pull to refresh..."
-      on-refresh="reloadArray()">
+    <ion-refresher pulling-text="Pull to refresh..." on-refresh="reloadArray()" spinner="spiral">
     </ion-refresher>
+
+    <div id="loadingSpinner" ng-if="loading"><ion-spinner icon="spiral"></ion-spinner></div>
 
     <div class="list">
 
@@ -22,25 +22,25 @@
         <div class="row">
           <div class="col">
             <div class="item item-avatar">
-              <img ng-src="data:image/jpeg;base64,{{getPhoto(img.authorID)}}">
-              <h2>{{img.author}}</h2>
-              <p>4 minutes ago</p>
+              <img id="galleryUserPhoto" ng-src="data:image/jpeg;base64,{{img.authorImg}}">
+              <h2 id="userNameByPhoto">{{img.author}}</h2>
+              <p>{{img.minutesAgo}}</p>
             </div>
           </div>
 
-          <div class="col col-20"><button class="button button-light ion-thumbsdown" ng-click="dislike(img)"> {{img.thumbsDown}}</button></div>
-          <div class="col col-20"><button class="button button-light ion-thumbsup" ng-click="like(img)"> {{img.thumbsUp}}</button></div>
+          <div class="col col-20"><button class="button button-outline button-assertive ion-thumbsdown" ng-click="dislikePhoto(img)"> {{img.thumbsDown}}</button></div>
+          <div class="col col-20"><button class="button button-outline button-positive ion-thumbsup" ng-click="likePhoto(img)"> {{img.thumbsUp}}</button></div>
         </div>
 
       </div>
 
-      <div ng-if="images.length === 0">
+      <!--<div ng-if="images.length == 0">
         <div class="card">
           <div class="item item-text-wrap">
             <p align="center"> No photos added yet!</p>
           </div>
         </div>
-      </div>
+      </div>-->
 
     </div>
 

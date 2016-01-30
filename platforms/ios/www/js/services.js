@@ -3,80 +3,13 @@
  */
 var teleportServices = angular.module('teleport.services', []);
 
-teleportServices.factory('ReceivedRequests', function($firebaseArray) {
-  // Might use a resource here that returns a JSON array
-
+teleportServices.factory('FirebaseRef', function() {
   var ref = new Firebase("https://fiery-heat-6378.firebaseio.com/");
 
-  var rad = function(x) {
-    return x * Math.PI / 180;
-  };
-
-  var getDistance = function(p1, p2) {
-    //console.log("p1: " + p1 + " p2: " + p2);
-    var R = 6378137; // Earth’s mean radius in meter
-    var dLat = rad(p2.lat() - p1.lat());
-    var dLong = rad(p2.lng() - p1.lng());
-    var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos(rad(p1.lat())) * Math.cos(rad(p2.lat())) *
-      Math.sin(dLong / 2) * Math.sin(dLong / 2);
-    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    var d = R * c;
-    console.log("Distance: " + d);
-    return d; // returns the distance in meter
-  };
-
-  var filteredRequests = [];
-
-  function startGettingRequests(lat, lng, uid) {
-    var requestRef = ref.child("requests");
-    requestRef.orderByChild("timestamp");
-    var requests = $firebaseArray(requestRef);
-    filteredRequests = [];
-
-    requests.$loaded().then(function() {
-      var reqArray = requests;
-      var myLoc = new google.maps.LatLng(lat, lng);
-      for (var i = 0; i < reqArray.length; i++) {
-        var reqLoc = new google.maps.LatLng(reqArray[i].latitude, reqArray[i].longitude);
-        var reqRequester = reqArray[i].requesterID;
-        var distance = getDistance(myLoc, reqLoc);
-        if (distance < 200 && reqRequester != uid) {
-          filteredRequests.push(reqArray[i]);
-        }
-      }
-    });
-  }
-
-  return {
-    all: function(lat, lng, uid) {
-      startGettingRequests(lat, lng, uid);
-      return filteredRequests;
-    },
-    remove: function(req) {
-      filteredRequests.splice(filteredRequests.indexOf(req), 1);
-    },
-    get: function(chatId) {
-      for (var i = 0; i < requests.length; i++) {
-        if (requests[i].id === parseInt(chatId)) {
-          return requests[i];
-        }
-      }
-      return null;
-    }
-  };
+  return ref;
 });
 
-teleportServices.factory('CreatedRequests', function($firebaseArray, $ionicLoading) {
-
-  var ref = new Firebase("https://fiery-heat-6378.firebaseio.com/");
-
-  var requests = [];
-  var requestRef = ref.child("requests");
-  var requestSync = $firebaseArray(requestRef);
-  requests = requestSync;
-
-  var filteredRequests = [];
+teleportServices.factory('ReceivedRequests', function(FirebaseRef, $firebaseArray) {
 
   function isStillActive(ts) {
     var timestamp5minutesAgo = Date.now() - 5 * 60 * 1000;
@@ -91,45 +24,186 @@ teleportServices.factory('CreatedRequests', function($firebaseArray, $ionicLoadi
     }
   }
 
-  function startGettingRequests(uid) {
-    $ionicLoading.show({
-      template: '<ion-spinner icon="spiral"></ion-spinner>'
-    });
-    var requestRef = ref.child("requests");
-    requestRef.orderByChild("timestamp");
+  var rad = function(x) {
+    return x * Math.PI / 180;
+  };
+
+  var getDistance = function(p1, p2) {
+    var R = 6378137; // Earth’s mean radius in meter
+    var dLat = rad(p2.lat() - p1.lat());
+    var dLong = rad(p2.lng() - p1.lng());
+    var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(rad(p1.lat())) * Math.cos(rad(p2.lat())) *
+      Math.sin(dLong / 2) * Math.sin(dLong / 2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    var d = R * c;
+    //console.log("Distance: " + d);
+    return d; // returns the distance in meter
+  };
+
+  var filteredRequests = [];
+
+  function startGettingRequests(lat, lng, uid, cb) {
+    var requestRef = FirebaseRef.child("requests");
     var requests = $firebaseArray(requestRef);
-    filteredRequests = [];
+    filteredRequests.splice(0);
+
+    requests.$loaded().then(function() {
+      var reqArray = requests;
+      var myLoc = new google.maps.LatLng(lat, lng);
+      for (var i = 0; i < reqArray.length; i++) {
+        var reqLoc = new google.maps.LatLng(reqArray[i].latitude, reqArray[i].longitude);
+        var reqRequester = reqArray[i].requesterID;
+        var ts = reqArray[i].timestamp;
+        var distance = getDistance(myLoc, reqLoc);
+        if ( distance < 500 && reqRequester != uid ) { //&& isStillActive(ts)
+          filteredRequests.push(reqArray[i]);
+        }
+      }
+      if (cb) cb();
+    });
+  }
+
+  return {
+    all: function(lat, lng, uid, cb) {
+      startGettingRequests(lat, lng, uid, cb);
+      return filteredRequests;
+    },
+    remove: function(req) {
+      filteredRequests.splice(filteredRequests.indexOf(req), 1);
+    }
+  };
+});
+
+teleportServices.factory('CreatedRequests', function(FirebaseRef, $firebaseArray) {
+
+  var requests = [];
+  var requestRef = FirebaseRef.child("requests");
+  var requestSync = $firebaseArray(requestRef);
+  requests = requestSync;
+
+  var filteredRequests = [];
+
+  function isStillActive(ts) {
+    var timestamp5minutesAgo = Date.now() - 5 * 60 * 1000;
+    var requestTimestamp = ts;
+    var value = requestTimestamp - timestamp5minutesAgo;
+    if(value > 0) {
+      return true
+    } else {
+      return false
+    }
+  }
+
+  function startGettingRequests(uid, cb) {
+    var requestRef = FirebaseRef.child("requests");
+    var requests = $firebaseArray(requestRef);
+    filteredRequests.splice(0);
 
     requests.$loaded().then(function() {
       var reqArray = requests;
       for( var i = 0; i < reqArray.length; i++ ) {
         var reqRequester = reqArray[i].requesterID;
         var ts = reqArray[i].timestamp;
-        if( reqRequester === uid && isStillActive(ts)) { //add && isStillActive(ts)
+        if( reqRequester === uid ) { //add && isStillActive(ts)
           filteredRequests.push(reqArray[i]);
         }
       }
+      if (cb) {
+        if(filteredRequests.length > 0){
+          cb(false);
+        } else {
+          cb(true);
+        }
+
+      }
     });
-    $ionicLoading.hide();
   }
 
   return {
-    all: function(uid) {
-      startGettingRequests(uid);
+    all: function(uid, cb) {
+      startGettingRequests(uid, cb);
       return filteredRequests;
     },
     remove: function(chat) {
       requests.splice(requests.indexOf(chat), 1);
-    },
-    get: function(id) {
-      for (var i = 0; i < requests.length; i++) {
-        if (requests[i].id === parseInt(id)) {
-          return requests[i];
-        }
-      }
-      return null;
     }
   };
+});
 
+teleportServices.factory('GalleryService', function(FirebaseRef, $firebaseArray) {
 
+  var photos = [];
+
+  function isUserAuthor(img) {
+    console.log("Am I the author?", img.authorID == FirebaseRef.getAuth().uid);
+    var value = (img.authorID == FirebaseRef.getAuth().uid);
+    return value;
+  }
+
+  function getIfLikedValue() {
+    var value;
+    var likeRef = FirebaseRef.child("photos").child(requestTimestamp).child(gallery[i].$id).child('likes').child('thumbsUp').child('whoClicked');
+    likeRef.once("value", function(snapshot) {
+      var childName = FirebaseRef.getAuth().uid;
+      var hasClicked = snapshot.hasChild(childName);
+      if(hasClicked){
+        console.log('I liked this photo');
+        value = false;
+      } else {
+        console.log('I didnt like this photo');
+        value = true;
+      }
+    });
+    return value;
+  }
+
+  function getIfDislikedValue() {
+    var value;
+    var dislikeRef = FirebaseRef.child("photos").child(requestTimestamp).child(gallery[i].$id).child('likes').child('thumbsDown').child('whoClicked');
+    dislikeRef.once("value", function(snapshot) {
+      var childName = FirebaseRef.getAuth().uid;
+      var hasClicked = snapshot.hasChild(childName);
+      if(hasClicked){
+        console.log('I disliked this photo');
+        value = false;
+      } else {
+        console.log('I didnt dislike this photo');
+        value = true;
+      }
+    });
+    return value;
+  }
+
+  function startGettingPhotos(requestTimestamp, cb) {
+    var galleryRef = FirebaseRef.child("photos").child(requestTimestamp);
+    var gallery = $firebaseArray(galleryRef);
+    photos.splice(0);
+    var i;
+    gallery.$loaded().then(function() {
+      for( i = 0; i < gallery.length; i++ ) {
+        if(isUserAuthor()) {
+          gallery[i].isAuthor = true;
+          gallery[i].canAddLike = false;
+          gallery[i].canAddDislike = false;
+        } else {
+          gallery[i].isAuthor = false;
+          gallery[i].canAddLike = getIfLikedValue(gallery[i]);
+          gallery[i].canAddDislike = getIfDislikedValue(gallery[i]);
+        }
+        photos.push(gallery[i]);
+      }
+      if (cb) cb(photos);
+    });
+  }
+
+  return {
+    all: function(requestTimestamp, cb) {
+      startGettingPhotos(requestTimestamp, cb);
+      return photos;
+    },
+    remove: function(chat) {
+      requests.splice(requests.indexOf(chat), 1);
+    }
+  };
 });

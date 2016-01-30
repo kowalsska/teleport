@@ -4,18 +4,29 @@
 
 var teleportApp = angular.module('teleport.controllers', []);
 
-var ref = new Firebase("https://fiery-heat-6378.firebaseio.com/");
-
 var myLat;
 var myLng;
 
-navigator.geolocation.getCurrentPosition(function(position) {
-  myLat = position.coords.latitude;
-  myLng = position.coords.longitude;
-  console.log("My location: " + myLat + ", " + myLng);
-});
+var options = {
+  enableHighAccuracy: true,
+  timeout: 8000,
+  maximumAge: 0
+};
 
-teleportApp.controller('MapCtrl', function($scope, $state, $cordovaGeolocation, $firebaseArray, $ionicPopup, $ionicLoading) {
+function success(pos) {
+  myLat = pos.coords.latitude;
+  myLng = pos.coords.longitude;
+  //console.log('lat', myLat);
+  //console.log('long', myLng);
+}
+
+function error(err) {
+  console.warn('ERROR LOCATION(' + err.code + '): ' + err.message);
+}
+
+navigator.geolocation.getCurrentPosition(success, error, options);
+
+teleportApp.controller('MapCtrl', function(FirebaseRef, $scope, $state, $cordovaGeolocation, $firebaseArray, $ionicPopup, $ionicLoading) {
 
   function takeScreenshot() {
     navigator.screenshot.URI(function(error,res){
@@ -24,8 +35,16 @@ teleportApp.controller('MapCtrl', function($scope, $state, $cordovaGeolocation, 
       }else{
         $scope.reqScreenshot = res.URI;
       }
-    },50);
+    },40);
   }
+
+  $scope.disableTap = function(){
+    container = document.getElementsByClassName('pac-container');
+    angular.element(container).attr('data-tap-disabled', 'true');
+    angular.element(container).on("click", function(){
+      document.getElementById('pac-input').blur();
+    });
+  };
 
   $scope.sendRequest = function() {
 
@@ -43,14 +62,14 @@ teleportApp.controller('MapCtrl', function($scope, $state, $cordovaGeolocation, 
 
       if($scope.requestName != undefined) {
 
-        var fbAuth = ref.getAuth();
-        if(fbAuth) {
-          var requestsRef = ref.child("requests");
+        var fbAuth = FirebaseRef.getAuth();
 
+        if(fbAuth) {
+          var requestsRef = FirebaseRef.child("requests");
           var newRequestRef = requestsRef.push();
           var ts = Date.now();
 
-          var userRef = new Firebase("https://fiery-heat-6378.firebaseio.com/users/" + fbAuth.uid);
+          var userRef = FirebaseRef.child("users").child(fbAuth.uid);
 
           userRef.once("value", function(data) {
             var user = data.val();
@@ -71,15 +90,6 @@ teleportApp.controller('MapCtrl', function($scope, $state, $cordovaGeolocation, 
               screenshot: $scope.reqScreenshot
             });
           });
-
-          //window.plugins.screenshot.save(function(error,res){
-          //  if(error){
-          //    alert(error);
-          //  }else{
-          //    alert('ok','/img'); //should be path/to/myScreenshot.jpg
-          //  }
-          //},'jpg',50,ts);
-
           $ionicLoading.show({ template: 'Request sent!', noBackdrop: true, duration: 1500 });
         }
       } else {
@@ -105,13 +115,10 @@ teleportApp.controller('MapCtrl', function($scope, $state, $cordovaGeolocation, 
 
     $scope.centerMap = map.getCenter();
 
-    // Construct a draggable red triangle with geodesic set to true.
     var circle = new google.maps.Circle({
-      strokeColor: '#1f9398',
-      strokeOpacity: 0.25,
       strokeWeight: 0,
-      fillColor: '#1f9398',
-      fillOpacity: 0.25,
+      fillColor: '#0daba4',
+      fillOpacity: 0.35,
       map: map,
       center: $scope.centerMap,
       radius: 200,
@@ -130,29 +137,21 @@ teleportApp.controller('MapCtrl', function($scope, $state, $cordovaGeolocation, 
     var searchBox = new google.maps.places.SearchBox(input);
     map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
-    // Bias the SearchBox results towards current map's viewport.
     map.addListener('bounds_changed', function() {
       searchBox.setBounds(map.getBounds());
     });
 
     var markers = [];
-    // Listen for the event fired when the user selects a prediction and retrieve
-    // more details for that place.
     searchBox.addListener('places_changed', function() {
-
       var places = searchBox.getPlaces();
-
       if (places.length == 0) {
         return;
       }
-
-      // Clear out the old markers.
       markers.forEach(function(marker) {
         marker.setMap(null);
       });
       markers = [];
 
-      // For each place, get the icon, name and location.
       var bounds = new google.maps.LatLngBounds();
       places.forEach(function(place) {
         var icon = {
@@ -163,7 +162,6 @@ teleportApp.controller('MapCtrl', function($scope, $state, $cordovaGeolocation, 
           scaledSize: new google.maps.Size(25, 25)
         };
 
-        // Create a marker for each place.
         markers.push(new google.maps.Marker({
           map: map,
           icon: icon,
@@ -172,7 +170,6 @@ teleportApp.controller('MapCtrl', function($scope, $state, $cordovaGeolocation, 
         }));
 
         if (place.geometry.viewport) {
-          // Only geocodes have viewport.
           bounds.union(place.geometry.viewport);
         } else {
           bounds.extend(place.geometry.location);
@@ -187,16 +184,23 @@ teleportApp.controller('MapCtrl', function($scope, $state, $cordovaGeolocation, 
 
 });
 
-teleportApp.controller('LoginCtrl', function ($scope, $ionicModal, $state, $firebaseAuth, $ionicLoading, $rootScope, $cordovaCamera) {
+teleportApp.controller('LoginCtrl', function (FirebaseRef, $scope, $ionicModal, $state, $firebaseAuth, $ionicLoading, $rootScope, $cordovaCamera) {
 
   console.log('Login Controller Initialized');
 
-  //$scope.profilePictureURI = null;
+  if (isLoggedIn()) {
+    $state.go('map');
+    return;
+  }
+
+  function isLoggedIn() {
+    return FirebaseRef.getAuth() != null;
+  }
 
   $scope.pickPhoto = function() {
 
     var options = {
-      quality: 60,
+      quality: 30,
       destinationType: Camera.DestinationType.DATA_URL,
       sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
       allowEdit: true,
@@ -216,7 +220,7 @@ teleportApp.controller('LoginCtrl', function ($scope, $ionicModal, $state, $fire
     });
   };
 
-  var auth = $firebaseAuth(ref);
+  var auth = $firebaseAuth(FirebaseRef);
 
   $ionicModal.fromTemplateUrl('templates/signup.html', {
     scope: $scope
@@ -236,7 +240,7 @@ teleportApp.controller('LoginCtrl', function ($scope, $ionicModal, $state, $fire
         password: user.password
       }).then(function (userData) {
         alert("User created successfully!");
-        ref.child("users").child(userData.uid).set({
+        FirebaseRef.child("users").child(userData.uid).set({
           email: user.email,
           displayName: user.displayname,
           location: user.location,
@@ -265,9 +269,13 @@ teleportApp.controller('LoginCtrl', function ($scope, $ionicModal, $state, $fire
         password: user.pwdForLogin
       }).then(function (authData) {
         console.log("Logged in as: " + authData.uid);
-        ref.child("users").child(authData.uid).once('value', function (snapshot) {
+        //Parse
+        if (!!window.ParsePlugin) {
+          ParsePlugin.initialize("QPhqq46IfsZuIT9GLUMydSwHHNRakPas2u2mIjDl", "ixkdoG5b66pJfR6s1PnlyTc1WX83XVKYLY7aMAar", authData.uid, function () {
+          });
+        }
+        FirebaseRef.child("users").child(authData.uid).once('value', function (snapshot) {
           var val = snapshot.val();
-          // To Update AngularJS $scope either use $apply or $timeout
           $scope.$apply(function () {
             $rootScope.displayName = val;
           });
@@ -283,59 +291,79 @@ teleportApp.controller('LoginCtrl', function ($scope, $ionicModal, $state, $fire
   }
 });
 
-teleportApp.controller('ReceivedRequestsCtrl', function($scope, $cordovaCamera, $firebaseArray, $firebaseObject, ReceivedRequests, $ionicPopup) {
+teleportApp.controller('ReceivedRequestsCtrl', function(FirebaseRef, $scope, $timeout, $ionicViewSwitcher, $cordovaCamera, $firebaseArray, $firebaseObject, ReceivedRequests, $ionicPopup, $state) {
 
-  var fbAuth = ref.getAuth();
+  var fbAuth = FirebaseRef.getAuth();
   var myID = fbAuth.uid;
 
-  $scope.receivedRequests = ReceivedRequests.all(myLat, myLng, myID);
+  $scope.loading = true;
+  $scope.receivedRequests = ReceivedRequests.all(myLat, myLng, myID, initImages);
+
+  function initImages() {
+    $scope.loading = false;
+    $scope.receivedRequests.forEach(function(req) {
+      getRequestersPhotos(req.requesterID, req);
+    });
+  }
+
+  function getRequestersPhotos(userID, req) {
+    var tempRef = FirebaseRef.child("users").child(userID);
+    var sync = $firebaseObject(tempRef);
+    sync.$loaded(function(data) {
+      req.authorImg = data.profilePicture;
+    });
+  }
+
+  $scope.swipeRight = function() {
+    $ionicViewSwitcher.nextDirection("back");
+    $state.go("map");
+  };
 
   $scope.reloadArray = function() {
-    $scope.receivedRequests = ReceivedRequests.all(myLat, myLng, myID);
+    $scope.loading = true;
+    $scope.receivedRequests = ReceivedRequests.all(myLat, myLng, myID, initImages);
     $scope.$broadcast('scroll.refreshComplete');
   };
 
-  //digest error
-  $scope.getRequesterProfilePicture = function(req) {
-    var userRef = new Firebase("https://fiery-heat-6378.firebaseio.com/users/" + req.requesterID);
-    var sync = $firebaseObject(userRef);
-    sync.$loaded(function(data) {
-      console.log(data.displayName);
-      return "data:image/jpeg;base64," + data.profilePicture;
-    });
+  $scope.runTimer = function(request) {
+    var reqTimestamp = request.timestamp / 1000;
+    var now = Date.now() / 1000;
+    var value = 300 - (now - reqTimestamp);
+    if(value > 0){
+      return value;
+    } else {
+      return -1;
+    }
   };
 
   $scope.checkReplies = function(req) {
     if(req.repliedBy != "none") {
       for (reply in req.repliedBy) {
-        var replyRef = new Firebase("https://fiery-heat-6378.firebaseio.com/requests/" + req.ref + "/repliedBy/" + reply);
+        var replyRef = FirebaseRef.child("requests").child(req.ref).child("repliedBy").child(reply);
         replyRef.on("value", function (snapshot) {
           $scope.whoReplied = snapshot.val().repliedByID;
         });
         if ($scope.whoReplied === myID) {
-          //console.log("Yes you replied to this request");
           return true;
         }
       }
-      //console.log("Current user didnt reply");
       return false;
     } else {
-      //console.log("None replied yet");
       return false;
     }
   };
 
   $scope.decline = function(request) {
 
-    var fbAuth = ref.getAuth();
+    var fbAuth = FirebaseRef.getAuth();
 
     var userDisplayName;
-    var refUser = new Firebase("https://fiery-heat-6378.firebaseio.com/users/" + fbAuth.uid);
+    var refUser = FirebaseRef.child("users").child(fbAuth.uid);
     refUser.on("value", function (snapshot) {
       userDisplayName = snapshot.val().displayName;
     });
 
-    var requestRef = new Firebase("https://fiery-heat-6378.firebaseio.com/requests/" + request.ref + "/declinedBy");
+    var requestRef = FirebaseRef.child("requests").child(request.ref).child("declinedBy");
     var declinedByArray = $firebaseArray(requestRef);
     declinedByArray.$add({
       declinedByID: fbAuth.uid,
@@ -346,31 +374,242 @@ teleportApp.controller('ReceivedRequestsCtrl', function($scope, $cordovaCamera, 
 
   };
 
-  $scope.myUserID = ref.getAuth().uid;
+  $scope.myUserID = FirebaseRef.getAuth().uid;
 
   $scope.takePhoto = function (reqPhoto) {
 
-    var fbAuth = ref.getAuth();
+    $$log$$('someone', 'addedPhoto');
 
-    var requestGalleryRef = new Firebase("https://fiery-heat-6378.firebaseio.com/photos/" + reqPhoto.timestamp);
+    var myID = FirebaseRef.getAuth().uid;
+
+    var requestGalleryRef = FirebaseRef.child("photos").child(reqPhoto.timestamp);
     var requestsGalleryArray = $firebaseArray(requestGalleryRef);
 
-    //console.log(reqPhoto.ref);
     var userDisplayName;
-    var refUser = new Firebase("https://fiery-heat-6378.firebaseio.com/users/" + fbAuth.uid);
+    var refUser = FirebaseRef.child("users").child(fbAuth.uid);
+    refUser.on("value", function (snapshot) {
+      userDisplayName = snapshot.val().displayName;
+      var requestRef = FirebaseRef.child("requests").child(reqPhoto.ref).child("repliedBy");
+      var repliedByArray = $firebaseArray(requestRef);
+      repliedByArray.$add({
+        repliedByID: fbAuth.uid,
+        repliedByName: userDisplayName
+      });
+    });
+
+    var options = {
+      quality: 40,
+      destinationType: Camera.DestinationType.DATA_URL,
+      sourceType: Camera.PictureSourceType.CAMERA,
+      allowEdit: false,
+      encodingType: Camera.EncodingType.JPEG,
+      popoverOptions: CameraPopoverOptions,
+      saveToPhotoAlbum: false
+    };
+
+    $cordovaCamera.getPicture(options).then(function (imageData) {
+      requestsGalleryArray.$add({
+        image: imageData,
+        author: userDisplayName,
+        authorID: myID,
+        likes: {thumbsUp: {value: 0, whoClicked: 'none' }, thumbsDown: {value: 0, whoClicked: 'none' } },
+        timestamp: Date.now()
+      });
+    }, function (err) {
+      $ionicPopup.alert({
+        title: 'teleport',
+        template: 'Something went wrong when taking photo.'
+      })
+    });
+
+  };
+
+});
+
+teleportApp.controller('CreatedRequestsCtrl', function(FirebaseRef, $scope, $firebaseObject, $firebaseArray, CreatedRequests, $state, $ionicViewSwitcher) {
+
+  var fbAuth = FirebaseRef.getAuth();
+  var myID = fbAuth.uid;
+
+  $scope.loading = true;
+  $scope.noRequestsToShow = false;
+  $scope.createdRequestsMine = CreatedRequests.all(myID, loadingInformation);
+
+  $scope.reloadArray = function() {
+    $scope.createdRequestsMine = CreatedRequests.all(myID, loadingInformation);
+    $scope.$broadcast('scroll.refreshComplete');
+  };
+
+  $scope.swipeLeft = function() {
+    $ionicViewSwitcher.nextDirection("forward");
+    $state.go("map");
+  };
+
+  $scope.runTimer = function(request) {
+    var reqTimestamp = request.timestamp / 1000;
+    var now = Date.now() / 1000;
+    var value = 300 - (now - reqTimestamp);
+    if(value > 0){
+      return value;
+    } else {
+      return -1;
+    }
+  };
+
+  function loadingInformation(loadingVar) {
+    $scope.noRequestsToShow = loadingVar;
+    $scope.createdRequestsMine.forEach(function(req) {
+      getNumberOfPhotos(req);
+    });
+    $scope.loading = false;
+  }
+
+  function convertToString(size) {
+    if(size == 0) {
+      return "0 photos in gallery";
+    } else if (size == 1) {
+      return "1 photo in gallery";
+    } else {
+      return size + " photos in gallery";
+    }
+  }
+
+  function getNumberOfPhotos(req) {
+    //var tempRef = FirebaseRef.child("photos").child(req.timestamp);
+    //tempRef.once("value", function (snapshot) {
+    //  var a = snapshot.numChildren();
+    //  console.log(a);
+    //  req.numberOfPhotos = a;
+    //});
+    req.numberOfPhotos = convertToString(5);
+  }
+
+});
+
+teleportApp.controller('GalleryCtrl', function(FirebaseRef, $scope, $firebaseArray, $firebaseObject, $stateParams, $cordovaCamera, $ionicPopup, GalleryService) {
+
+  var requestTimestamp = $stateParams.req;
+  var requestID = $stateParams.reqid;
+  $scope.requestName = $stateParams.reqname;
+  var now = Date.now();
+  $scope.try1 = 1;
+
+
+  $scope.loading = true;
+  $scope.images = GalleryService.all(requestTimestamp, initImages);
+
+  function initImages() {
+    $scope.loading = false;
+    $scope.images.forEach(function(img) {
+      startFetchingPhoto(img.authorID, img);
+      addTimers(img, now);
+      //console.log("can I add like", img.canAddLike);
+      //console.log("can I add dislike", img.canAddDislike);
+    });
+  }
+
+  function addTimers(img, now) {
+    var photoTimestamp = img.timestamp;
+    var value = Math.floor((now/60000) - (photoTimestamp/60000));
+    if(value === 0) {
+      img.minutesAgo = "less than a minute ago";
+    }
+    else if(value === 1) {
+      img.minutesAgo = "1 minute ago";
+    }
+    else {
+      img.minutesAgo = value + " minutes ago";
+    }
+  }
+
+  function startFetchingPhoto(userID, img) {
+    var tempRef = FirebaseRef.child("users").child(userID);
+    var sync = $firebaseObject(tempRef);
+    sync.$loaded(function(data) {
+      img.authorImg = data.profilePicture;
+    });
+  }
+
+  function reloadArray() {
+    $scope.loading = true;
+    $scope.images = GalleryService.all(requestTimestamp, initImages);
+    $scope.$broadcast('scroll.refreshComplete');
+  }
+
+  $scope.reloadArray = reloadArray;
+
+  $scope.likePhoto = function(img) {
+    var saveThis = img.canAddDislike;
+    var likeRef = FirebaseRef.child("photos").child(requestTimestamp).child(img.$id).child("likes").child("thumbsUp");
+    likeRef.on('value', function(dataSnapshot) {
+      $scope.val = dataSnapshot.val().value + 1;
+    });
+    likeRef.update({value:$scope.val});
+    img.canAddLike = false;
+    img.canAddDislike = saveThis;
+    //console.log("Like added");
+    //console.log("can I add like now?", img.canAddLike);
+    //console.log("can I still dislike?", img.canAddDislike);
+    addTimers(img, now);
+    addLikeToAuthor(img, 'thumbsUp');
+    addLikerToWhoClicked(img, 'thumbsUp');
+  };
+
+  $scope.dislikePhoto = function(img) {
+    var saveThis = img.canAddLike;
+    console.log(saveThis);
+    var likeRef = FirebaseRef.child("photos").child(requestTimestamp).child(img.$id).child("likes").child("thumbsDown");
+    likeRef.on('value', function(dataSnapshot) {
+      $scope.val = dataSnapshot.val().value + 1;
+    });
+    likeRef.update({value:$scope.val});
+    img.canAddDislike = false;
+    img.canAddLike = saveThis;
+    //console.log("can I add dislike now?", img.canAddDislike);
+    //console.log("can I still like?", img.canAddLike);
+    addTimers(img, now);
+    addLikeToAuthor(img, 'thumbsDown');
+    addLikerToWhoClicked(img, 'thumbsDown');
+  };
+
+  function addLikeToAuthor(img, yesno) {
+    var authorRef = FirebaseRef.child("users").child(img.authorID);
+    authorRef.on('value', function(dataSnapshot) {
+      if(yesno === 'thumbsUp') {
+        $scope.val = dataSnapshot.val().likes + 1;
+      } else {
+        $scope.val = dataSnapshot.val().dislikes + 1;
+      }
+    });
+    if(yesno === 'thumbsUp') {
+      authorRef.update({likes:$scope.val});
+    } else {
+      authorRef.update({dislikes:$scope.val});
+    }
+  }
+
+  function addLikerToWhoClicked(img, likeType) {
+    var tempRef = FirebaseRef.child("photos").child(requestTimestamp).child(img.$id).child("likes").child(likeType).child("whoClicked").child(FirebaseRef.getAuth().uid);
+    tempRef.set(true);
+  }
+
+  $scope.takeNextPhoto = function () {
+
+    $$log$$('someone two', 'added more photos');
+
+    var fbAuth = FirebaseRef.getAuth();
+
+    var requestGalleryRef = FirebaseRef.child("photos").child(requestTimestamp);
+    var requestsGalleryArray = $firebaseArray(requestGalleryRef);
+
+    var userDisplayName;
+    var refUser = FirebaseRef.child("users").child(fbAuth.uid);
     refUser.on("value", function (snapshot) {
       userDisplayName = snapshot.val().displayName;
     });
 
-    var requestRef = new Firebase("https://fiery-heat-6378.firebaseio.com/requests/" + reqPhoto.ref + "/repliedBy");
-    var repliedByArray = $firebaseArray(requestRef);
-    repliedByArray.$add({
-      repliedByID: fbAuth.uid,
-      repliedByName: userDisplayName
-    });
-
     var options = {
-      quality: 80,
+      quality: 40,
       destinationType: Camera.DestinationType.DATA_URL,
       sourceType: Camera.PictureSourceType.CAMERA,
       allowEdit: false,
@@ -384,8 +623,8 @@ teleportApp.controller('ReceivedRequestsCtrl', function($scope, $cordovaCamera, 
         image: imageData,
         author: userDisplayName,
         authorID: fbAuth.uid,
-        thumbsUp: 0,
-        thumbsDown: 0
+        likes: {thumbsUp: {value: 0, whoClicked: 'none' }, thumbsDown: {value: 0, whoClicked: 'none' } },
+        timestamp: Date.now()
       });
     }, function (err) {
       $ionicPopup.alert({
@@ -393,124 +632,18 @@ teleportApp.controller('ReceivedRequestsCtrl', function($scope, $cordovaCamera, 
         template: 'Something went wrong when taking photo.'
       })
     });
+
+    reloadArray();
+
   };
 
 });
 
-teleportApp.controller('CreatedRequestsCtrl', function($scope, $firebaseObject, CreatedRequests) {
-
-  var fbAuth = ref.getAuth();
-  var myID = fbAuth.uid;
-
-  $scope.createdRequestsMine = CreatedRequests.all(myID);
-
-  $scope.reloadArray = function() {
-    $scope.createdRequestsMine = CreatedRequests.all(myID);
-    $scope.$broadcast('scroll.refreshComplete');
-  };
-
-  $scope.runTimer = function(request) {
-    var reqTimestamp = request.timestamp / 1000;
-    var now = Date.now() / 1000;
-    //console.log("Current: " + now + " Timestamp: " + reqTimestamp);
-    var value = 300 - (now - reqTimestamp);
-    if(value > 0){
-      return value;
-    } else {
-      return -1;
-    }
-  };
-
-  $scope.numberOfPhotos = function(req) {
-    var reqRef = new Firebase("https://fiery-heat-6378.firebaseio.com/photos/" + req.timestamp);
-    var sync = $firebaseObject(reqRef);
-    sync.$loaded(function(data) {
-      $scope.photosValue = sync.numChildren();
-      var string = $scope.photosValue.toString() + " photos in gallery";
-      if($scope.photosValue == 1) {
-        string = $scope.photosValue.toString() + " photo in gallery";
-      }
-      return string;
-      }
-    );
-    //reqRef.once("value", function(snapshot) {
-    //  $scope.photosValue = snapshot.numChildren();
-    //});
-    //reqRef.$loaded(function () {
-    //  var string = $scope.photosValue.toString() + " photos in gallery";
-    //  if($scope.photosValue == 1) {
-    //    string = $scope.photosValue.toString() + " photo in gallery";
-    //  }
-    //  return string;
-    //});
-  };
-
-});
-
-teleportApp.controller('GalleryCtrl', function($scope, $firebaseArray, $firebaseObject, $stateParams, $ionicHistory) {
-
-  $scope.galleryRequestTimestamp = $stateParams.req;
-
-  var myReqGalleryRef = new Firebase("https://fiery-heat-6378.firebaseio.com/photos/" + $scope.galleryRequestTimestamp);
-  var myReqGalleryArray = $firebaseArray(myReqGalleryRef);
-
-  myReqGalleryArray.$loaded().then(function() {
-    $scope.images = myReqGalleryArray;
-  });
-
-  $scope.reloadArray = function() {
-    var myReqGalleryRef = new Firebase("https://fiery-heat-6378.firebaseio.com/photos/" + $scope.galleryRequestTimestamp);
-    var myReqGalleryArray = $firebaseArray(myReqGalleryRef);
-    myReqGalleryArray.$loaded().then(function() {
-      $scope.images = myReqGalleryArray;
-    });
-    $scope.$broadcast('scroll.refreshComplete');
-  };
-
-  //digest error
-  //$scope.getPhoto = function (userID) {
-  //  var tempRef = new Firebase("https://fiery-heat-6378.firebaseio.com/users/" + userID);
-  //  var sync = $firebaseObject(tempRef);
-  //  sync.$loaded(function(data) {
-  //    var photo = data.profilePicture;
-  //    return photo;
-  //  });
-  //};
-
-  //only loads photo after clicking something in the view
-  $scope.getPhoto = function (userID) {
-    var tempRef = new Firebase("https://fiery-heat-6378.firebaseio.com/users/" + userID);
-    var photo;
-    tempRef.on("value", function (snapshot) {
-      photo = snapshot.val().profilePicture;
-    });
-    return photo;
-  };
-
-  $scope.goBackFunc = function() {
-    $ionicHistory.nextViewOptions({
-      disableAnimate: true
-    });
-    $ionicHistory.goBack();
-  };
-
-  //doesnt work yet
-  $scope.like = function(photo) {
-    var photoRef = new Firebase("https://fiery-heat-6378.firebaseio.com/photos/" + photo.timestamp);
-    photoRef.on("value", function(snapshot) {
-      var newLikesValue = snapshot.val().thumbsUp + 1;
-      console.log(newLikesValue);
-      photoRef.update({thumbsUp : newLikesValue});
-    });
-  }
-
-});
-
-teleportApp.controller('SettingsCtrl', function($scope, $firebaseObject, $ionicHistory, $ionicPopup) {
+teleportApp.controller('SettingsCtrl', function(FirebaseRef, $scope, $firebaseObject, $ionicHistory, $ionicPopup, $state, $ionicLoading) {
 
   //sometimes works , sometimes not
-  var fbAuth = ref.getAuth();
-  var userRef = new Firebase("https://fiery-heat-6378.firebaseio.com/users/" + fbAuth.uid);
+  var fbAuth = FirebaseRef.getAuth();
+  var userRef = FirebaseRef.child("users").child(fbAuth.uid);
   var sync = $firebaseObject(userRef);
   sync.$loaded(function(data) {
     $scope.userLocation = data.location;
@@ -519,7 +652,14 @@ teleportApp.controller('SettingsCtrl', function($scope, $firebaseObject, $ionicH
     $scope.userPhoto = data.profilePicture;
   });
 
-  //works in the browser, not on a phone
+  $scope.logout = function() {
+    FirebaseRef.unauth();
+    ParsePlugin.logout();
+    $state.go('login');
+    $ionicLoading.show({ template: 'Sucessful log out', noBackdrop: true, duration: 1000 });
+  };
+
+  //works nice in the browser, not on a phone
   $scope.updateLocation = function() {
     var popup = $ionicPopup.prompt({
       title: 'What\'s your usual location?',
