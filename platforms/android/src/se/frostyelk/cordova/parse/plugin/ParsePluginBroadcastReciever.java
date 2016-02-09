@@ -43,18 +43,24 @@ public class ParsePluginBroadcastReciever extends ParsePushBroadcastReceiver {
 
         try {
             jsonObject = new JSONObject(jsonData);
-            String requesterID = jsonObject.getString("requesterID");
-            String reqLatitude = jsonObject.getString("reqLatitude");
-            String reqLongitude = jsonObject.getString("reqLongitude");
-            String message = jsonObject.getString("alert");
 
-            Log.i(LOGTAG, "starting Location Service");
-            Intent serviceIntent = new Intent(context,MyLocationService.class);
-            serviceIntent.putExtra("message", message);
-            serviceIntent.putExtra(MyLocationService.EXTRA_REQUESTER_ID, requesterID);
-            serviceIntent.putExtra("latitude", reqLatitude);
-            serviceIntent.putExtra("longitude", reqLongitude);
-            context.startService(serviceIntent);
+            if(jsonObject.has("reqLatitude")) {
+                String requesterID = jsonObject.getString("requesterID");
+                String reqLatitude = jsonObject.getString("reqLatitude");
+                String reqLongitude = jsonObject.getString("reqLongitude");
+                String message = jsonObject.getString("alert");
+
+                Log.i(LOGTAG, "starting Location Service");
+                Intent serviceIntent = new Intent(context,MyLocationService.class);
+                serviceIntent.putExtra("message", message);
+                serviceIntent.putExtra(MyLocationService.EXTRA_REQUESTER_ID, requesterID);
+                serviceIntent.putExtra("latitude", reqLatitude);
+                serviceIntent.putExtra("longitude", reqLongitude);
+                context.startService(serviceIntent);
+            } else {
+                super.onPushReceive(context, intent);
+            }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }

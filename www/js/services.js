@@ -12,8 +12,8 @@ teleportServices.factory('FirebaseRef', function() {
 teleportServices.factory('ReceivedRequests', function(FirebaseRef, $firebaseArray) {
 
   function isStillActive(ts) {
-    var timestamp5minutesAgo = Date.now() - 5 * 60 * 1000;
-    var value = ts - timestamp5minutesAgo;
+    var timestamp15minutesAgo = Date.now() - 15 * 60 * 1000;
+    var value = ts - timestamp15minutesAgo;
     return value > 0;
   }
 
@@ -49,7 +49,7 @@ teleportServices.factory('ReceivedRequests', function(FirebaseRef, $firebaseArra
         var reqRequester = reqArray[i].requesterID;
         var ts = reqArray[i].timestamp;
         var distance = getDistance(myLoc, reqLoc);
-        if ( distance < 500 && reqRequester != uid ) { //&& isStillActive(ts)
+        if ( distance < 500 && reqRequester != uid && isStillActive(ts) ) {
           filteredRequests.push(reqArray[i]);
         }
       }
@@ -94,12 +94,11 @@ teleportServices.factory('CreatedRequests', function(FirebaseRef, $firebaseArray
     filteredRequests.splice(0);
 
     requests.$loaded().then(function() {
-      var reqArray = requests;
-      for( var i = 0; i < reqArray.length; i++ ) {
-        var reqRequester = reqArray[i].requesterID;
-        var ts = reqArray[i].timestamp;
-        if( reqRequester === uid ) { //add && isStillActive(ts)
-          filteredRequests.push(reqArray[i]);
+      for( var i = 0; i < requests.length; i++ ) {
+        var reqRequester = requests[i].requesterID;
+        var ts = requests[i].timestamp;
+        if( reqRequester === uid && isStillActive(ts) ) {
+          filteredRequests.push(requests[i]);
         }
       }
       if (cb) {

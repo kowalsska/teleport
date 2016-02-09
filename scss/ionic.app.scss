@@ -183,6 +183,14 @@ $font-family-base: "Oxygen", sans-serif !default;
 #pendingRequestCounter {
   z-index:10;
   position:absolute;
-  bottom:20px;
-  right:25px;
+  bottom:25px;
+  right:23px;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  background: #dd9e9e;
+  color: #fff;
+  text-align: center;
+  font-weight: bold;
 }

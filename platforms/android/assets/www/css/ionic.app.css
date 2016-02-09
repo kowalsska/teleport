@@ -9203,3 +9203,24 @@ a.button {
   margin: auto;
   top: 5px;
   width: 10%; }
+
+#likeButton {
+  display: flex;
+  max-width: 55px;
+  min-width: 55px;
+  max-height: 50px;
+  line-height: 55px; }
+
+#pendingRequestCounter {
+  z-index: 10;
+  position: absolute;
+  bottom: 25px;
+  right: 23px;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  background: #dd9e9e;
+  color: #fff;
+  text-align: center;
+  font-weight: bold; }

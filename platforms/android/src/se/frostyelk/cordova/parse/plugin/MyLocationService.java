@@ -27,8 +27,6 @@ public class MyLocationService extends Service {
 	public static final String EXTRA_REQUESTER_ID = "requesterID";
 
   	private LocationManager locationManager;
-  	private NotificationManager notificationManager;
-  	private Notification notification;
 
 	@Override
 	public IBinder onBind(Intent arg0) {
@@ -36,49 +34,59 @@ public class MyLocationService extends Service {
 	}
 
 	@Override
-	public void onStart(Intent intent, int startId) {
-		Log.i(LOGTAG, "MyLocationService has started");
-		super.onStart(intent, startId);
-		// Get the location manager
-		Log.i(LOGTAG, "Getting location");
-	    locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-	    // Define the criteria how to select the location provider
-	    Criteria criteria = new Criteria();
-	    String provider = locationManager.getBestProvider(criteria, false);
-	    Log.i(LOGTAG, "Provider: " + provider);
-	    Location location = locationManager.getLastKnownLocation(provider);
-	    double requestLatitude = Double.parseDouble(intent.getStringExtra("latitude"));
-	    double requestLongitude = Double.parseDouble(intent.getStringExtra("longitude"));
-	    String message = intent.getStringExtra("message");
-	    String requesterID = intent.getStringExtra(EXTRA_REQUESTER_ID);
-	    double distance = getDistanceBetweenTwoLocations(location, requestLatitude, requestLongitude);
-		
-        if (nearMe(distance) && forMe(requesterID) && isLoggedIn()) {
-        	//Show the notification
-        	int drawableResourceId = this.getResources().getIdentifier("icon", "drawable", this.getPackageName());
-	    	Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+	public int onStartCommand(Intent intent, int flags, int startId) {
 
-			NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
-				.setSmallIcon(drawableResourceId)
-			    .setContentTitle("Teleport")
-			    .setContentText(message)
-			    .setVibrate(new long[] { 0, 500, -1})
-			    .setSound(alarmSound);
+        if(intent!=null) {
 
-			// Gets an instance of the NotificationManager service
-			NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            Log.i(LOGTAG, "MyLocationService has started");
+            String requesterID = intent.getStringExtra(EXTRA_REQUESTER_ID);
 
-			Log.i(LOGTAG, "Displaying notification");
-			mNotifyMgr.notify(0, mBuilder.build());
+            if(forMe(requesterID)) {
+                Log.i(LOGTAG, "Getting location");
+                locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                // Define the criteria how to select the location provider
+                Criteria criteria = new Criteria();
+                String provider = locationManager.getBestProvider(criteria, false);
+                Log.i(LOGTAG, "Provider: " + provider);
+                Location location = locationManager.getLastKnownLocation(provider);
+                double requestLatitude = Double.parseDouble(intent.getStringExtra("latitude"));
+                double requestLongitude = Double.parseDouble(intent.getStringExtra("longitude"));
+                String message = intent.getStringExtra("message");
+                double distance = getDistanceBetweenTwoLocations(location, requestLatitude, requestLongitude);
+
+                if (nearMe(distance) && isLoggedIn()) {
+                    //Show the notification
+                    int drawableResourceId = this.getResources().getIdentifier("icon", "drawable", this.getPackageName());
+                    Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+
+                    NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
+                            .setSmallIcon(drawableResourceId)
+                            .setContentTitle("Teleport")
+                            .setContentText(message)
+                            .setVibrate(new long[]{0, 500, -1})
+                            .setSound(alarmSound);
+
+                    // Gets an instance of the NotificationManager service
+                    NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+                    Log.i(LOGTAG, "Displaying notification");
+                    mNotifyMgr.notify(0, mBuilder.build());
+                    stopSelf();
+                }
+            } else {
+                Log.i(LOGTAG, "I created the request. No notification");
+                stopSelf();
+            }
+
         } else {
-            //Stop service
-			//stopService();
+            stopSelf();
         }
 
+		return START_NOT_STICKY;
 	}
 
 	private boolean nearMe(double distance) {
-		return distance < 300;
+		return distance < 500;
 	}
 
 	private boolean forMe(String requesterID) {

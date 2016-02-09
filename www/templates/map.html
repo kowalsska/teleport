@@ -1,6 +1,8 @@
 <ion-view>
   <ion-content scroll="false">
-    <div id="pendingRequestCounter">{{countPending}}</div>
+
+
+    <div id="pendingRequestCounter" ng-if="countPending > 0 || countPending==='...'">{{countPending}}</div>
 
     <input id="pac-input" class="controls" type="text" placeholder="Where are you teleporting to?" ng-focus="disableTap()">
     <div id="map" data-tap-disabled="true"></div>
@@ -8,13 +10,13 @@
     <ion-footer-bar>
       <ion-tabs class="tabs-striped tabs-color-calm">
         <a class="tab-item" ui-sref="left" nav-direction="back">
-          <i class="icon ion-eye"></i>
+          <i class="icon ion-android-compass"></i>
         </a>
         <a class="tab-item active">
           <img src="img/button.png" class="button button-clear" ng-click=sendRequest()>
         </a>
         <a class="tab-item" ui-sref="right" nav-direction="forward">
-          <i class="icon ion-android-locate"></i>
+          <i class="icon ion-earth"></i>
         </a>
       </ion-tabs>
     </ion-footer-bar>
