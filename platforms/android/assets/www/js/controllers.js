@@ -108,8 +108,8 @@ teleportApp.controller('MapCtrl', function(FirebaseRef, $scope, $state, $cordova
     var popup = $ionicPopup.prompt({
       title: 'Where are you teleporting?',
       subTitle: 'Give it a name',
-      inputType: 'text',
-      template: '<input autofocus>'
+      inputType: 'text'
+      //template: '<input autofocus>'
     }).then(function(res) {
       $scope.requestName = res;
     });
@@ -628,6 +628,7 @@ teleportApp.controller('GalleryCtrl', function(FirebaseRef, $scope, $firebaseArr
   }
 
   function reloadArray() {
+    console.log("reloaaading");
     $scope.loading = true;
     $scope.images = GalleryService.all(requestTimestamp, initImages);
     $scope.$broadcast('scroll.refreshComplete');
@@ -705,9 +706,7 @@ teleportApp.controller('GalleryCtrl', function(FirebaseRef, $scope, $firebaseArr
     tempRef2.set(true);
   }
 
-  $scope.takeNextPhoto = takeNextPhoto.then(reloadArray);
-
-  function takeNextPhoto() {
+  $scope.takeNextPhoto = function() {
 
     var photoTimestamp = Date.now();
 
@@ -775,6 +774,7 @@ teleportApp.controller('GalleryCtrl', function(FirebaseRef, $scope, $firebaseArr
     var channelName = "req" + requestTimestamp;
     ParsePlugin.subscribe(channelName, function() {});
 
+    reloadArray();
 
   };
 
