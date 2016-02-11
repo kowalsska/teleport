@@ -153,7 +153,7 @@ teleportApp.controller('MapCtrl', function(FirebaseRef, $scope, $state, $cordova
               requesterFrom: userLocation
             };
 
-            $$log$$('User created a request', data);
+            $$log$$('request-created', data);
 
           });
 
@@ -361,10 +361,14 @@ teleportApp.controller('LoginCtrl', function (FirebaseRef, $scope, $ionicModal, 
   }
 });
 
-teleportApp.controller('ReceivedRequestsCtrl', function(FirebaseRef, $scope, $timeout, $ionicViewSwitcher, $cordovaCamera, $firebaseArray, $firebaseObject, ReceivedRequests, $ionicPopup, $state) {
+teleportApp.controller('ReceivedRequestsCtrl', function(FirebaseRef, $scope, $ionicViewSwitcher, $cordovaCamera, $firebaseArray, $firebaseObject, ReceivedRequests, $ionicPopup, $state) {
 
   var eventDate = new Date();
-  $$log$$('User entered ReceivedRequest view', eventDate);
+  var data = {
+    view: "ReceivedRequests",
+    eventDate: eventDate
+  };
+  $$log$$('view-changed', data);
 
   var fbAuth = FirebaseRef.getAuth();
   var myID = fbAuth.uid;
@@ -431,7 +435,7 @@ teleportApp.controller('ReceivedRequestsCtrl', function(FirebaseRef, $scope, $ti
       requestLongitude: request.longitude,
       requestDate: reqDate
     };
-    $$log$$('User declined a request', data);
+    $$log$$('request-declined', data);
 
     var declineRef =  FirebaseRef.child("requests").child(request.timestamp).child("declinedBy").child(FirebaseRef.getAuth().uid);
     declineRef.set(true);
@@ -453,7 +457,7 @@ teleportApp.controller('ReceivedRequestsCtrl', function(FirebaseRef, $scope, $ti
       requestDate: reqDate,
       photoDate: photoDate
     };
-    $$log$$('First photo added to request', data);
+    $$log$$('photo-added', data);
 
     var requestGalleryRef = FirebaseRef.child("photos").child(reqPhoto.timestamp).child(photoTimestamp);
 
@@ -516,7 +520,11 @@ teleportApp.controller('ReceivedRequestsCtrl', function(FirebaseRef, $scope, $ti
 teleportApp.controller('CreatedRequestsCtrl', function(FirebaseRef, $scope, $firebaseObject, $firebaseArray, CreatedRequests, $state, $ionicViewSwitcher) {
 
   var eventDate = new Date();
-  $$log$$('User entered CreatedRequests view', eventDate);
+  var data = {
+    view: "MyCreatedRequests",
+    eventDate: eventDate
+  };
+  $$log$$('view-changed', data);
 
   var myID = FirebaseRef.getAuth().uid;
 
@@ -574,16 +582,21 @@ teleportApp.controller('CreatedRequestsCtrl', function(FirebaseRef, $scope, $fir
 
 teleportApp.controller('GalleryCtrl', function(FirebaseRef, $scope, $firebaseArray, $firebaseObject, $stateParams, $cordovaCamera, $ionicPopup, GalleryService) {
 
-
   var requestTimestamp = $stateParams.req;
   $scope.requestName = $stateParams.reqname;
 
+  var requestGalleryReference = FirebaseRef.child("photos").child(requestTimestamp);
+  requestGalleryReference.on("child_added", function(childSnapshot) {
+    reloadArray();
+  });
+
   var eventDate = new Date();
   var data = {
+    view: "Gallery",
     eventDate: eventDate,
     galleryName: $scope.requestName
   };
-  $$log$$('User entered a gallery', data);
+  $$log$$('view-changed', data);
 
   $scope.loading = true;
   $scope.images = GalleryService.all(requestTimestamp, initImages);
@@ -600,7 +613,7 @@ teleportApp.controller('GalleryCtrl', function(FirebaseRef, $scope, $firebaseArr
   function addTimers(img) {
     var value = Math.floor((Date.now()/60000) - (img.timestamp/60000));
     if(value === 0) {
-      img.minutesAgo = "less than a minute ago";
+      img.minutesAgo = "less than minute ago";
     }
     else if(value === 1) {
       img.minutesAgo = "1 minute ago";
@@ -628,7 +641,6 @@ teleportApp.controller('GalleryCtrl', function(FirebaseRef, $scope, $firebaseArr
   }
 
   function reloadArray() {
-    console.log("reloaaading");
     $scope.loading = true;
     $scope.images = GalleryService.all(requestTimestamp, initImages);
     $scope.$broadcast('scroll.refreshComplete');
@@ -642,7 +654,7 @@ teleportApp.controller('GalleryCtrl', function(FirebaseRef, $scope, $firebaseArr
       photoAuthor: img.author,
       photoDate: photoDate
     };
-    $$log$$('User liked a photo', data);
+    $$log$$('like-added', data);
 
     img.thumbsUp += 1;
     var saveTime = img.minutesAgo;
@@ -668,7 +680,7 @@ teleportApp.controller('GalleryCtrl', function(FirebaseRef, $scope, $firebaseArr
       photoAuthor: img.author,
       photoDate: photoDate
     };
-    $$log$$('User disliked a photo', data);
+    $$log$$('dislike-added', data);
 
     img.thumbsDown += 1;
     var saveTime = img.minutesAgo;
@@ -717,7 +729,7 @@ teleportApp.controller('GalleryCtrl', function(FirebaseRef, $scope, $firebaseArr
       requestDate: reqDate,
       photoDate: photoDate
     };
-    $$log$$('Next photo added to request', data);
+    $$log$$('photo-added', data);
 
     var fbAuth = FirebaseRef.getAuth();
 
@@ -774,8 +786,6 @@ teleportApp.controller('GalleryCtrl', function(FirebaseRef, $scope, $firebaseArr
     var channelName = "req" + requestTimestamp;
     ParsePlugin.subscribe(channelName, function() {});
 
-    reloadArray();
-
   };
 
 });
@@ -783,7 +793,11 @@ teleportApp.controller('GalleryCtrl', function(FirebaseRef, $scope, $firebaseArr
 teleportApp.controller('SettingsCtrl', function(FirebaseRef, $scope, $firebaseObject, $ionicHistory, $ionicPopup, $state, $ionicLoading) {
 
   var eventDate = new Date();
-  $$log$$('User entered Settings view', eventDate);
+  var data = {
+    view: "Settings",
+    eventDate: eventDate
+  };
+  $$log$$('view-changed', data);
 
   var fbAuth = FirebaseRef.getAuth();
   var userRef = FirebaseRef.child("users").child(fbAuth.uid);

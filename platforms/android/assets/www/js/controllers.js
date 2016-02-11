@@ -361,7 +361,7 @@ teleportApp.controller('LoginCtrl', function (FirebaseRef, $scope, $ionicModal, 
   }
 });
 
-teleportApp.controller('ReceivedRequestsCtrl', function(FirebaseRef, $scope, $timeout, $ionicViewSwitcher, $cordovaCamera, $firebaseArray, $firebaseObject, ReceivedRequests, $ionicPopup, $state) {
+teleportApp.controller('ReceivedRequestsCtrl', function(FirebaseRef, $scope, $ionicViewSwitcher, $cordovaCamera, $firebaseArray, $firebaseObject, ReceivedRequests, $ionicPopup, $state) {
 
   var eventDate = new Date();
   $$log$$('User entered ReceivedRequest view', eventDate);
@@ -578,6 +578,13 @@ teleportApp.controller('GalleryCtrl', function(FirebaseRef, $scope, $firebaseArr
   var requestTimestamp = $stateParams.req;
   $scope.requestName = $stateParams.reqname;
 
+  console.log('requesttimestamp', requestTimestamp);
+  var requestGalleryReference = FirebaseRef.child("photos").child(requestTimestamp);
+  requestGalleryReference.on("child_added", function(childSnapshot) {
+    console.log("hello its me");
+    reloadArray();
+  });
+
   var eventDate = new Date();
   var data = {
     eventDate: eventDate,
@@ -773,8 +780,6 @@ teleportApp.controller('GalleryCtrl', function(FirebaseRef, $scope, $firebaseArr
 
     var channelName = "req" + requestTimestamp;
     ParsePlugin.subscribe(channelName, function() {});
-
-    reloadArray();
 
   };
 

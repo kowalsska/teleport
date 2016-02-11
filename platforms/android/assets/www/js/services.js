@@ -184,7 +184,7 @@ teleportServices.factory('GalleryService', function(FirebaseRef, $firebaseArray)
         }
         photos.push(gallery[i]);
       }
-      photos.reverse;
+      photos.reverse();
       if (cb) cb(photos);
     });
   }
