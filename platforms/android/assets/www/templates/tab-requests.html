@@ -1,7 +1,7 @@
 <ion-view view-title="right">
   <div class="bar bar-header">
     <button class="button button-icon ion-ios-arrow-back" ui-sref="map" nav-direction="back"></button>
-    <div class="h1 title">Teleport requests</div>
+    <div class="h1 title">Requests in your location</div>
     <button class="button button-icon ion-ios-gear-outline" ui-sref="settings" nav-direction="enter"></button>
   </div>
   <ion-content class="has-header" on-swipe-right="swipeRight()" nav-direction="back">
@@ -62,11 +62,16 @@
               <button class="button icon-left ion-android-checkbox button-balanced" ng-click="takePhoto(request)">Accept</button>
               <button class="button icon-left ion-android-cancel button-assertive" ng-click="decline(request)">Decline</button>
             </div>
-
           </div>
-
         </div>
+      </div>
+    </div>
 
+    <div ng-if="noRequestsToShow">
+      <div class="card">
+        <div class="item item-text-wrap">
+          <p align="center"> No active requests in your location!</p>
+        </div>
       </div>
     </div>
 

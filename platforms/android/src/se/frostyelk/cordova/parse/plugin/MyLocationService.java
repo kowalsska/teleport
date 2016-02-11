@@ -1,5 +1,6 @@
 package se.frostyelk.cordova.parse.plugin;
 
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.app.Service;
@@ -20,6 +21,8 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.content.SharedPreferences;
 
+import com.ionicframework.teleport2514364.MainActivity;
+
 public class MyLocationService extends Service {
 
 	private static final String LOGTAG = "ParsePluginReciever";
@@ -27,6 +30,7 @@ public class MyLocationService extends Service {
 	public static final String EXTRA_REQUESTER_ID = "requesterID";
 
   	private LocationManager locationManager;
+  	private Location location;
 
 	@Override
 	public IBinder onBind(Intent arg0) {
@@ -48,7 +52,7 @@ public class MyLocationService extends Service {
                 Criteria criteria = new Criteria();
                 String provider = locationManager.getBestProvider(criteria, false);
                 Log.i(LOGTAG, "Provider: " + provider);
-                Location location = locationManager.getLastKnownLocation(provider);
+                location = locationManager.getLastKnownLocation(provider);
                 double requestLatitude = Double.parseDouble(intent.getStringExtra("latitude"));
                 double requestLongitude = Double.parseDouble(intent.getStringExtra("longitude"));
                 String message = intent.getStringExtra("message");
@@ -59,18 +63,23 @@ public class MyLocationService extends Service {
                     int drawableResourceId = this.getResources().getIdentifier("icon", "drawable", this.getPackageName());
                     Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
+					Intent notificationIntent = new Intent(this, MainActivity.class);
+					PendingIntent ionicIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+
                     NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
                             .setSmallIcon(drawableResourceId)
-                            .setContentTitle("Teleport")
+							.setContentTitle("Teleport")
                             .setContentText(message)
                             .setVibrate(new long[]{0, 500, -1})
-                            .setSound(alarmSound);
+							.setContentIntent(ionicIntent)
+							.setAutoCancel(true)
+							.setSound(alarmSound);
 
                     // Gets an instance of the NotificationManager service
                     NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
-                    Log.i(LOGTAG, "Displaying notification");
-                    mNotifyMgr.notify(0, mBuilder.build());
+					int notifID = (int)(Math.random() * 1000);
+					Log.i(LOGTAG, "Displaying notification");
+                    mNotifyMgr.notify(notifID, mBuilder.build());
                     stopSelf();
                 }
             } else {

@@ -25,8 +25,7 @@
         <div class="col col-75"><button class="button button-calm" ng-click="pickPhoto()">Add profile picture</button></div>
         <div class="col" id="isPictureAdded"></div>
       </div>
-      <button class="button button-full button-calm">Terms and Conditions</button>
-      <ion-checkbox>I have read and agreed to<br> Terms and Conditions</ion-checkbox>
+      <ion-checkbox ng-click="isChecked()"><p>I have read and agreed to Terms<br>and Conditions of the evaluation</p></ion-checkbox>
       <button class="button button-full button-calm" ng-click="createUser(user)">Create</button>
     </div>
   </ion-content>

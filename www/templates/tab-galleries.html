@@ -30,17 +30,15 @@
           <div class="item item-icon-left assertive">
             <i class="icon ion-ios-timer-outline"></i><timer countdown="runTimer(myRequest)" max-time-unit="'minute'" interval="1000">{{mminutes}}:{{sseconds}}</timer>
           </div>
-
         </div>
+      </div>
 
-        <div ng-if="noRequestsToShow">
-          <div class="card">
-            <div class="item item-text-wrap">
-              <p align="center"> No requests to show!</p>
-            </div>
+      <div ng-if="noRequestsToShow">
+        <div class="card">
+          <div class="item item-text-wrap">
+            <p align="center"> You haven't made any requests in the last 10 minutes!</p>
           </div>
         </div>
-
       </div>
 
     </ion-content>

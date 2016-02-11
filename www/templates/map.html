@@ -1,11 +1,12 @@
 <ion-view>
-  <ion-content scroll="false">
+  <ion-content scroll="false" class="has-footer">
 
+    <input id="pac-input" class="controls" type="text" placeholder="Search for specific location" ng-focus="disableTap()">
+    <div id="map" data-tap-disabled="true"></div>
+
+  </ion-content>
 
     <div id="pendingRequestCounter" ng-if="countPending > 0 || countPending==='...'">{{countPending}}</div>
-
-    <input id="pac-input" class="controls" type="text" placeholder="Where are you teleporting to?" ng-focus="disableTap()">
-    <div id="map" data-tap-disabled="true"></div>
 
     <ion-footer-bar>
       <ion-tabs class="tabs-striped tabs-color-calm">
@@ -20,10 +21,6 @@
         </a>
       </ion-tabs>
     </ion-footer-bar>
-
-  </ion-content>
-
-
 
 </ion-view>
 

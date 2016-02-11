@@ -6,7 +6,7 @@
   </div>
   <ion-content class="has-header">
 
-    <button class="button button-block icon ion-ios-plus-outline button-light" ng-click="takeNextPhoto()"> Add more photos
+    <button class="button button-block icon ion-ios-plus-outline button-light" ng-click="takeNextPhoto(reloadArray)"> Add more photos
     </button>
 
     <ion-refresher
@@ -32,24 +32,24 @@
               <p>{{img.minutesAgo}}</p>
             </div>
           </div>
-            <div ng-if ="img.isAuthor || img.canAddDislike =='disable'">
-              <div class="col col-20"><button id='likeButton' class="button button-outline button-assertive ion-thumbsdown" disabled="true"> {{img.likes.thumbsDown.value}}</button></div>
+            <div ng-if ="img.isAuthor">
+              <div class="col col-20"><button id='likeButton' class="button button-outline button-assertive ion-thumbsdown" disabled="true"> {{img.thumbsDown}}</button></div>
             </div>
             <div ng-if ="!img.canAddDislike && !img.isAuthor">
-              <div class="col col-20"><button id='likeButton' class="button button button-assertive ion-thumbsdown" > {{img.likes.thumbsDown.value}}</button></div>
+              <div class="col col-20"><button id='likeButton' class="button button button-assertive ion-thumbsdown" > {{img.thumbsDown}}</button></div>
             </div>
             <div ng-if ="img.canAddDislike && !img.isAuthor">
-              <div class="col col-20"><button id='likeButton' class="button button-outline button-assertive ion-thumbsdown" ng-click="dislikePhoto(img)"> {{img.likes.thumbsDown.value}}</button></div>
+              <div class="col col-20"><button id='likeButton' class="button button-outline button-assertive ion-thumbsdown" ng-click="dislikePhoto(img)"> {{img.thumbsDown}}</button></div>
             </div>
 
-          <div ng-if ="img.isAuthor || img.canAddLike =='disable'">
-              <div class="col col-20"><button id='likeButton' class="button button-outline button-positive ion-thumbsup" disabled="true"> {{img.likes.thumbsUp.value}}</button></div>
+          <div ng-if ="img.isAuthor">
+              <div class="col col-20"><button id='likeButton' class="button button-outline button-positive ion-thumbsup" disabled="true"> {{img.thumbsUp}}</button></div>
             </div>
             <div ng-if ="!img.canAddLike && !img.isAuthor">
-              <div class="col col-20"><button id='likeButton' class="button button button-positive ion-thumbsup"> {{img.likes.thumbsUp.value}}</button></div>
+              <div class="col col-20"><button id='likeButton' class="button button button-positive ion-thumbsup"> {{img.thumbsUp}}</button></div>
             </div>
             <div ng-if ="img.canAddLike && !img.isAuthor">
-              <div class="col col-20"><button id='likeButton' class="button button-outline button-positive ion-thumbsup" ng-click="likePhoto(img)"> {{img.likes.thumbsUp.value}}</button></div>
+              <div class="col col-20"><button id='likeButton' class="button button-outline button-positive ion-thumbsup" ng-click="likePhoto(img)"> {{img.thumbsUp}}</button></div>
             </div>
         </div>
       </div>

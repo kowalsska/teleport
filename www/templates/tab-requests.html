@@ -62,11 +62,16 @@
               <button class="button icon-left ion-android-checkbox button-balanced" ng-click="takePhoto(request)">Accept</button>
               <button class="button icon-left ion-android-cancel button-assertive" ng-click="decline(request)">Decline</button>
             </div>
-
           </div>
-
         </div>
+      </div>
+    </div>
 
+    <div ng-if="noRequestsToShow">
+      <div class="card">
+        <div class="item item-text-wrap">
+          <p align="center"> No active requests in your location!</p>
+        </div>
       </div>
     </div>
 

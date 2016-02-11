@@ -11,8 +11,10 @@ teleportServices.factory('FirebaseRef', function() {
 
 teleportServices.factory('ReceivedRequests', function(FirebaseRef, $firebaseArray) {
 
+  var filteredRequests = [];
+
   function isStillActive(ts) {
-    var timestamp15minutesAgo = Date.now() - 15 * 60 * 1000;
+    var timestamp15minutesAgo = Date.now() - 10 * 60 * 1000;
     var value = ts - timestamp15minutesAgo;
     return value > 0;
   }
@@ -30,11 +32,20 @@ teleportServices.factory('ReceivedRequests', function(FirebaseRef, $firebaseArra
       Math.sin(dLong / 2) * Math.sin(dLong / 2);
     var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     var d = R * c;
-    //console.log("Distance: " + d);
-    return d; // returns the distance in meter
+    return d;
   };
 
-  var filteredRequests = [];
+  function haveUserDeclined(req) {
+    if(req.declinedBy !="none"){
+      for(decline in req.declinedBy) {
+        if(decline === FirebaseRef.getAuth().uid) {
+          return true;
+        }
+      }
+      return false;
+    }
+    return false;
+  }
 
   function startGettingRequests(lat, lng, uid, cb) {
     var requestRef = FirebaseRef.child("requests");
@@ -48,11 +59,13 @@ teleportServices.factory('ReceivedRequests', function(FirebaseRef, $firebaseArra
         var reqLoc = new google.maps.LatLng(reqArray[i].latitude, reqArray[i].longitude);
         var reqRequester = reqArray[i].requesterID;
         var ts = reqArray[i].timestamp;
+
         var distance = getDistance(myLoc, reqLoc);
-        if ( distance < 500 && reqRequester != uid && isStillActive(ts) ) {
+        if ( distance < 500 && reqRequester != uid && isStillActive(ts) && !haveUserDeclined(reqArray[i]) ) {
           filteredRequests.push(reqArray[i]);
         }
       }
+      filteredRequests.reverse();
       if (cb) cb();
     });
   }
@@ -78,14 +91,9 @@ teleportServices.factory('CreatedRequests', function(FirebaseRef, $firebaseArray
   var filteredRequests = [];
 
   function isStillActive(ts) {
-    var timestamp5minutesAgo = Date.now() - 5 * 60 * 1000;
-    var requestTimestamp = ts;
-    var value = requestTimestamp - timestamp5minutesAgo;
-    if(value > 0) {
-      return true
-    } else {
-      return false
-    }
+    var timestamp5minutesAgo = Date.now() - 10 * 60 * 1000;
+    var value = ts - timestamp5minutesAgo;
+    return value > 0;
   }
 
   function startGettingRequests(uid, cb) {
@@ -101,6 +109,7 @@ teleportServices.factory('CreatedRequests', function(FirebaseRef, $firebaseArray
           filteredRequests.push(requests[i]);
         }
       }
+      filteredRequests.reverse();
       if (cb) {
         if(filteredRequests.length > 0){
           cb(false);
@@ -140,39 +149,42 @@ teleportServices.factory('GalleryService', function(FirebaseRef, $firebaseArray)
     var i;
     gallery.$loaded().then(function() {
       for( i = 0; i < gallery.length; i++ ) {
+        var galleryObject = gallery[i];
         if(isUserAuthor(gallery[i])) {
           gallery[i].isAuthor = true;
           gallery[i].canAddLike = false;
           gallery[i].canAddDislike = false;
         } else {
           gallery[i].isAuthor = false;
-          var likeRef = FirebaseRef.child("photos").child(requestTimestamp).child(gallery[i].$id).child('likes').child('thumbsUp').child('whoClicked');
+          console.log('PRINT IT!', requestTimestamp, gallery[i].timestamp, 'thumbsUp', 'whoClicked');
+          var likeRef = FirebaseRef.child("likes").child(requestTimestamp).child(gallery[i].timestamp).child('thumbsUp').child('whoClicked');
           likeRef.once("value", function(snapshot) {
             var childName = FirebaseRef.getAuth().uid;
             var hasClicked = snapshot.hasChild(childName);
             if(hasClicked){
               console.log('I liked this photo');
-              gallery[i].canAddLike = false;
+              galleryObject.canAddLike = false;
             } else {
               console.log('I didnt like this photo');
-              gallery[i].canAddLike = true;
+              galleryObject.canAddLike = true;
             }
           });
-          var dislikeRef = FirebaseRef.child("photos").child(requestTimestamp).child(gallery[i].$id).child('likes').child('thumbsDown').child('whoClicked');
+          var dislikeRef = FirebaseRef.child("likes").child(requestTimestamp).child(gallery[i].timestamp).child('thumbsDown').child('whoClicked');
           dislikeRef.once("value", function(snapshot) {
             var childName = FirebaseRef.getAuth().uid;
             var hasClicked = snapshot.hasChild(childName);
             if(hasClicked){
               console.log('I disliked this photo');
-              gallery[i].canAddDislike = false;
+              galleryObject.canAddDislike = false;
             } else {
               console.log('I didnt dislike this photo');
-              gallery[i].canAddDislike = true;
+              galleryObject.canAddDislike = true;
             }
           });
         }
         photos.push(gallery[i]);
       }
+      photos.reverse;
       if (cb) cb(photos);
     });
   }
