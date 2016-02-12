@@ -75,7 +75,7 @@ teleportApp.controller('MapCtrl', function(FirebaseRef, $scope, $state, $cordova
         var ts = countRefArray[i].timestamp;
         var reqRequester = countRefArray[i].requesterID;
         var distance = getDistance(myLoc, reqLoc);
-        if ( distance < 500 && reqRequester != FirebaseRef.getAuth().uid && isStillActive(ts) && !haveUserDeclined(countRefArray[i])) {
+        if ( distance < 300 && reqRequester != FirebaseRef.getAuth().uid && isStillActive(ts) && !haveUserDeclined(countRefArray[i])) {
           count++;
         }
       }
@@ -109,7 +109,6 @@ teleportApp.controller('MapCtrl', function(FirebaseRef, $scope, $state, $cordova
       title: 'Where are you teleporting?',
       subTitle: 'Give it a name',
       inputType: 'text'
-      //template: '<input autofocus>'
     }).then(function(res) {
       $scope.requestName = res;
     });
@@ -585,9 +584,10 @@ teleportApp.controller('GalleryCtrl', function(FirebaseRef, $scope, $firebaseArr
   var requestTimestamp = $stateParams.req;
   $scope.requestName = $stateParams.reqname;
 
-  var requestGalleryReference = FirebaseRef.child("photos").child(requestTimestamp);
-  requestGalleryReference.on("child_added", function(childSnapshot) {
-    reloadArray();
+  FirebaseRef.child("photos").on("child_changed", function(childSnapshot) {
+    if(childSnapshot.key() === requestTimestamp) {
+      reloadArray();
+    }
   });
 
   var eventDate = new Date();
@@ -816,7 +816,6 @@ teleportApp.controller('SettingsCtrl', function(FirebaseRef, $scope, $firebaseOb
     $ionicLoading.show({ template: 'Sucessful log out', noBackdrop: true, duration: 1000 });
   };
 
-  //works nice in the browser, not on a phone
   $scope.updateLocation = function() {
     var popup = $ionicPopup.prompt({
       title: 'What\'s your usual location?',
@@ -824,7 +823,6 @@ teleportApp.controller('SettingsCtrl', function(FirebaseRef, $scope, $firebaseOb
     }).then(function(res) {
       $scope.newLocationName = res;
       userRef.update({location : $scope.newLocationName});
-      //$window.location.reload(true);
     });
   };
 

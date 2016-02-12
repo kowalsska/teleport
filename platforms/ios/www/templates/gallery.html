@@ -20,6 +20,7 @@
         </div>
 
         <div class="row">
+
           <div class="col">
             <div class="item item-avatar">
               <img id="galleryUserPhoto" ng-src="data:image/jpeg;base64,{{img.authorImg}}">
@@ -28,22 +29,27 @@
             </div>
           </div>
 
-          <div class="col col-20"><button class="button button-outline button-assertive ion-thumbsdown" ng-click="dislikePhoto(img)"> {{img.thumbsDown}}</button></div>
-          <div class="col col-20"><button class="button button-outline button-positive ion-thumbsup" ng-click="likePhoto(img)"> {{img.thumbsUp}}</button></div>
+          <div class="col col-20">
+            <div ng-if ="img.isAuthor || img.canAddDislike =='disable'">
+              <button id='likeButton' class="button button-outline button-assertive ion-thumbsdown" disabled="true"> {{img.thumbsDown}}</button></div>
+            <div ng-if ="!img.canAddDislike && !img.isAuthor">
+              <button id='likeButton' class="button button button-assertive ion-thumbsdown" > {{img.thumbsDown}}</button></div>
+            <div ng-if ="img.canAddDislike && !img.isAuthor">
+              <button id='likeButton' class="button button-outline button-assertive ion-thumbsdown" ng-click="dislikePhoto(img)"> {{img.thumbsDown}}</button></div>
+          </div>
+          <div class="col col-20">
+            <div ng-if ="img.isAuthor || img.canAddLike =='disable'">
+              <button id='likeButton' class="button button-outline button-positive ion-thumbsup" disabled="true"> {{img.thumbsUp}}</button></div>
+            <div ng-if ="!img.canAddLike && !img.isAuthor">
+              <button id='likeButton' class="button button button-positive ion-thumbsup"> {{img.thumbsUp}}</button></div>
+            <div ng-if ="img.canAddLike && !img.isAuthor">
+              <button id='likeButton' class="button button-outline button-positive ion-thumbsup" ng-click="likePhoto(img)"> {{img.thumbsUp}}</button></div>
+          </div>
+
         </div>
 
       </div>
-
-      <!--<div ng-if="images.length == 0">
-        <div class="card">
-          <div class="item item-text-wrap">
-            <p align="center"> No photos added yet!</p>
-          </div>
-        </div>
-      </div>-->
-
     </div>
-
 
   </ion-content>
 </ion-view>

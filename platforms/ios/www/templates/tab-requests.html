@@ -1,7 +1,7 @@
 <ion-view view-title="right">
   <div class="bar bar-header">
     <button class="button button-icon ion-ios-arrow-back" ui-sref="map" nav-direction="back"></button>
-    <div class="h1 title">Teleport requests</div>
+    <div class="h1 title">Requests in your location</div>
     <button class="button button-icon ion-ios-gear-outline" ui-sref="settings" nav-direction="enter"></button>
   </div>
   <ion-content class="has-header" on-swipe-right="swipeRight()" nav-direction="back">
@@ -36,7 +36,7 @@
               </div>
             </div>
             <div class="button-bar">
-              <a class="button icon-left ion-images button-calm" nav-direction="forward" ui-sref="galleryAddMore({req: request.timestamp, reqid: request.ref, reqname: request.name })">See gallery</a>
+              <a class="button icon-left ion-images button-calm" nav-direction="forward" ui-sref="galleryAddMore({req: request.timestamp, reqname: request.name })">See gallery</a>
             </div>
 
           </div>
@@ -62,11 +62,16 @@
               <button class="button icon-left ion-android-checkbox button-balanced" ng-click="takePhoto(request)">Accept</button>
               <button class="button icon-left ion-android-cancel button-assertive" ng-click="decline(request)">Decline</button>
             </div>
-
           </div>
-
         </div>
+      </div>
+    </div>
 
+    <div ng-if="noRequestsToShow">
+      <div class="card">
+        <div class="item item-text-wrap">
+          <p align="center"> No active requests in your location!</p>
+        </div>
       </div>
     </div>
 
@@ -75,13 +80,13 @@
   <ion-footer-bar>
     <ion-tabs class="tabs-striped tabs-color-calm">
       <a class="tab-item" ui-sref="left" nav-direction="back">
-        <i class="icon ion-eye"></i>
+        <i class="icon ion-android-compass"></i>
       </a>
       <a class="tab-item" ui-sref="map" nav-direction="back">
         <img src="img/button_inactive.png" class="button button-clear">
       </a>
       <a class="tab-item active">
-        <i class="icon ion-android-locate"></i>
+        <i class="icon ion-earth"></i>
       </a>
     </ion-tabs>
   </ion-footer-bar>

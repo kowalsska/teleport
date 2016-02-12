@@ -41,22 +41,6 @@ module.exports = [
         ]
     },
     {
-        "file": "plugins/cordova-plugin-console/www/logger.js",
-        "id": "cordova-plugin-console.logger",
-        "pluginId": "cordova-plugin-console",
-        "clobbers": [
-            "cordova.logger"
-        ]
-    },
-    {
-        "file": "plugins/cordova-plugin-console/www/console-via-logger.js",
-        "id": "cordova-plugin-console.console",
-        "pluginId": "cordova-plugin-console",
-        "clobbers": [
-            "console"
-        ]
-    },
-    {
         "file": "plugins/cordova-plugin-device/www/device.js",
         "id": "cordova-plugin-device.device",
         "pluginId": "cordova-plugin-device",
@@ -126,7 +110,6 @@ module.exports.metadata =
 {
     "com.darktalker.cordova.screenshot": "0.1.3",
     "cordova-plugin-camera": "1.2.0",
-    "cordova-plugin-console": "1.0.1",
     "cordova-plugin-crosswalk-webview": "1.4.0",
     "cordova-plugin-device": "1.0.1",
     "cordova-plugin-geolocation": "1.0.1",

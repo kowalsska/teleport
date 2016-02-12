@@ -4,24 +4,19 @@
 var teleportServices = angular.module('teleport.services', []);
 
 teleportServices.factory('FirebaseRef', function() {
-  var ref = new Firebase("https://fiery-heat-6378.firebaseio.com/");
+  var ref = new Firebase("https://blazing-heat-1057.firebaseio.com/");
 
   return ref;
 });
 
 teleportServices.factory('ReceivedRequests', function(FirebaseRef, $firebaseArray) {
 
+  var filteredRequests = [];
+
   function isStillActive(ts) {
-    var timestamp5minutesAgo = Date.now() - 5 * 60 * 1000;
-    var requestTimestamp = ts;
-    var value = requestTimestamp - timestamp5minutesAgo;
-    if(value > 0) {
-      console.log(value);
-      return true
-    } else {
-      console.log(value);
-      return false
-    }
+    var timestamp10minutesAgo = Date.now() - 10 * 60 * 1000;
+    var value = ts - timestamp10minutesAgo;
+    return value > 0;
   }
 
   var rad = function(x) {
@@ -29,7 +24,7 @@ teleportServices.factory('ReceivedRequests', function(FirebaseRef, $firebaseArra
   };
 
   var getDistance = function(p1, p2) {
-    var R = 6378137; // Earth’s mean radius in meter
+    var R = 6378137;
     var dLat = rad(p2.lat() - p1.lat());
     var dLong = rad(p2.lng() - p1.lng());
     var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
@@ -37,11 +32,20 @@ teleportServices.factory('ReceivedRequests', function(FirebaseRef, $firebaseArra
       Math.sin(dLong / 2) * Math.sin(dLong / 2);
     var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     var d = R * c;
-    //console.log("Distance: " + d);
-    return d; // returns the distance in meter
+    return d;
   };
 
-  var filteredRequests = [];
+  function haveUserDeclined(req) {
+    if(req.declinedBy !="none"){
+      for(decline in req.declinedBy) {
+        if(decline === FirebaseRef.getAuth().uid) {
+          return true;
+        }
+      }
+      return false;
+    }
+    return false;
+  }
 
   function startGettingRequests(lat, lng, uid, cb) {
     var requestRef = FirebaseRef.child("requests");
@@ -55,11 +59,13 @@ teleportServices.factory('ReceivedRequests', function(FirebaseRef, $firebaseArra
         var reqLoc = new google.maps.LatLng(reqArray[i].latitude, reqArray[i].longitude);
         var reqRequester = reqArray[i].requesterID;
         var ts = reqArray[i].timestamp;
+
         var distance = getDistance(myLoc, reqLoc);
-        if ( distance < 500 && reqRequester != uid ) { //&& isStillActive(ts)
+        if ( distance < 300 && reqRequester != uid && isStillActive(ts) && !haveUserDeclined(reqArray[i]) ) {
           filteredRequests.push(reqArray[i]);
         }
       }
+      filteredRequests.reverse();
       if (cb) cb();
     });
   }
@@ -85,14 +91,9 @@ teleportServices.factory('CreatedRequests', function(FirebaseRef, $firebaseArray
   var filteredRequests = [];
 
   function isStillActive(ts) {
-    var timestamp5minutesAgo = Date.now() - 5 * 60 * 1000;
-    var requestTimestamp = ts;
-    var value = requestTimestamp - timestamp5minutesAgo;
-    if(value > 0) {
-      return true
-    } else {
-      return false
-    }
+    var timestamp10minutesAgo = Date.now() - 10 * 60 * 1000;
+    var value = ts - timestamp10minutesAgo;
+    return value > 0;
   }
 
   function startGettingRequests(uid, cb) {
@@ -101,14 +102,14 @@ teleportServices.factory('CreatedRequests', function(FirebaseRef, $firebaseArray
     filteredRequests.splice(0);
 
     requests.$loaded().then(function() {
-      var reqArray = requests;
-      for( var i = 0; i < reqArray.length; i++ ) {
-        var reqRequester = reqArray[i].requesterID;
-        var ts = reqArray[i].timestamp;
-        if( reqRequester === uid ) { //add && isStillActive(ts)
-          filteredRequests.push(reqArray[i]);
+      for( var i = 0; i < requests.length; i++ ) {
+        var reqRequester = requests[i].requesterID;
+        var ts = requests[i].timestamp;
+        if( reqRequester === uid && isStillActive(ts) ) {
+          filteredRequests.push(requests[i]);
         }
       }
+      filteredRequests.reverse();
       if (cb) {
         if(filteredRequests.length > 0){
           cb(false);
@@ -136,42 +137,7 @@ teleportServices.factory('GalleryService', function(FirebaseRef, $firebaseArray)
   var photos = [];
 
   function isUserAuthor(img) {
-    console.log("Am I the author?", img.authorID == FirebaseRef.getAuth().uid);
     var value = (img.authorID == FirebaseRef.getAuth().uid);
-    return value;
-  }
-
-  function getIfLikedValue() {
-    var value;
-    var likeRef = FirebaseRef.child("photos").child(requestTimestamp).child(gallery[i].$id).child('likes').child('thumbsUp').child('whoClicked');
-    likeRef.once("value", function(snapshot) {
-      var childName = FirebaseRef.getAuth().uid;
-      var hasClicked = snapshot.hasChild(childName);
-      if(hasClicked){
-        console.log('I liked this photo');
-        value = false;
-      } else {
-        console.log('I didnt like this photo');
-        value = true;
-      }
-    });
-    return value;
-  }
-
-  function getIfDislikedValue() {
-    var value;
-    var dislikeRef = FirebaseRef.child("photos").child(requestTimestamp).child(gallery[i].$id).child('likes').child('thumbsDown').child('whoClicked');
-    dislikeRef.once("value", function(snapshot) {
-      var childName = FirebaseRef.getAuth().uid;
-      var hasClicked = snapshot.hasChild(childName);
-      if(hasClicked){
-        console.log('I disliked this photo');
-        value = false;
-      } else {
-        console.log('I didnt dislike this photo');
-        value = true;
-      }
-    });
     return value;
   }
 
@@ -182,17 +148,37 @@ teleportServices.factory('GalleryService', function(FirebaseRef, $firebaseArray)
     var i;
     gallery.$loaded().then(function() {
       for( i = 0; i < gallery.length; i++ ) {
-        if(isUserAuthor()) {
+        var galleryObject = gallery[i];
+        if(isUserAuthor(gallery[i])) {
           gallery[i].isAuthor = true;
           gallery[i].canAddLike = false;
           gallery[i].canAddDislike = false;
         } else {
           gallery[i].isAuthor = false;
-          gallery[i].canAddLike = getIfLikedValue(gallery[i]);
-          gallery[i].canAddDislike = getIfDislikedValue(gallery[i]);
+          var likeRef = FirebaseRef.child("likes").child(requestTimestamp).child(gallery[i].timestamp).child('thumbsUp').child('whoClicked');
+          likeRef.once("value", function(snapshot) {
+            var childName = FirebaseRef.getAuth().uid;
+            var hasClicked = snapshot.hasChild(childName);
+            if(hasClicked){
+              galleryObject.canAddLike = false;
+            } else {
+              galleryObject.canAddLike = true;
+            }
+          });
+          var dislikeRef = FirebaseRef.child("likes").child(requestTimestamp).child(gallery[i].timestamp).child('thumbsDown').child('whoClicked');
+          dislikeRef.once("value", function(snapshot) {
+            var childName = FirebaseRef.getAuth().uid;
+            var hasClicked = snapshot.hasChild(childName);
+            if(hasClicked){
+              galleryObject.canAddDislike = false;
+            } else {
+              galleryObject.canAddDislike = true;
+            }
+          });
         }
         photos.push(gallery[i]);
       }
+      photos.reverse();
       if (cb) cb(photos);
     });
   }

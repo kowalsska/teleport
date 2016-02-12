@@ -95,7 +95,7 @@ public class MyLocationService extends Service {
 	}
 
 	private boolean nearMe(double distance) {
-		return distance < 500;
+		return distance < 300;
 	}
 
 	private boolean forMe(String requesterID) {
