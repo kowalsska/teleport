@@ -19,9 +19,6 @@
         "cordova-plugin-device": {
             "PACKAGE_NAME": "com.ionicframework.teleport2514364"
         },
-        "cordova-plugin-geolocation": {
-            "PACKAGE_NAME": "com.ionicframework.teleport2514364"
-        },
         "cordova-plugin-googleplayservices": {
             "PACKAGE_NAME": "com.ionicframework.teleport2514364"
         },
@@ -41,6 +38,9 @@
             "PACKAGE_NAME": "com.ionicframework.teleport2514364"
         },
         "cordova-plugin-network-information": {
+            "PACKAGE_NAME": "com.ionicframework.teleport2514364"
+        },
+        "cordova-plugin-geolocation": {
             "PACKAGE_NAME": "com.ionicframework.teleport2514364"
         }
     },

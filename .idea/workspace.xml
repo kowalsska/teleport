@@ -5,22 +5,87 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="41740c5e-2e78-411d-90cf-c3f49eb1076a" name="Default" comment="">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/platforms/android/.gradle/2.2.1/taskArtifacts/cache.properties.lock" afterPath="$PROJECT_DIR$/platforms/android/.gradle/2.2.1/taskArtifacts/cache.properties.lock" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/platforms/android/.gradle/2.2.1/taskArtifacts/fileHashes.bin" afterPath="$PROJECT_DIR$/platforms/android/.gradle/2.2.1/taskArtifacts/fileHashes.bin" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/platforms/android/.gradle/2.2.1/taskArtifacts/fileSnapshots.bin" afterPath="$PROJECT_DIR$/platforms/android/.gradle/2.2.1/taskArtifacts/fileSnapshots.bin" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/platforms/android/.gradle/2.2.1/taskArtifacts/outputFileStates.bin" afterPath="$PROJECT_DIR$/platforms/android/.gradle/2.2.1/taskArtifacts/outputFileStates.bin" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/platforms/android/.gradle/2.2.1/taskArtifacts/taskArtifacts.bin" afterPath="$PROJECT_DIR$/platforms/android/.gradle/2.2.1/taskArtifacts/taskArtifacts.bin" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/platforms/android/CordovaLib/build/intermediates/res/resources-debug-test.ap_" afterPath="$PROJECT_DIR$/platforms/android/CordovaLib/build/intermediates/res/resources-debug-test.ap_" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plugins/cordova-plugin-geolocation/doc/it/README.md" afterPath="$PROJECT_DIR$/plugins/cordova-plugin-geolocation/doc/it/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plugins/cordova-plugin-geolocation/doc/ko/index.md" afterPath="$PROJECT_DIR$/plugins/cordova-plugin-geolocation/doc/ko/index.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/teleport2_node_modules.xml" afterPath="$PROJECT_DIR$/.idea/libraries/teleport2_node_modules.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/platforms/android/assets/www/css/ionic.app.css" afterPath="$PROJECT_DIR$/platforms/android/assets/www/css/ionic.app.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/platforms/android/assets/www/css/ionic.app.min.css" afterPath="$PROJECT_DIR$/platforms/android/assets/www/css/ionic.app.min.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config.xml" afterPath="$PROJECT_DIR$/config.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/platforms/android/.idea/workspace.xml" afterPath="$PROJECT_DIR$/platforms/android/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/platforms/android/AndroidManifest.xml" afterPath="$PROJECT_DIR$/platforms/android/AndroidManifest.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/platforms/android/android.json" afterPath="$PROJECT_DIR$/platforms/android/android.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/platforms/android/assets/www/cordova_plugins.js" afterPath="$PROJECT_DIR$/platforms/android/assets/www/cordova_plugins.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/platforms/android/assets/www/index.html" afterPath="$PROJECT_DIR$/platforms/android/assets/www/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/platforms/android/assets/www/js/app.js" afterPath="$PROJECT_DIR$/platforms/android/assets/www/js/app.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/platforms/android/assets/www/js/controllers.js" afterPath="$PROJECT_DIR$/platforms/android/assets/www/js/controllers.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/platforms/android/assets/www/js/services.js" afterPath="$PROJECT_DIR$/platforms/android/assets/www/js/services.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/platforms/android/assets/www/templates/gallery.html" afterPath="$PROJECT_DIR$/platforms/android/assets/www/templates/gallery.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/platforms/android/assets/www/templates/signup.html" afterPath="$PROJECT_DIR$/platforms/android/assets/www/templates/signup.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/platforms/android/assets/www/templates/tab-galleries.html" afterPath="$PROJECT_DIR$/platforms/android/assets/www/templates/tab-galleries.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/platforms/android/platform_www/cordova_plugins.js" afterPath="$PROJECT_DIR$/platforms/android/platform_www/cordova_plugins.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/platforms/android/res/xml/config.xml" afterPath="$PROJECT_DIR$/platforms/android/res/xml/config.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/platforms/android/src/se/frostyelk/cordova/parse/plugin/MyLocationService.java" afterPath="$PROJECT_DIR$/platforms/android/src/se/frostyelk/cordova/parse/plugin/MyLocationService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scss/ionic.app.scss" afterPath="$PROJECT_DIR$/scss/ionic.app.scss" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/css/ionic.app.css" afterPath="$PROJECT_DIR$/www/css/ionic.app.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/css/ionic.app.min.css" afterPath="$PROJECT_DIR$/www/css/ionic.app.min.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/platforms/ios/ios.json" afterPath="$PROJECT_DIR$/platforms/ios/ios.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/platforms/ios/platform_www/cordova_plugins.js" afterPath="$PROJECT_DIR$/platforms/ios/platform_www/cordova_plugins.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/platforms/ios/platform_www/plugins/cordova-plugin-geolocation/www/Position.js" afterPath="$PROJECT_DIR$/platforms/ios/platform_www/plugins/cordova-plugin-geolocation/www/Position.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/platforms/ios/platform_www/plugins/cordova-plugin-geolocation/www/PositionError.js" afterPath="$PROJECT_DIR$/platforms/ios/platform_www/plugins/cordova-plugin-geolocation/www/PositionError.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/platforms/ios/platform_www/plugins/cordova-plugin-geolocation/www/geolocation.js" afterPath="$PROJECT_DIR$/platforms/ios/platform_www/plugins/cordova-plugin-geolocation/www/geolocation.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/platforms/ios/teleport.xcodeproj/project.pbxproj" afterPath="$PROJECT_DIR$/platforms/ios/teleport.xcodeproj/project.pbxproj" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/platforms/ios/teleport/Plugins/cordova-plugin-geolocation/CDVLocation.m" afterPath="$PROJECT_DIR$/platforms/ios/teleport/Plugins/cordova-plugin-geolocation/CDVLocation.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/platforms/ios/teleport/config.xml" afterPath="$PROJECT_DIR$/platforms/ios/teleport/config.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/platforms/ios/teleport/teleport-Info.plist" afterPath="$PROJECT_DIR$/platforms/ios/teleport/teleport-Info.plist" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/platforms/ios/www/cordova_plugins.js" afterPath="$PROJECT_DIR$/platforms/ios/www/cordova_plugins.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/platforms/ios/www/index.html" afterPath="$PROJECT_DIR$/platforms/ios/www/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/platforms/ios/www/js/app.js" afterPath="$PROJECT_DIR$/platforms/ios/www/js/app.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/platforms/ios/www/js/controllers.js" afterPath="$PROJECT_DIR$/platforms/ios/www/js/controllers.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/platforms/ios/www/js/services.js" afterPath="$PROJECT_DIR$/platforms/ios/www/js/services.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/platforms/ios/www/plugins/cordova-plugin-geolocation/www/Position.js" afterPath="$PROJECT_DIR$/platforms/ios/www/plugins/cordova-plugin-geolocation/www/Position.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/platforms/ios/www/plugins/cordova-plugin-geolocation/www/PositionError.js" afterPath="$PROJECT_DIR$/platforms/ios/www/plugins/cordova-plugin-geolocation/www/PositionError.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/platforms/ios/www/plugins/cordova-plugin-geolocation/www/geolocation.js" afterPath="$PROJECT_DIR$/platforms/ios/www/plugins/cordova-plugin-geolocation/www/geolocation.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/platforms/ios/www/templates/gallery.html" afterPath="$PROJECT_DIR$/platforms/ios/www/templates/gallery.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/platforms/ios/www/templates/signup.html" afterPath="$PROJECT_DIR$/platforms/ios/www/templates/signup.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/platforms/ios/www/templates/tab-galleries.html" afterPath="$PROJECT_DIR$/platforms/ios/www/templates/tab-galleries.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plugins/android.json" afterPath="$PROJECT_DIR$/plugins/android.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plugins/cordova-plugin-geolocation/CONTRIBUTING.md" afterPath="$PROJECT_DIR$/plugins/cordova-plugin-geolocation/CONTRIBUTING.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plugins/cordova-plugin-geolocation/README.md" afterPath="$PROJECT_DIR$/plugins/cordova-plugin-geolocation/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plugins/cordova-plugin-geolocation/RELEASENOTES.md" afterPath="$PROJECT_DIR$/plugins/cordova-plugin-geolocation/RELEASENOTES.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plugins/cordova-plugin-geolocation/doc/de/README.md" afterPath="$PROJECT_DIR$/plugins/cordova-plugin-geolocation/doc/de/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plugins/cordova-plugin-geolocation/doc/de/index.md" afterPath="$PROJECT_DIR$/plugins/cordova-plugin-geolocation/doc/de/index.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plugins/cordova-plugin-geolocation/doc/es/README.md" afterPath="$PROJECT_DIR$/plugins/cordova-plugin-geolocation/doc/es/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plugins/cordova-plugin-geolocation/doc/es/index.md" afterPath="$PROJECT_DIR$/plugins/cordova-plugin-geolocation/doc/es/index.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plugins/cordova-plugin-geolocation/doc/fr/README.md" afterPath="$PROJECT_DIR$/plugins/cordova-plugin-geolocation/doc/fr/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plugins/cordova-plugin-geolocation/doc/fr/index.md" afterPath="$PROJECT_DIR$/plugins/cordova-plugin-geolocation/doc/fr/index.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plugins/cordova-plugin-geolocation/doc/it/index.md" afterPath="$PROJECT_DIR$/plugins/cordova-plugin-geolocation/doc/it/index.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plugins/cordova-plugin-geolocation/doc/ja/README.md" afterPath="$PROJECT_DIR$/plugins/cordova-plugin-geolocation/doc/ja/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plugins/cordova-plugin-geolocation/doc/ko/README.md" afterPath="$PROJECT_DIR$/plugins/cordova-plugin-geolocation/doc/ko/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plugins/cordova-plugin-geolocation/doc/pl/README.md" afterPath="$PROJECT_DIR$/plugins/cordova-plugin-geolocation/doc/pl/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plugins/cordova-plugin-geolocation/doc/zh/README.md" afterPath="$PROJECT_DIR$/plugins/cordova-plugin-geolocation/doc/zh/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plugins/cordova-plugin-geolocation/doc/zh/index.md" afterPath="$PROJECT_DIR$/plugins/cordova-plugin-geolocation/doc/zh/index.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plugins/cordova-plugin-geolocation/package.json" afterPath="$PROJECT_DIR$/plugins/cordova-plugin-geolocation/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plugins/cordova-plugin-geolocation/plugin.xml" afterPath="$PROJECT_DIR$/plugins/cordova-plugin-geolocation/plugin.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plugins/cordova-plugin-geolocation/src/ios/CDVLocation.m" afterPath="$PROJECT_DIR$/plugins/cordova-plugin-geolocation/src/ios/CDVLocation.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plugins/cordova-plugin-geolocation/src/windows/GeolocationProxy.js" afterPath="$PROJECT_DIR$/plugins/cordova-plugin-geolocation/src/windows/GeolocationProxy.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plugins/cordova-plugin-geolocation/tests/plugin.xml" afterPath="$PROJECT_DIR$/plugins/cordova-plugin-geolocation/tests/plugin.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plugins/cordova-plugin-geolocation/tests/tests.js" afterPath="$PROJECT_DIR$/plugins/cordova-plugin-geolocation/tests/tests.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plugins/cordova-plugin-geolocation/www/Position.js" afterPath="$PROJECT_DIR$/plugins/cordova-plugin-geolocation/www/Position.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plugins/cordova-plugin-geolocation/www/PositionError.js" afterPath="$PROJECT_DIR$/plugins/cordova-plugin-geolocation/www/PositionError.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plugins/cordova-plugin-geolocation/www/geolocation.js" afterPath="$PROJECT_DIR$/plugins/cordova-plugin-geolocation/www/geolocation.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plugins/fetch.json" afterPath="$PROJECT_DIR$/plugins/fetch.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plugins/ios.json" afterPath="$PROJECT_DIR$/plugins/ios.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plugins/se.frostyelk.cordova.parse.plugin/src/android/ParsePluginMainApplication.java" afterPath="$PROJECT_DIR$/plugins/se.frostyelk.cordova.parse.plugin/src/android/ParsePluginMainApplication.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/index.html" afterPath="$PROJECT_DIR$/www/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/js/app.js" afterPath="$PROJECT_DIR$/www/js/app.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/js/controllers.js" afterPath="$PROJECT_DIR$/www/js/controllers.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/js/services.js" afterPath="$PROJECT_DIR$/www/js/services.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/templates/settings.html" afterPath="$PROJECT_DIR$/www/templates/settings.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/templates/gallery.html" afterPath="$PROJECT_DIR$/www/templates/gallery.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/templates/signup.html" afterPath="$PROJECT_DIR$/www/templates/signup.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/templates/tab-galleries.html" afterPath="$PROJECT_DIR$/www/templates/tab-galleries.html" />
     </list>
     <ignored path="teleport2.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -44,8 +109,8 @@
       <file leaf-file-name="gallery.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/www/templates/gallery.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="6.25">
-              <caret line="9" column="20" selection-start-line="9" selection-start-column="20" selection-end-line="9" selection-end-column="20" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="56" column="28" selection-start-line="56" selection-start-column="28" selection-end-line="56" selection-end-column="28" />
               <folding />
             </state>
           </provider>
@@ -54,7 +119,7 @@
       <file leaf-file-name="galleryAddMore.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/www/templates/galleryAddMore.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-0.625">
+            <state vertical-scroll-proportion="0.0">
               <caret line="13" column="33" selection-start-line="13" selection-start-column="33" selection-end-line="13" selection-end-column="33" />
               <folding />
             </state>
@@ -64,8 +129,8 @@
       <file leaf-file-name="tab-galleries.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/www/templates/tab-galleries.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-13.958333">
-              <caret line="38" column="31" selection-start-line="38" selection-start-column="12" selection-end-line="38" selection-end-column="31" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="35" column="0" selection-start-line="35" selection-start-column="0" selection-end-line="41" selection-end-column="12" />
               <folding />
             </state>
           </provider>
@@ -74,10 +139,10 @@
       <file leaf-file-name="controllers.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/www/js/controllers.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-0.23156089">
-              <caret line="249" column="15" selection-start-line="249" selection-start-column="4" selection-end-line="249" selection-end-column="15" />
+            <state vertical-scroll-proportion="0.17213115">
+              <caret line="7" column="10" selection-start-line="7" selection-start-column="10" selection-end-line="7" selection-end-column="10" />
               <folding>
-                <marker date="1455289354000" expanded="true" signature="16224:16423" placeholder="..." />
+                <marker date="1455751467000" expanded="true" signature="15973:16172" placeholder="..." />
               </folding>
             </state>
           </provider>
@@ -107,22 +172,23 @@
         <option value="$PROJECT_DIR$/platforms/android/AndroidManifest.xml" />
         <option value="$PROJECT_DIR$/www/js/log.js" />
         <option value="$PROJECT_DIR$/www/css/ionic.app.css" />
-        <option value="$PROJECT_DIR$/www/index.html" />
         <option value="$PROJECT_DIR$/www/templates/tab-requests.html" />
-        <option value="$PROJECT_DIR$/www/templates/tab-galleries.html" />
-        <option value="$PROJECT_DIR$/www/templates/gallery.html" />
         <option value="$PROJECT_DIR$/platforms/android/src/se/frostyelk/cordova/parse/plugin/ParsePluginBroadcastReciever.java" />
         <option value="$PROJECT_DIR$/www/templates/galleryAddMore.html" />
-        <option value="$PROJECT_DIR$/config.xml" />
         <option value="$PROJECT_DIR$/www/templates/map.html" />
         <option value="$PROJECT_DIR$/www/templates/evaluation.html" />
-        <option value="$PROJECT_DIR$/www/js/app.js" />
-        <option value="$PROJECT_DIR$/www/templates/signup.html" />
         <option value="$PROJECT_DIR$/scss/ionic.app.scss" />
         <option value="$PROJECT_DIR$/platforms/android/src/se/frostyelk/cordova/parse/plugin/MyLocationService.java" />
         <option value="$PROJECT_DIR$/www/templates/settings.html" />
-        <option value="$PROJECT_DIR$/www/js/controllers.js" />
+        <option value="$PROJECT_DIR$/plugins/se.frostyelk.cordova.parse.plugin/src/android/ParsePluginMainApplication.java" />
+        <option value="$PROJECT_DIR$/www/js/app.js" />
+        <option value="$PROJECT_DIR$/www/index.html" />
+        <option value="$PROJECT_DIR$/config.xml" />
         <option value="$PROJECT_DIR$/www/js/services.js" />
+        <option value="$PROJECT_DIR$/www/templates/tab-galleries.html" />
+        <option value="$PROJECT_DIR$/www/templates/signup.html" />
+        <option value="$PROJECT_DIR$/www/templates/gallery.html" />
+        <option value="$PROJECT_DIR$/www/js/controllers.js" />
       </list>
     </option>
   </component>
@@ -166,8 +232,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -384,6 +448,8 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scratches" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -508,20 +574,12 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/scss/ionic.app.scss">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="185" column="10" selection-start-line="185" selection-start-column="10" selection-end-line="185" selection-end-column="10" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/www/js/controllers.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <marker date="1455289354000" expanded="true" signature="16224:16423" placeholder="..." />
+            <marker date="1455751467000" expanded="true" signature="15973:16172" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -580,7 +638,7 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="174" column="16" selection-start-line="174" selection-start-column="16" selection-end-line="174" selection-end-column="16" />
           <folding>
-            <marker date="1455289354000" expanded="true" signature="16224:16423" placeholder="..." />
+            <marker date="1455751467000" expanded="true" signature="15973:16172" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -625,7 +683,7 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="84" column="26" selection-start-line="84" selection-start-column="13" selection-end-line="84" selection-end-column="26" />
           <folding>
-            <marker date="1455289354000" expanded="true" signature="16224:16423" placeholder="..." />
+            <marker date="1455751467000" expanded="true" signature="15973:16172" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -700,13 +758,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/plugins/se.frostyelk.cordova.parse.plugin/src/android/ParsePluginMainApplication.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.77868855">
-          <caret line="49" column="0" selection-start-line="48" selection-start-column="0" selection-end-line="49" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/www/css/ionic.app.css">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-7.1764708">
@@ -718,13 +769,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/www/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="37" column="9" selection-start-line="37" selection-start-column="9" selection-end-line="37" selection-end-column="9" />
         </state>
       </provider>
     </entry>
@@ -763,13 +807,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/plugins/se.frostyelk.cordova.parse.plugin/www/ParsePlugin.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.21311475">
-          <caret line="24" column="53" selection-start-line="24" selection-start-column="53" selection-end-line="24" selection-end-column="53" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/www/templates/tab-requests.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="6.647059">
@@ -784,25 +821,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/www/templates/signup.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="32" column="0" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/www/templates/login.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="19" column="26" selection-start-line="19" selection-start-column="26" selection-end-line="19" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/config.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.12798634">
-          <caret line="5" column="18" selection-start-line="5" selection-start-column="18" selection-end-line="5" selection-end-column="18" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -813,61 +835,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/www/js/app.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.5245901">
-          <caret line="62" column="18" selection-start-line="62" selection-start-column="18" selection-end-line="62" selection-end-column="18" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/www/templates/gallery.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="6.25">
-          <caret line="9" column="20" selection-start-line="9" selection-start-column="20" selection-end-line="9" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/www/templates/galleryAddMore.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.625">
-          <caret line="13" column="33" selection-start-line="13" selection-start-column="33" selection-end-line="13" selection-end-column="33" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/www/templates/tab-galleries.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-13.958333">
-          <caret line="38" column="31" selection-start-line="38" selection-start-column="12" selection-end-line="38" selection-end-column="31" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/platforms/android/src/se/frostyelk/cordova/parse/plugin/MyLocationService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.4426229">
-          <caret line="134" column="24" selection-start-line="134" selection-start-column="0" selection-end-line="135" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/scss/ionic.app.scss">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.025597269">
           <caret line="125" column="13" selection-start-line="125" selection-start-column="13" selection-end-line="125" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/www/js/services.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="2.3670669">
-          <caret line="94" column="32" selection-start-line="94" selection-start-column="32" selection-end-line="94" selection-end-column="32" />
-          <folding>
-            <element signature="e#0#50#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -875,16 +846,104 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.69283277">
           <caret line="46" column="12" selection-start-line="46" selection-start-column="12" selection-end-line="46" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/plugins/se.frostyelk.cordova.parse.plugin/src/android/ParsePlugin.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-2.1226416">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/plugins/se.frostyelk.cordova.parse.plugin/src/android/ParsePluginMainApplication.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.75409836">
+          <caret line="50" column="74" selection-start-line="49" selection-start-column="12" selection-end-line="50" selection-end-column="74" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/plugins/se.frostyelk.cordova.parse.plugin/www/ParsePlugin.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.16393442">
+          <caret line="24" column="53" selection-start-line="24" selection-start-column="53" selection-end-line="24" selection-end-column="53" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.025597269">
+          <caret line="1" column="62" selection-start-line="1" selection-start-column="62" selection-end-line="1" selection-end-column="62" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/www/templates/galleryAddMore.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="13" column="33" selection-start-line="13" selection-start-column="33" selection-end-line="13" selection-end-column="33" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/www/templates/tab-galleries.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="35" column="0" selection-start-line="35" selection-start-column="0" selection-end-line="41" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/www/templates/gallery.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="56" column="28" selection-start-line="56" selection-start-column="28" selection-end-line="56" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/www/js/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.31967214">
+          <caret line="13" column="149" selection-start-line="13" selection-start-column="149" selection-end-line="13" selection-end-column="149" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/www/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.27303755">
+          <caret line="16" column="121" selection-start-line="16" selection-start-column="121" selection-end-line="16" selection-end-column="121" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/www/js/services.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.3327616">
+          <caret line="38" column="35" selection-start-line="38" selection-start-column="32" selection-end-line="38" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/www/templates/signup.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.6911263">
+          <caret line="27" column="75" selection-start-line="27" selection-start-column="75" selection-end-line="27" selection-end-column="75" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/platforms/android/src/se/frostyelk/cordova/parse/plugin/MyLocationService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.057377048">
+          <caret line="134" column="0" selection-start-line="134" selection-start-column="0" selection-end-line="135" selection-end-column="0" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/www/js/controllers.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.23156089">
-          <caret line="249" column="15" selection-start-line="249" selection-start-column="4" selection-end-line="249" selection-end-column="15" />
+        <state vertical-scroll-proportion="0.17213115">
+          <caret line="7" column="10" selection-start-line="7" selection-start-column="10" selection-end-line="7" selection-end-column="10" />
           <folding>
-            <marker date="1455289354000" expanded="true" signature="16224:16423" placeholder="..." />
+            <marker date="1455751467000" expanded="true" signature="15973:16172" placeholder="..." />
           </folding>
         </state>
       </provider>

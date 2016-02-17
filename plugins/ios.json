@@ -142,9 +142,6 @@
         "ionic-plugin-keyboard": {
             "PACKAGE_NAME": "com.ionicframework.starter"
         },
-        "cordova-plugin-geolocation": {
-            "PACKAGE_NAME": "com.ionicframework.starter"
-        },
         "cordova-plugin-camera": {
             "PACKAGE_NAME": "com.ionicframework.starter"
         },
@@ -158,6 +155,9 @@
             "PACKAGE_NAME": "com.ionicframework.starter"
         },
         "cordova-plugin-network-information": {
+            "PACKAGE_NAME": "com.ionicframework.teleport2514364"
+        },
+        "cordova-plugin-geolocation": {
             "PACKAGE_NAME": "com.ionicframework.teleport2514364"
         }
     },

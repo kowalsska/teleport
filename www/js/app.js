@@ -5,10 +5,18 @@
 // the 2nd parameter is an array of 'requires'
 var teleportApp = angular.module('teleport', ['ionic', 'ngCordova', 'firebase', 'timer', 'teleport.controllers', 'teleport.services']);
 
-teleportApp.run(function($ionicPlatform) {
+teleportApp.run(function($ionicPlatform, FirebaseRef) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
+    var authenticated = FirebaseRef.getAuth();
+    if(authenticated) {
+      ParsePlugin.initialize("QPhqq46IfsZuIT9GLUMydSwHHNRakPas2u2mIjDl", "ixkdoG5b66pJfR6s1PnlyTc1WX83XVKYLY7aMAar", authenticated.uid, function () {
+      });
+    } else {
+      $state.go('login');
+      $ionicLoading.show({ template: 'Please login', noBackdrop: true, duration: 1500 });
+    }
     if(window.cordova && window.cordova.plugins.Keyboard) {
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
     }

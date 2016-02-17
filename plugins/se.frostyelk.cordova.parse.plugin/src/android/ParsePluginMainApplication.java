@@ -46,6 +46,7 @@ public class ParsePluginMainApplication extends Application {
 
         if (!"".equals(appId)) {
 //			Log.i(LOGTAG, "Parse initialize: " + appId + ", " + clientKey);
+            Parse.enableLocalDatastore(this);
             Parse.initialize(this, appId, clientKey);
             ParseInstallation.getCurrentInstallation().saveInBackground();
         }

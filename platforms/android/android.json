@@ -63,6 +63,10 @@
                         {
                             "xml": "<feature name=\"NetworkStatus\"><param name=\"android-package\" value=\"org.apache.cordova.networkinformation.NetworkManager\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Geolocation\"><param name=\"android-package\" value=\"org.apache.cordova.geolocation.Geolocation\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -172,9 +176,6 @@
         "cordova-plugin-device": {
             "PACKAGE_NAME": "com.ionicframework.teleport2514364"
         },
-        "cordova-plugin-geolocation": {
-            "PACKAGE_NAME": "com.ionicframework.teleport2514364"
-        },
         "cordova-plugin-googleplayservices": {
             "PACKAGE_NAME": "com.ionicframework.teleport2514364"
         },
@@ -194,6 +195,9 @@
             "PACKAGE_NAME": "com.ionicframework.teleport2514364"
         },
         "cordova-plugin-network-information": {
+            "PACKAGE_NAME": "com.ionicframework.teleport2514364"
+        },
+        "cordova-plugin-geolocation": {
             "PACKAGE_NAME": "com.ionicframework.teleport2514364"
         }
     },
@@ -302,6 +306,20 @@
             "clobbers": [
                 "Connection"
             ]
+        },
+        {
+            "file": "plugins/cordova-plugin-geolocation/www/android/geolocation.js",
+            "id": "cordova-plugin-geolocation.geolocation",
+            "pluginId": "cordova-plugin-geolocation",
+            "clobbers": [
+                "navigator.geolocation"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-geolocation/www/PositionError.js",
+            "id": "cordova-plugin-geolocation.PositionError",
+            "pluginId": "cordova-plugin-geolocation",
+            "runs": true
         }
     ],
     "plugin_metadata": {
@@ -309,13 +327,13 @@
         "cordova-plugin-camera": "1.2.0",
         "cordova-plugin-crosswalk-webview": "1.4.0",
         "cordova-plugin-device": "1.0.1",
-        "cordova-plugin-geolocation": "1.0.1",
         "cordova-plugin-googleplayservices": "19.0.3",
         "cordova-plugin-splashscreen": "2.1.0",
         "cordova-plugin-statusbar": "1.0.1",
         "cordova-plugin-whitelist": "1.0.0",
         "ionic-plugin-keyboard": "1.0.7",
         "se.frostyelk.cordova.parse.plugin": "0.2.0",
-        "cordova-plugin-network-information": "1.2.0"
+        "cordova-plugin-network-information": "1.2.0",
+        "cordova-plugin-geolocation": "2.1.0"
     }
 }

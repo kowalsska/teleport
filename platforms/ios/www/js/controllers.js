@@ -9,7 +9,7 @@ var myLng;
 
 var options = {
   enableHighAccuracy: true,
-  timeout: 8000,
+  timeout: 10000,
   maximumAge: 0
 };
 
@@ -29,25 +29,14 @@ teleportApp.controller('MapCtrl', function(FirebaseRef, $scope, $state, $cordova
   countPendingRequests();
 
   function isStillActive(ts) {
-    var timestamp5minutesAgo = Date.now() - 10 * 60 * 1000;
-    var value = ts - timestamp5minutesAgo;
+    var timestampMinutesAgo = Date.now() - 10 * 60 * 1000;
+    var value = ts - timestampMinutesAgo;
     return value > 0;
   }
 
-  var rad = function(x) {
-    return x * Math.PI / 180;
-  };
-
   var getDistance = function(p1, p2) {
-    var R = 6378137;
-    var dLat = rad(p2.lat() - p1.lat());
-    var dLong = rad(p2.lng() - p1.lng());
-    var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos(rad(p1.lat())) * Math.cos(rad(p2.lat())) *
-      Math.sin(dLong / 2) * Math.sin(dLong / 2);
-    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    var d = R * c;
-    return d;
+    var distance = google.maps.geometry.spherical.computeDistanceBetween(p1, p2);
+    return distance;
   };
 
   function haveUserDeclined(req) {
@@ -75,7 +64,7 @@ teleportApp.controller('MapCtrl', function(FirebaseRef, $scope, $state, $cordova
         var ts = countRefArray[i].timestamp;
         var reqRequester = countRefArray[i].requesterID;
         var distance = getDistance(myLoc, reqLoc);
-        if ( distance < 300 && reqRequester != FirebaseRef.getAuth().uid && isStillActive(ts) && !haveUserDeclined(countRefArray[i])) {
+        if ( distance <= 200 && reqRequester != FirebaseRef.getAuth().uid && isStillActive(ts) && !haveUserDeclined(countRefArray[i])) {
           count++;
         }
       }
@@ -103,11 +92,14 @@ teleportApp.controller('MapCtrl', function(FirebaseRef, $scope, $state, $cordova
 
   $scope.sendRequest = function() {
 
+    var requestLatitude = $scope.centerMap.lat();
+    var requestLongitude = $scope.centerMap.lng();
+
     takeScreenshot();
 
     var popup = $ionicPopup.prompt({
-      title: 'Where are you teleporting?',
-      subTitle: 'Give it a name',
+      title: 'Where are you teleporting to?',
+      subTitle: 'Add a short message',
       inputType: 'text'
     }).then(function(res) {
       $scope.requestName = res;
@@ -131,8 +123,8 @@ teleportApp.controller('MapCtrl', function(FirebaseRef, $scope, $state, $cordova
 
             requestsRef.set({
               name: $scope.requestName,
-              latitude: $scope.centerMap.lat(),
-              longitude: $scope.centerMap.lng(),
+              latitude: requestLatitude,
+              longitude: requestLongitude,
               timestamp: ts,
               requesterName: userName,
               requesterID: fbAuth.uid,
@@ -271,7 +263,6 @@ teleportApp.controller('LoginCtrl', function (FirebaseRef, $scope, $ionicModal, 
       sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
       allowEdit: true,
       encodingType: Camera.EncodingType.JPEG,
-      popoverOptions: CameraPopoverOptions,
       saveToPhotoAlbum: false
     };
 
@@ -279,9 +270,10 @@ teleportApp.controller('LoginCtrl', function (FirebaseRef, $scope, $ionicModal, 
       document.getElementById('isPictureAdded').innerHTML = 'Photo added!';
       $scope.profilePictureURI = imageData;
     }, function (err) {
+      document.getElementById('isPictureAdded').innerHTML = 'Photo not added.';
       $ionicPopup.alert({
-        title: 'teleport',
-        template: 'Something went wrong when loading photo.'
+        title: 'Teleport',
+        template: 'Something went wrong when loading photo. Try again'
       })
     });
   };
@@ -338,11 +330,8 @@ teleportApp.controller('LoginCtrl', function (FirebaseRef, $scope, $ionicModal, 
         email: user.email,
         password: user.pwdForLogin
       }).then(function (authData) {
-        //Parse
-        if (!!window.ParsePlugin) {
-          ParsePlugin.initialize("QPhqq46IfsZuIT9GLUMydSwHHNRakPas2u2mIjDl", "ixkdoG5b66pJfR6s1PnlyTc1WX83XVKYLY7aMAar", authData.uid, function () {
-          });
-        }
+        ParsePlugin.initialize("QPhqq46IfsZuIT9GLUMydSwHHNRakPas2u2mIjDl", "ixkdoG5b66pJfR6s1PnlyTc1WX83XVKYLY7aMAar", authData.uid, function () {
+        });
         FirebaseRef.child("users").child(authData.uid).once('value', function (snapshot) {
           var val = snapshot.val();
           $scope.$apply(function () {
@@ -480,8 +469,8 @@ teleportApp.controller('ReceivedRequestsCtrl', function(FirebaseRef, $scope, $io
       sourceType: Camera.PictureSourceType.CAMERA,
       allowEdit: false,
       encodingType: Camera.EncodingType.JPEG,
-      popoverOptions: CameraPopoverOptions,
-      saveToPhotoAlbum: false
+      saveToPhotoAlbum: false,
+      correctOrientation: true
     };
 
     $cordovaCamera.getPicture(options).then(function (imageData) {
@@ -493,7 +482,7 @@ teleportApp.controller('ReceivedRequestsCtrl', function(FirebaseRef, $scope, $io
       });
     }, function (err) {
       $ionicPopup.alert({
-        title: 'teleport',
+        title: 'Teleport',
         template: 'Something went wrong when taking photo.'
       })
     });
@@ -754,8 +743,8 @@ teleportApp.controller('GalleryCtrl', function(FirebaseRef, $scope, $firebaseArr
       sourceType: Camera.PictureSourceType.CAMERA,
       allowEdit: false,
       encodingType: Camera.EncodingType.JPEG,
-      popoverOptions: CameraPopoverOptions,
-      saveToPhotoAlbum: false
+      saveToPhotoAlbum: false,
+      correctOrientation: true
     };
 
     $cordovaCamera.getPicture(options).then(function (imageData) {
@@ -813,7 +802,7 @@ teleportApp.controller('SettingsCtrl', function(FirebaseRef, $scope, $firebaseOb
     FirebaseRef.unauth();
     ParsePlugin.logout();
     $state.go('login');
-    $ionicLoading.show({ template: 'Sucessful log out', noBackdrop: true, duration: 1000 });
+    $ionicLoading.show({ template: 'Successful log out', noBackdrop: true, duration: 1000 });
   };
 
   $scope.updateLocation = function() {

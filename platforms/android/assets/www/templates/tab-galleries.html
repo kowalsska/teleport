@@ -21,9 +21,9 @@
             <p>{{myRequest.numberOfPhotos}}</p>
           </a>
 
-          <div class="item item-image">
+          <div class="item item-image" >
             <div class="crop">
-              <img ng-src="{{myRequest.screenshot}}" height="150">
+              <img ng-src="{{myRequest.screenshot}}" ui-sref="gallery({req: myRequest.timestamp, reqid: myRequest.ref, reqname: myRequest.name })" height="150">
             </div>
           </div>
 

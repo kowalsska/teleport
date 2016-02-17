@@ -21,9 +21,12 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.content.SharedPreferences;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.ionicframework.teleport2514364.MainActivity;
 
-public class MyLocationService extends Service {
+public class MyLocationService extends Service implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
 	private static final String LOGTAG = "ParsePluginReciever";
 
@@ -31,6 +34,12 @@ public class MyLocationService extends Service {
 
   	private LocationManager locationManager;
   	private Location location;
+	private GoogleApiClient mGoogleApiClient;
+	private Location mLocation;
+	private Double requestLatitude;
+	private Double requestLongitude;
+	private String message;
+
 
 	@Override
 	public IBinder onBind(Intent arg0) {
@@ -38,64 +47,50 @@ public class MyLocationService extends Service {
 	}
 
 	@Override
+	public void onCreate() {
+		mGoogleApiClient = new GoogleApiClient.Builder(this)
+				.addConnectionCallbacks(this)
+				.addOnConnectionFailedListener(this)
+				.addApi(LocationServices.API)
+				.build();
+	}
+
+	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 
-        if(intent!=null) {
+		Log.i(LOGTAG, "MyLocationService has started");
 
-            Log.i(LOGTAG, "MyLocationService has started");
+		if(intent!=null) {
+
             String requesterID = intent.getStringExtra(EXTRA_REQUESTER_ID);
 
             if(forMe(requesterID)) {
-                Log.i(LOGTAG, "Getting location");
-                locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-                // Define the criteria how to select the location provider
-                Criteria criteria = new Criteria();
-                String provider = locationManager.getBestProvider(criteria, false);
-                Log.i(LOGTAG, "Provider: " + provider);
-                location = locationManager.getLastKnownLocation(provider);
-                double requestLatitude = Double.parseDouble(intent.getStringExtra("latitude"));
-                double requestLongitude = Double.parseDouble(intent.getStringExtra("longitude"));
-                String message = intent.getStringExtra("message");
-                double distance = getDistanceBetweenTwoLocations(location, requestLatitude, requestLongitude);
 
-                if (nearMe(distance) && isLoggedIn()) {
-                    //Show the notification
-                    int drawableResourceId = this.getResources().getIdentifier("icon", "drawable", this.getPackageName());
-                    Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+				requestLatitude = Double.parseDouble(intent.getStringExtra("latitude"));
+				requestLongitude = Double.parseDouble(intent.getStringExtra("longitude"));
+				message = intent.getStringExtra("message");
 
-					Intent notificationIntent = new Intent(this, MainActivity.class);
-					PendingIntent ionicIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+				if(mGoogleApiClient.isConnected()) {
+					generateNotification();
+				} else {
+					mGoogleApiClient.connect();
+				}
 
-                    NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
-                            .setSmallIcon(drawableResourceId)
-							.setContentTitle("Teleport")
-                            .setContentText(message)
-                            .setVibrate(new long[]{0, 500, -1})
-							.setContentIntent(ionicIntent)
-							.setAutoCancel(true)
-							.setSound(alarmSound);
-
-                    // Gets an instance of the NotificationManager service
-                    NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-					int notifID = (int)(Math.random() * 1000);
-					Log.i(LOGTAG, "Displaying notification");
-                    mNotifyMgr.notify(notifID, mBuilder.build());
-                    stopSelf();
-                }
             } else {
                 Log.i(LOGTAG, "I created the request. No notification");
                 stopSelf();
             }
 
         } else {
-            stopSelf();
+			Log.i(LOGTAG, "Intent is null?");
+			stopSelf();
         }
 
 		return START_NOT_STICKY;
 	}
 
 	private boolean nearMe(double distance) {
-		return distance < 300;
+		return distance <= 200;
 	}
 
 	private boolean forMe(String requesterID) {
@@ -119,21 +114,67 @@ public class MyLocationService extends Service {
 		super.onDestroy();
 	}
 
-	public double getRad(double x) {
-		return x * Math.PI / 180;
-		}
-
 	private double getDistanceBetweenTwoLocations(Location phoneLocation, double requestLatitude, double requestLongitude) {
-		double phoneLat = phoneLocation.getLatitude();
-		double phoneLong = phoneLocation.getLongitude();
-		double rVal = 6378137; // Earth’s mean radius in meter
-		double dLat = getRad(phoneLat - requestLatitude);
-		double dLong = getRad(phoneLong - requestLongitude);
-		double aVal = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(getRad(phoneLat)) * Math.cos(getRad(requestLatitude)) * Math.sin(dLong / 2) * Math.sin(dLong / 2);
-		double cVal = 2 * Math.atan2(Math.sqrt(aVal), Math.sqrt(1 - aVal));
-		double dVal = rVal * cVal;
-		Log.i(LOGTAG, "Distance: " + dVal);
-		return dVal; //Returns distance in meter
+		float[] results = new float[1];
+		Log.i(LOGTAG, "Request Lat: " + requestLatitude);
+		Log.i(LOGTAG, "Request Lng: " + requestLongitude);
+
+		Location.distanceBetween(phoneLocation.getLatitude(), phoneLocation.getLongitude(), requestLatitude, requestLongitude, results);
+		Log.i(LOGTAG, "Distance: " + results[0]);
+		return results[0];
 	}
 
+	private void generateNotification() {
+
+		mLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+
+		if (mLocation != null) {
+			Log.i(LOGTAG, "Accuracy: " + mLocation.getAccuracy());
+			Log.i(LOGTAG, "Lat: " + mLocation.getLatitude());
+			Log.i(LOGTAG, "Lng: " + mLocation.getLongitude());
+
+			double distance = getDistanceBetweenTwoLocations(mLocation, requestLatitude, requestLongitude);
+
+			if (nearMe(distance) && isLoggedIn()) {
+				//Show the notification
+				int drawableResourceId = this.getResources().getIdentifier("icon", "drawable", this.getPackageName());
+				Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+
+				Intent notificationIntent = new Intent(this, MainActivity.class);
+				PendingIntent ionicIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+
+				NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
+						.setSmallIcon(drawableResourceId)
+						.setContentTitle("Teleport")
+						.setContentText(message)
+						.setVibrate(new long[]{0, 500, -1})
+						.setContentIntent(ionicIntent)
+						.setAutoCancel(true)
+						.setSound(alarmSound);
+
+				// Gets an instance of the NotificationManager service
+				NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+				int notifID = (int)(Math.random() * 1000);
+				Log.i(LOGTAG, "Displaying notification");
+				mNotifyMgr.notify(notifID, mBuilder.build());
+				stopSelf();
+			}
+		}
+	}
+
+	@Override
+	public void onConnected(Bundle bundle) {
+		generateNotification();
+	}
+
+	@Override
+	public void onConnectionSuspended(int i) {
+		Log.i(LOGTAG, "Connection Suspended");
+		mGoogleApiClient.connect();
+	}
+
+	@Override
+	public void onConnectionFailed(ConnectionResult connectionResult) {
+		Log.i(LOGTAG, "Connection failed. Error: " + connectionResult.getErrorCode());
+	}
 }

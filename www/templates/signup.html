@@ -18,14 +18,14 @@
         <input ng-model="user.displayname" type="text">
       </label>
       <label id="bottomInput" class="item item-input">
-        <span class="input-label">Location</span>
+        <span class="input-label">Usual location</span>
         <input ng-model="user.location" type="text">
       </label>
       <div class="row">
         <div class="col col-75"><button class="button button-calm" ng-click="pickPhoto()">Add profile picture</button></div>
         <div class="col" id="isPictureAdded"></div>
       </div>
-      <ion-checkbox ng-click="isChecked()"><p>I have read and agreed to Terms<br>and Conditions of the evaluation</p></ion-checkbox>
+      <ion-checkbox ng-click="isChecked()"><p>I have read and agreed to<br>Terms and Conditions</p></ion-checkbox>
       <button class="button button-full button-calm" ng-click="createUser(user)">Create</button>
     </div>
   </ion-content>
