@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.ionicframework.teleport2514364" version="0.0.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.ionicframework.teleport2514364" version="0.0.3" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <preference name="AllowInlineMediaPlayback" value="false" />
     <preference name="BackupWebStorage" value="cloud" />
     <preference name="DisallowOverscroll" value="false" />
@@ -34,10 +34,6 @@
     <feature name="Keyboard">
         <param name="ios-package" onload="true" value="IonicKeyboard" />
     </feature>
-    <feature name="Camera">
-        <param name="ios-package" value="CDVCamera" />
-    </feature>
-    <preference name="CameraUsesGeolocation" value="false" />
     <feature name="Screenshot">
         <param name="ios-package" value="Screenshot" />
     </feature>
@@ -47,6 +43,10 @@
     <feature name="Geolocation">
         <param name="ios-package" value="CDVLocation" />
     </feature>
+    <feature name="Camera">
+        <param name="ios-package" value="CDVCamera" />
+    </feature>
+    <preference name="CameraUsesGeolocation" value="false" />
     <splash height="1136" src="resources/ios/splash/Default-568h@2x~iphone.png" width="640" />
     <splash height="1334" src="resources/ios/splash/Default-667h.png" width="750" />
     <splash height="768" src="resources/ios/splash/Default-Landscape~ipad.png" width="1024" />
@@ -86,9 +86,9 @@
     <preference name="SplashScreen" value="screen" />
     <preference name="SplashScreenDelay" value="3000" />
     <preference name="CrosswalkAnimatable" value="true" />
-    <preference name="xwalkVersion" value="15+" />
+    <icon src="resources/android/icon/drawable-xhdpi-icon.png" />
+    <preference name="xwalkVersion" value="16+" />
     <preference name="xwalkCommandLine" value="--disable-pull-to-refresh-effect" />
     <preference name="xwalkMode" value="embedded" />
     <preference name="xwalkMultipleApk" value="true" />
-    <icon src="resources/android/icon/drawable-xhdpi-icon.png" />
 </widget>

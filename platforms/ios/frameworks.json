@@ -10,7 +10,7 @@
     "SystemConfiguration.framework": 4,
     "libz.dylib": 3,
     "libsqlite3.dylib": 3,
-    "ImageIO.framework": 1,
-    "AVFoundation.framework": 1,
+    "ImageIO.framework": 2,
+    "AVFoundation.framework": 2,
     "CoreTelephony.framework": 1
 }

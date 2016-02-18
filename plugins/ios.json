@@ -142,12 +142,6 @@
         "ionic-plugin-keyboard": {
             "PACKAGE_NAME": "com.ionicframework.starter"
         },
-        "cordova-plugin-camera": {
-            "PACKAGE_NAME": "com.ionicframework.starter"
-        },
-        "cordova-plugin-crosswalk-webview": {
-            "PACKAGE_NAME": "com.ionicframework.starter"
-        },
         "com.darktalker.cordova.screenshot": {
             "PACKAGE_NAME": "com.ionicframework.starter"
         },
@@ -159,11 +153,16 @@
         },
         "cordova-plugin-geolocation": {
             "PACKAGE_NAME": "com.ionicframework.teleport2514364"
-        }
-    },
-    "dependent_plugins": {
+        },
+        "cordova-plugin-crosswalk-webview": {
+            "PACKAGE_NAME": "com.ionicframework.teleport2514364"
+        },
+        "cordova-plugin-camera": {
+            "PACKAGE_NAME": "com.ionicframework.teleport2514364"
+        },
         "cordova-plugin-googleplayservices": {
             "PACKAGE_NAME": "com.ionicframework.starter"
         }
-    }
+    },
+    "dependent_plugins": {}
 }

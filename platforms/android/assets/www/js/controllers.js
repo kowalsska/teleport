@@ -7,22 +7,24 @@ var teleportApp = angular.module('teleport.controllers', []);
 var myLat;
 var myLng;
 
-var options = {
-  enableHighAccuracy: false,
-  timeout: 10000,
-  maximumAge: 0
-};
+$ionicPlatform.ready(function() {
+  var options = {
+    enableHighAccuracy: true,
+    timeout: 10000,
+    maximumAge: 1000
+  };
 
-function success(pos) {
-  myLat = pos.coords.latitude;
-  myLng = pos.coords.longitude;
-}
+  function success(pos) {
+    myLat = pos.coords.latitude;
+    myLng = pos.coords.longitude;
+  }
 
-function error(err) {
-  console.warn('ERROR LOCATION(' + err.code + '): ' + err.message);
-}
+  function error(err) {
+    console.warn('ERROR LOCATION(' + err.code + '): ' + err.message);
+  }
 
-navigator.geolocation.getCurrentPosition(success, error, options);
+  navigator.geolocation.getCurrentPosition(success, error, options);
+});
 
 teleportApp.controller('MapCtrl', function(FirebaseRef, $scope, $state, $cordovaGeolocation, $firebaseArray, $ionicPopup, $ionicLoading) {
 

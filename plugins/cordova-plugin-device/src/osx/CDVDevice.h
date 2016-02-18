@@ -17,15 +17,12 @@
  under the License.
  */
 
-#import <UIKit/UIKit.h>
 #import <Cordova/CDVPlugin.h>
-#import <Cordova/CDVWhitelist.h>
 
-@interface CDVNavigationWhitelistPlugin : CDVPlugin {}
+@interface CDVDevice : CDVPlugin
 
-@property (nonatomic, readonly, strong) CDVWhitelist* whitelist; // readonly for public
++ (NSString*) cordovaVersion;
 
-- (BOOL)shouldAllowNavigationToURL:(NSURL *)url;
-- (BOOL)shouldAllowRequestForURL:(NSURL *)url;
+- (void) getDeviceInfo:(CDVInvokedUrlCommand*)command;
 
 @end
