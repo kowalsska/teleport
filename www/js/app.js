@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 var teleportApp = angular.module('teleport', ['ionic', 'ngCordova', 'firebase', 'timer', 'teleport.controllers', 'teleport.services']);
 
-teleportApp.run(function($ionicPlatform, FirebaseRef) {
+teleportApp.run(function($ionicPlatform, FirebaseRef, $state) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -15,7 +15,6 @@ teleportApp.run(function($ionicPlatform, FirebaseRef) {
       });
     } else {
       $state.go('login');
-      $ionicLoading.show({ template: 'Please login', noBackdrop: true, duration: 1500 });
     }
     if(window.cordova && window.cordova.plugins.Keyboard) {
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
@@ -24,6 +23,13 @@ teleportApp.run(function($ionicPlatform, FirebaseRef) {
       StatusBar.styleDefault();
     }
   });
+
+  $ionicPlatform.onHardwareBackButton(function() {
+    if($state.current.name=="map") {
+      ionic.Platform.exitApp();
+    }
+  });
+
 });
 
 teleportApp.config(function($stateProvider, $urlRouterProvider) {

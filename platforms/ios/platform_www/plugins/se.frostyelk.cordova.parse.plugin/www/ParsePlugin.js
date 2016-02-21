@@ -1,4 +1,5 @@
-cordova.define("se.frostyelk.cordova.parse.plugin.ParsePlugin", function(require, exports, module) { /**
+cordova.define("se.frostyelk.cordova.parse.plugin.ParsePlugin", function(require, exports, module) {
+/**
 Copyright 2014 Frosty Elk AB
 
 Licensed under the Apache License, Version 2.0 (the "License");

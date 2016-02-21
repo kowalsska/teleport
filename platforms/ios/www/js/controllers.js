@@ -756,7 +756,7 @@ teleportApp.controller('GalleryCtrl', function(FirebaseRef, $scope, $firebaseArr
       });
     }, function (err) {
       $ionicPopup.alert({
-        title: 'teleport',
+        title: 'Teleport',
         template: 'Something went wrong when taking photo.'
       })
     });
